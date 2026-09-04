@@ -1,0 +1,1531 @@
+<!--
+  ============================================================================
+  Naturheilpraxis Cornelia Dinger — Startseite (Redesign v3)
+  ----------------------------------------------------------------------------
+  Design language follows the Clireo healthcare template
+  (~/Downloads/clireo_framer_website.html), remapped onto the practice's own
+  brand plum. What was ported from it:
+
+    · LIGHT, AIRY GROUNDS — white plus brand-tinted washes; no dark sections
+    · INK IS THE BRAND HUE, NOT BLACK — Clireo uses navy #1b2978 for all text;
+      here that role is a deep plum, so nothing on the page is near-black
+    · SURFACES + HAIRLINES DERIVED FROM THE HUE AT LOW ALPHA (2% / 5% / 13%)
+      rather than neutral grey — this is what makes it read as one system
+    · BIG TYPE AT LIGHT WEIGHT — 70px / w400 hero, 44px / w400 headings
+    · GENEROUS ROUNDING — 20px dominant radius
+    · BOOKING FORM IN THE HERO — Clireo's signature conversion pattern
+    · SECOND, BRIGHTER ACCENT for small highlights (Clireo: #0099ff;
+      here: the pink already inside the practice logo)
+
+  Typeface: Figtree, not Clireo's Inter. Inter there is Framer's default
+  placeholder ("Inter, Inter Placeholder, sans-serif"), not a brand decision;
+  Figtree carries the same light-weight-at-large-size treatment with warmth
+  suited to a naturopathic practice rather than a clinic.
+
+  Photography is the practice's own, re-cropped from the existing site to
+  remove baked-in pink frames and baked-in German text. Sources are only
+  167-251px wide, so every image is placed at or below native size.
+  See assets/ for originals and assets/clean/ for the repaired crops.
+
+  SEO HEAD for the live domain:
+  <title>Naturheilpraxis Cornelia Dinger | Heilpraktikerin in Bad Schönborn</title>
+  <meta name="description" content="Ganzheitliche Ursachenbehandlung in Bad Schönborn:
+    Psychosomatische Energetik (PSE), Vital- & Stoffwechselanalyse, Labordiagnostik.
+    Kostenloses Vorgespräch – Heilpraktikerin Cornelia Dinger. Tel. 0171 124 27 17">
+  <link rel="canonical" href="https://naturheilpraxis-dinger.de/">
+  ============================================================================
+-->
+<meta charset="utf-8">
+<title>Naturheilpraxis Cornelia Dinger</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap">
+
+<style>
+/* ==========================================================================
+   TOKENS
+   Everything below is derived from one hue. --ink is a deep plum, never
+   near-black; every wash and hairline is that plum at low alpha, which is
+   what holds the page together as a single light system.
+   ========================================================================== */
+:root{
+  --canvas:#FFFFFF;
+  --wash-1:#FCF8FA;                      /* plum @ ~2% */
+  --wash-2:#F7EFF3;                      /* plum @ ~5% */
+  --wash-3:#F1E3EB;                      /* plum @ ~9% */
+  --hairline:rgba(58,31,48,.13);
+  --hairline-soft:rgba(58,31,48,.07);
+
+  --ink:#3A1F30;                          /* deep plum — the "navy" role */
+  --body:#6C5361;
+  --muted:#93808B;
+  --faint:#AE9CA6;
+
+  --accent:#A83168;                       /* primary voltage: CTAs, links */
+  --accent-hover:#8E2455;
+  --accent-wash:#FBEFF5;
+  --bright:#D97BA8;                       /* second accent, from the logo */
+  --on-accent:#FFFFFF;
+
+  --r-sm:12px; --r-md:16px; --r-lg:20px; --r-xl:26px; --r-pill:999px;
+
+  --shadow-card:0 1px 2px rgba(58,31,48,.03), 0 10px 30px -16px rgba(58,31,48,.13);
+  --shadow-panel:0 2px 6px rgba(58,31,48,.04), 0 24px 56px -28px rgba(58,31,48,.20);
+  --shadow-cta:0 8px 20px -10px rgba(168,49,104,.45);
+
+  --measure:1200px;
+  --gutter:clamp(20px,5vw,46px);
+  --sect:clamp(62px,7.5vw,112px);
+
+  --f:"Figtree","Helvetica Neue",Arial,sans-serif;
+
+  /* Built-in easings are too weak to read as intentional. */
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --ease-in-out:cubic-bezier(.77,0,.175,1);
+
+  color-scheme:light;
+  interpolate-size:allow-keywords;   /* lets the FAQ animate to height:auto */   /* light-only by design — no dark variant */
+}
+/* ==========================================================================
+   BASE — big sizes, light weights, generous leading
+   ========================================================================== */
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;background:var(--canvas);color:var(--ink);
+  font-family:var(--f);font-size:17px;font-weight:400;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  /* clip, not hidden: hidden makes body a scroll container, which disables
+     position:sticky in its descendants. clip suppresses overflow without one. */
+  overflow-x:clip;
+}
+h1,h2,h3,h4{margin:0;text-wrap:balance;font-family:var(--f)}
+h1{font-size:clamp(2.55rem,5.6vw,4.25rem);font-weight:400;line-height:1.03;letter-spacing:-.032em}
+h2{font-size:clamp(1.85rem,3.5vw,2.7rem);font-weight:400;line-height:1.1;letter-spacing:-.026em}
+h3{font-size:1.3rem;font-weight:600;line-height:1.28;letter-spacing:-.014em}
+p{margin:0}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px}
+img{max-width:100%;display:block}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+.wrap{max-width:var(--measure);margin-inline:auto;padding-inline:var(--gutter)}
+.section{padding-block:var(--sect)}
+.tint{background:var(--wash-1)}
+.tint-2{background:var(--wash-2)}
+.stack{display:flex;flex-direction:column}
+.lede{font-size:clamp(1.08rem,1.6vw,1.3rem);font-weight:400;color:var(--body);max-width:56ch;line-height:1.55}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
+  font-size:.78rem;font-weight:600;letter-spacing:.04em;color:var(--accent);
+  background:var(--accent-wash);border-radius:var(--r-pill);padding:7px 15px;
+}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--bright);flex:none}
+.ico{width:1em;height:1em;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-family:var(--f);font-size:1rem;font-weight:600;line-height:1;
+  padding:17px 28px;border-radius:var(--r-pill);border:1.5px solid transparent;
+  cursor:pointer;text-decoration:none;
+  transition:transform .16s var(--ease-out),background .16s var(--ease-out),
+             box-shadow .16s var(--ease-out),border-color .16s var(--ease-out);
+}
+.btn--primary{background:var(--accent);color:var(--on-accent);box-shadow:var(--shadow-cta)}
+.btn--ghost{background:var(--canvas);color:var(--ink);border-color:var(--hairline)}
+@media (hover:hover) and (pointer:fine){
+  .btn--primary:hover{background:var(--accent-hover);transform:translateY(-2px)}
+  .btn--ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+}
+/* after the hover rules so a press always wins over a hover lift */
+.btn:active{transform:scale(.97)}
+.btn--sm{padding:12px 21px;font-size:.93rem}
+.btn .ico{width:18px;height:18px}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+.bar{
+  position:sticky;top:0;z-index:60;background:transparent;
+  border-bottom:1px solid transparent;
+  transition:background .3s var(--ease-out),border-color .3s var(--ease-out);
+}
+.bar.is-stuck{
+  background:color-mix(in srgb,var(--canvas) 88%,transparent);
+  backdrop-filter:saturate(160%) blur(16px);
+  border-bottom-color:var(--hairline-soft);
+}
+/* Over the hero photograph the header is transparent with white marks. */
+.bar:not(.is-stuck) .brand img{filter:brightness(0) invert(1)}
+.bar:not(.is-stuck) .nav a{color:rgba(255,255,255,.88)}
+.bar:not(.is-stuck) .nav a:hover{color:#fff;border-bottom-color:#fff}
+.bar:not(.is-stuck) .bar__tel,.bar:not(.is-stuck) .bar__tel .ico{color:#fff}
+.bar:not(.is-stuck) .btn--primary{background:#fff;color:var(--accent);box-shadow:none}
+.bar:not(.is-stuck) .btn--primary:hover{background:var(--wash-2)}
+.bar:not(.is-stuck) .burger{border-color:rgba(255,255,255,.45);color:#fff}
+.bar__in{display:flex;align-items:center;gap:clamp(14px,3vw,36px);height:84px}
+.brand{flex:none;display:block}
+.brand img{height:40px;width:auto}
+.nav{display:flex;gap:clamp(10px,1.7vw,28px);margin-left:auto}
+.nav a{
+  color:var(--body);text-decoration:none;font-size:.96rem;font-weight:500;white-space:nowrap;
+  padding:8px 0;border-bottom:2px solid transparent;transition:color .16s var(--ease-out),border-color .16s var(--ease-out);
+}
+.nav a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.bar__cta{display:flex;align-items:center;gap:12px;flex:none}
+.bar__tel{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:.95rem;color:var(--ink);text-decoration:none;white-space:nowrap}
+.bar__tel .ico{width:17px;height:17px;color:var(--accent)}
+.burger{display:none;background:none;border:1.5px solid var(--hairline);border-radius:var(--r-pill);padding:10px 16px;color:var(--ink);font:inherit;font-size:.9rem;font-weight:600;cursor:pointer;align-items:center}
+.sheet{display:none}
+.sheet[open]{display:block;position:fixed;inset:84px 0 0;z-index:55;background:var(--canvas);padding:22px var(--gutter) 40px;overflow-y:auto}
+.sheet a{display:block;padding:16px 0;border-bottom:1px solid var(--hairline-soft);color:var(--ink);text-decoration:none;font-size:1.2rem;font-weight:500}
+
+/* ==========================================================================
+   HERO — full-bleed photograph, plum gradient veil, booking card on the right
+   (Clireo's hero composition, remapped to the practice's own hue)
+   ========================================================================== */
+.hero{
+  position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;
+  min-height:100vh;
+  min-height:100svh;                   /* svh: no jump when mobile chrome hides */
+  margin-top:-84px;padding-top:84px;   /* sit underneath the transparent header */
+  padding-bottom:clamp(96px,11vh,132px);   /* room for the scroll cue */
+}
+.hero__bg{position:absolute;inset:0;z-index:-2}
+.hero__bg img{width:100%;height:100%;object-fit:cover;object-position:56% 34%}
+.hero__veil{
+  position:absolute;inset:0;z-index:-1;
+  background:
+    linear-gradient(97deg,
+      rgba(44,18,32,.90)  0%,
+      rgba(74,25,52,.76) 22%,
+      rgba(123,34,85,.44) 42%,
+      rgba(140,44,96,.12) 60%,
+      rgba(140,44,96,0)   76%),
+    linear-gradient(to top, rgba(44,18,32,.38) 0%, rgba(44,18,32,0) 40%),
+    /* keeps the white nav legible where the header crosses the bright side */
+    linear-gradient(to bottom, rgba(44,18,32,.5) 0, rgba(44,18,32,.18) 90px, rgba(44,18,32,0) 150px);
+}
+.hero__in{position:relative;z-index:1;width:100%}
+.hero__copy{display:flex;flex-direction:column;gap:24px;align-items:flex-start;max-width:640px}
+.hero h1{color:#fff;font-size:clamp(2.9rem,5.85vw,4.85rem);font-weight:500;letter-spacing:-.036em;line-height:1.0}
+.hero .lede{color:rgba(255,255,255,.9);max-width:34ch;font-size:clamp(1rem,1.45vw,1.125rem)}
+.hero .eyebrow{
+  color:#fff;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.22);
+}
+.hero .eyebrow::before{background:var(--bright)}
+.hero__actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.hero .btn--primary{background:#fff;color:var(--accent);box-shadow:0 10px 26px -12px rgba(30,10,20,.55)}
+.hero .btn--primary:hover{background:var(--wash-2)}
+.hero .btn--ghost{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);color:#fff;backdrop-filter:blur(6px)}
+.hero .btn--ghost:hover{background:#fff;color:var(--accent);border-color:#fff}
+
+/* the one hard number, bottom-left, the way Clireo anchors its 4.8 rating */
+.hero__stat{display:flex;align-items:center;gap:16px;margin-top:6px}
+.hero__stat-n{font-size:clamp(2.6rem,4.4vw,3.6rem);font-weight:300;color:#fff;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.hero__stat-t{font-size:.92rem;color:rgba(255,255,255,.84);line-height:1.4;max-width:22ch;border-left:1px solid rgba(255,255,255,.3);padding-left:16px}
+
+/* Scroll cue: a droplet falling down a hairline — the logo mark is a water
+   drop, so the motion belongs to this practice rather than being a generic
+   bouncing chevron. It is a real link to the next section, not decoration. */
+.scrollcue{
+  position:absolute;left:50%;bottom:clamp(26px,3.6vh,44px);transform:translateX(-50%);
+  z-index:2;display:flex;flex-direction:column;align-items:center;gap:11px;
+  text-decoration:none;color:#fff;
+  transition:opacity .45s var(--ease-out),transform .45s var(--ease-out);
+}
+.scrollcue__label{
+  font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.78);transition:color .2s var(--ease-out);
+}
+.scrollcue:hover .scrollcue__label{color:#fff}
+.scrollcue__track{
+  position:relative;width:1px;height:46px;
+  background:linear-gradient(to bottom,rgba(255,255,255,.42),rgba(255,255,255,0));
+}
+.scrollcue__drop{
+  position:absolute;left:50%;top:0;width:15px;height:15px;margin-left:-7.5px;
+  color:#fff;fill:currentColor;stroke:none;
+  animation:dropfall 2.1s cubic-bezier(.55,.05,.55,.95) infinite;
+  filter:drop-shadow(0 1px 3px rgba(44,18,32,.5));
+}
+@keyframes dropfall{
+   0%{transform:translateY(-4px) scale(.82);opacity:0}
+  16%{transform:translateY(2px)  scale(1);   opacity:1}
+  72%{opacity:1}
+ 100%{transform:translateY(34px) scale(.72); opacity:0}
+}
+.scrollcue.is-gone{opacity:0;transform:translateX(-50%) translateY(14px);pointer-events:none}
+
+.pills{display:flex;flex-wrap:wrap;gap:9px}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;font-size:.85rem;font-weight:500;color:var(--body);
+  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-pill);padding:8px 15px;
+}
+.pill .ico{width:15px;height:15px;color:var(--accent)}
+.hero .pill{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.24);color:#fff;backdrop-filter:blur(6px)}
+.hero .pill .ico{color:#fff}
+
+.appt__foot{font-size:.79rem;color:var(--faint);margin-top:13px;text-align:center}
+
+/* ==========================================================================
+   FORMS
+   ========================================================================== */
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.field label{font-size:.85rem;font-weight:600;color:var(--ink)}
+.field input,.field select,.field textarea{
+  font:inherit;font-size:.97rem;color:var(--ink);background:var(--wash-1);
+  border:1.5px solid var(--hairline);border-radius:var(--r-sm);padding:14px 15px;width:100%;
+  transition:border-color .16s var(--ease-out),background .16s var(--ease-out),box-shadow .16s var(--ease-out);
+}
+.field textarea{min-height:104px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--accent);background:var(--canvas);outline:none;
+  box-shadow:0 0 0 3px var(--accent-wash);
+}
+.field input::placeholder,.field textarea::placeholder{color:var(--faint)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.check{display:flex;gap:11px;align-items:flex-start;font-size:.85rem;color:var(--body);line-height:1.5;margin:6px 0 18px}
+.check input{margin:2px 0 0;accent-color:var(--accent);width:18px;height:18px;flex:none}
+.sent{display:none;flex-direction:column;gap:11px;padding:8px 0;text-align:center;align-items:center}
+.sent .ico{width:38px;height:38px;color:var(--accent);background:var(--accent-wash);border-radius:50%;padding:9px;box-sizing:content-box}
+.is-sent .fbody{display:none}
+.is-sent .sent{display:flex}
+
+/* ==========================================================================
+   STATEMENT — centred eyebrow, one large claim, CTA + proof, then fact cards
+   ========================================================================== */
+.center{display:flex;flex-direction:column;align-items:center;text-align:center}
+.eyebrow--c{align-self:center}
+.statement{
+  font-size:clamp(1.7rem,3.5vw,2.95rem);font-weight:400;line-height:1.16;letter-spacing:-.03em;
+  color:var(--ink);max-width:20em;margin-top:22px;
+}
+.statement em{font-style:normal;color:var(--accent)}
+.afterline{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(18px,3vw,44px);margin-top:34px}
+
+/* pill with a filled square action, the way Clireo pairs label + arrow */
+.btn-split{
+  display:inline-flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink);
+  font-size:1rem;font-weight:600;background:var(--canvas);border:1px solid var(--hairline);
+  border-radius:var(--r-pill);padding:7px 8px 7px 24px;box-shadow:var(--shadow-card);
+  transition:transform .16s var(--ease-out),box-shadow .16s var(--ease-out);
+}
+@media (hover:hover) and (pointer:fine){
+  .btn-split:hover{transform:translateY(-2px);box-shadow:var(--shadow-panel)}
+}
+.btn-split:active{transform:scale(.98)}
+.btn-split .sq{
+  width:42px;height:42px;border-radius:13px;background:var(--accent);color:var(--on-accent);
+  display:grid;place-items:center;flex:none;transition:background .18s var(--ease-out);
+}
+.btn-split:hover .sq{background:var(--accent-hover)}
+.btn-split .sq .ico{width:19px;height:19px}
+
+/* proof cluster — real patient initials, not stock avatars */
+.proof{display:flex;align-items:center;gap:14px;text-decoration:none}
+.proof__faces{display:flex}
+.proof__faces span{
+  width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+  background:var(--wash-3);color:var(--accent);font-size:.86rem;font-weight:700;
+  border:2px solid var(--canvas);margin-left:-11px;
+}
+.proof__faces span:first-child{margin-left:0}
+.proof__t{text-align:left;display:flex;flex-direction:column;line-height:1.3}
+.proof__t small{font-size:.85rem;color:var(--muted)}
+.proof__t b{font-size:.95rem;font-weight:600;color:var(--ink)}
+.proof:hover .proof__t b{color:var(--accent)}
+
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,26px);margin-top:clamp(40px,5vw,68px);width:100%}
+.fact{
+  position:relative;overflow:hidden;text-align:left;   /* the wrap is centred; cards are not */
+  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-xl);
+  padding:clamp(28px,3vw,38px);display:flex;flex-direction:column;min-height:308px;
+  text-decoration:none;color:var(--ink);
+  transition:transform .22s var(--ease-out),box-shadow .22s var(--ease-out),border-color .22s var(--ease-out);
+}
+/* a faint bloom in the top corner so a large white card is not a flat slab */
+.fact::after{
+  content:"";position:absolute;top:-42%;right:-26%;width:74%;aspect-ratio:1;pointer-events:none;
+  background:radial-gradient(circle,var(--wash-3) 0%,rgba(241,227,235,0) 68%);
+}
+.fact > *{position:relative;z-index:1}
+@media (hover:hover) and (pointer:fine){
+  .fact:hover{transform:translateY(-4px);box-shadow:var(--shadow-panel);border-color:var(--bright)}
+}
+a.fact:active{transform:scale(.985)}
+.fact__ico{width:46px;height:46px;color:var(--bright);stroke-width:1.4;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.fact__n{
+  margin-top:auto;padding-top:26px;
+  font-size:clamp(2rem,3vw,2.7rem);font-weight:400;letter-spacing:-.036em;line-height:1.04;
+  font-variant-numeric:tabular-nums;
+}
+.fact__l{font-weight:600;font-size:1.06rem;margin-top:12px;letter-spacing:-.008em}
+.fact__d{font-size:.93rem;color:var(--muted);margin-top:9px;line-height:1.55;max-width:30ch}
+
+/* The free consultation is the offer, so this one card carries the accent
+   and is the only clickable card in the row. */
+.fact--offer{background:var(--accent-wash);border-color:rgba(168,49,104,.2)}
+.fact--offer::after{background:radial-gradient(circle,rgba(217,123,168,.22) 0%,rgba(217,123,168,0) 68%)}
+.fact--offer .fact__ico,.fact--offer .fact__n{color:var(--accent)}
+.fact--offer .fact__d{color:var(--body)}
+.fact--offer:hover{border-color:var(--accent)}
+.fact__go{margin-top:16px;font-size:.92rem;font-weight:700;color:var(--accent);display:inline-flex;align-items:center;gap:8px}
+.fact__go .ico{width:15px;height:15px;transition:transform .2s var(--ease-out)}
+.fact--offer:hover .fact__go .ico{transform:translateX(4px)}
+
+/* ==========================================================================
+   SYMPTOM LIST
+   ========================================================================== */
+.two{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,80px);align-items:start}
+.symptoms{display:grid;grid-template-columns:1fr 1fr;gap:11px clamp(12px,1.6vw,20px);margin:0;padding:0;list-style:none}
+.symptoms li{
+  display:flex;gap:11px;align-items:flex-start;font-size:.98rem;font-weight:500;color:var(--ink);
+  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-md);padding:15px 17px;
+}
+.symptoms .ico{width:18px;height:18px;color:var(--accent);margin-top:3px}
+.after{margin-top:28px;display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+
+/* ==========================================================================
+   SERVICES — the one dark band on the page: image-filled cards in a
+   scroll-snap slider, the way Clireo presents its treatments
+   ========================================================================== */
+.dark{
+  --hairline:rgba(255,255,255,.16);
+  background:linear-gradient(158deg,#3C1C2E 0%,#55223E 52%,#38192B 100%);
+  color:#fff;
+}
+.dark h2{color:#fff}
+.dark .eyebrow{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
+.dark .eyebrow::before{background:var(--bright)}
+.dark .lede{color:rgba(255,255,255,.76)}
+
+/* The mask lives on a NON-scrolling wrapper. On the scroller itself the
+   browser has to recomposite the mask every frame, which is what makes a
+   masked slider stutter; here it is painted once and the cards move under it. */
+.sliderwrap{
+  --sidepad:max(var(--gutter),calc(50vw - var(--measure)/2 + var(--gutter)));
+  --fade:min(clamp(24px,6vw,116px),var(--sidepad));
+  margin-inline:calc(50% - 50vw);   /* break out of the centred measure */
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade),#000 calc(100% - var(--fade)),transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade),#000 calc(100% - var(--fade)),transparent 100%);
+}
+.slider{
+  display:flex;gap:clamp(14px,1.7vw,22px);overflow-x:auto;
+  scroll-snap-type:x proximity;
+  scrollbar-width:none;-ms-overflow-style:none;
+  padding:0 var(--sidepad) 4px;
+  scroll-padding-inline:var(--sidepad);
+  overscroll-behavior-x:contain;
+}
+.slider::-webkit-scrollbar{display:none}
+.scard{
+  position:relative;flex:0 0 clamp(252px,30%,344px);scroll-snap-align:start;
+  aspect-ratio:5/6;border-radius:var(--r-xl);overflow:hidden;isolation:isolate;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:clamp(20px,2vw,26px);text-decoration:none;color:#fff;
+  background:#2B1421;
+  transition:transform .2s var(--ease-out);
+}
+.scard img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;
+  transition:transform .32s var(--ease-out);
+}
+.scard::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(to top,
+    rgba(30,11,20,.94) 0%, rgba(30,11,20,.72) 34%,
+    rgba(38,15,26,.28) 64%, rgba(38,15,26,.06) 100%);
+}
+@media (hover:hover) and (pointer:fine){
+  .scard:hover img{transform:scale(1.06)}
+}
+.scard:active{transform:scale(.985)}
+.scard__ico{
+  width:44px;height:44px;border-radius:13px;margin-bottom:auto;flex:none;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);
+  backdrop-filter:blur(6px);display:grid;place-items:center;
+}
+.scard__ico .ico{width:21px;height:21px;color:#fff}
+.scard h3{font-size:1.32rem;font-weight:600;letter-spacing:-.016em;margin-top:20px}
+.scard p{font-size:.92rem;line-height:1.5;color:rgba(255,255,255,.82);margin-top:8px}
+.scard__go{
+  margin-top:14px;font-size:.87rem;font-weight:700;display:inline-flex;align-items:center;gap:7px;
+  color:#fff;opacity:.85;
+}
+.scard__go .ico{width:15px;height:15px;transition:transform .2s var(--ease-out)}
+.scard:hover .scard__go .ico{transform:translateX(4px)}
+
+.sarrows{display:flex;justify-content:center;gap:12px;margin-top:clamp(22px,2.6vw,32px)}
+.sarrow{
+  width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.28);
+  background:rgba(255,255,255,.1);color:#fff;cursor:pointer;display:grid;place-items:center;
+  transition:background .18s var(--ease-out),opacity .18s var(--ease-out),transform .16s var(--ease-out);
+}
+@media (hover:hover) and (pointer:fine){
+  .sarrow:hover:not(:disabled){background:#fff;color:var(--accent);transform:translateY(-2px)}
+}
+.sarrow:active:not(:disabled){transform:scale(.92)}
+.sarrow:disabled{opacity:.3;cursor:default}
+.sarrow .ico{width:19px;height:19px}
+.sarrow--prev .ico{transform:rotate(180deg)}
+
+.sfoot{
+  display:flex;flex-wrap:wrap;align-items:center;gap:18px clamp(20px,4vw,48px);
+  margin-top:clamp(30px,3.6vw,46px);padding-top:clamp(22px,2.6vw,30px);
+  border-top:1px solid rgba(255,255,255,.16);
+}
+.sfoot p{font-size:1rem;color:rgba(255,255,255,.76);max-width:34ch}
+.sfoot a{
+  margin-left:auto;display:inline-flex;align-items:center;gap:11px;
+  color:#fff;text-decoration:none;font-size:1.02rem;font-weight:600;
+}
+.sfoot a .sq{
+  width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.22);display:grid;place-items:center;
+  transition:background .18s var(--ease-out),color .18s var(--ease-out);
+}
+.sfoot a:hover .sq{background:#fff;color:var(--accent)}
+.sfoot a:active .sq{transform:scale(.92)}
+.sfoot a .sq .ico{width:17px;height:17px}
+
+/* ==========================================================================
+   STEPS
+   ========================================================================== */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,28px)}
+.step{
+  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-lg);
+  padding:28px 26px;display:flex;flex-direction:column;gap:10px;
+}
+.step__n{
+  width:38px;height:38px;border-radius:50%;background:var(--accent-wash);color:var(--accent);
+  display:grid;place-items:center;font-size:.92rem;font-weight:700;font-variant-numeric:tabular-nums;
+  margin-bottom:6px;
+}
+.step__t{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+.step__meta{font-size:.79rem;font-weight:600;color:var(--accent);white-space:nowrap;background:var(--accent-wash);border-radius:var(--r-pill);padding:4px 11px}
+.step p{font-size:.95rem;color:var(--body)}
+
+/* ==========================================================================
+   ABOUT
+   ========================================================================== */
+.about{display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(30px,5vw,76px);align-items:start}
+.creds{margin:0;padding:0;list-style:none;background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-lg);overflow:hidden}
+.creds li{display:flex;gap:16px;justify-content:space-between;align-items:baseline;padding:15px 22px;font-size:.95rem;border-bottom:1px solid var(--hairline-soft)}
+.creds li:last-child{border-bottom:0}
+.creds b{font-weight:600}
+.creds span{color:var(--muted);font-size:.87rem;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.pullquote{
+  font-size:clamp(1.2rem,2vw,1.5rem);font-weight:400;font-style:italic;line-height:1.4;
+  color:var(--ink);margin:0;padding:24px 26px;background:var(--wash-2);border-radius:var(--r-lg);
+}
+.pullquote cite{display:block;margin-top:13px;font-style:normal;font-size:.78rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+
+/* ==========================================================================
+   METHODS
+   ========================================================================== */
+.methods{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.4vw,28px)}
+.mpanel{background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:28px 26px}
+.mpanel h3{margin-bottom:14px}
+.mpanel ul{margin:0;padding:0;list-style:none}
+.mpanel li{padding:13px 0;border-bottom:1px solid var(--hairline-soft);font-size:.96rem;display:flex;gap:12px;align-items:flex-start}
+.mpanel li:last-child{border-bottom:0}
+.mpanel li .ico{width:17px;height:17px;color:var(--bright);margin-top:4px}
+.mpanel li b{font-weight:600;display:block}
+.mpanel li i{font-style:normal;color:var(--muted);font-size:.88rem}
+
+/* ==========================================================================
+   VOICE WALL — the 90svh sticky stage IS the clipping box: the cards live
+   inside it, so overflow:hidden on the stage genuinely hides them. They are
+   moved by scroll position rather than by document flow, which is what lets
+   the box stay 90svh while the cards travel through it.
+
+   .vwall is only a scroll runway. It must not get overflow:clip/hidden —
+   that would disable the sticky stage inside it.
+   ========================================================================== */
+.vwall{position:relative;height:200svh}
+.vwall__stage{
+  position:sticky;top:0;height:90svh;overflow:hidden;isolation:isolate;
+}
+.vwall__bg{position:absolute;inset:0;z-index:-2}
+.vwall__bg img{width:100%;height:100%;object-fit:cover;object-position:58% 42%}
+.vwall__veil{
+  position:absolute;inset:0;z-index:-1;
+  background:
+    linear-gradient(98deg,rgba(38,15,28,.95) 0%,rgba(56,22,41,.88) 33%,
+                          rgba(85,34,62,.66) 62%,rgba(85,34,62,.44) 100%),
+    linear-gradient(to bottom,rgba(38,15,28,.45) 0%,rgba(38,15,28,0) 24%);
+}
+.vwall__in{
+  position:relative;height:100%;display:grid;
+  grid-template-columns:min(46%,500px) 1fr;gap:clamp(28px,4vw,72px);
+  align-items:stretch;
+}
+.vwall__l{color:#fff;align-self:center;max-width:500px}
+.vwall__l .eyebrow{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
+.vwall__l .eyebrow::before{background:var(--bright)}
+.vwall__l h2{color:#fff;margin:18px 0 16px}
+.vwall__l p{color:rgba(255,255,255,.76);font-size:1.02rem;line-height:1.6}
+
+.vwall__col{position:relative;height:100%}
+.vwall__cards{
+  position:absolute;top:0;right:0;width:min(100%,470px);
+  display:flex;flex-direction:column;gap:clamp(18px,3svh,42px);
+  will-change:transform;
+}
+.vcard{
+  width:100%;color:#fff;
+  /* No backdrop-filter: the background is already blurred in the file, so a
+     flat translucent fill reads the same and costs nothing to scroll. */
+  background:rgba(44,18,33,.62);
+  border:1px solid rgba(255,255,255,.17);
+  border-radius:var(--r-xl);
+  padding:clamp(24px,2.4vw,32px);
+}
+.vcard blockquote{margin:0;font-size:clamp(1.02rem,1.5vw,1.18rem);line-height:1.5}
+.vcard__more{
+  margin-top:18px;display:inline-flex;align-items:center;gap:10px;
+  color:#fff;text-decoration:none;font-size:.88rem;font-weight:600;
+  transition:color .18s var(--ease-out);
+}
+.vcard__more .sq{
+  width:27px;height:27px;border-radius:8px;background:var(--bright);color:#2A1018;
+  display:grid;place-items:center;font-size:1rem;font-weight:700;line-height:1;
+  transition:transform .16s var(--ease-out),background .18s var(--ease-out);
+}
+@media (hover:hover) and (pointer:fine){
+  .vcard__more:hover .sq{background:#fff;transform:scale(1.08)}
+}
+.vcard__more:active .sq{transform:scale(.9)}
+.vcard__who{
+  margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.16);
+  display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;
+}
+.vcard__who b{font-size:.98rem;font-weight:600}
+.vcard__who span{font-size:.86rem;color:rgba(255,255,255,.66)}
+
+
+/* Under 900px: no pin, no transform — the section becomes a normal block and
+   the cards simply stack. The script detects this and stops driving them. */
+@media (max-width:900px){
+  .vwall{height:auto;background:linear-gradient(180deg,#3C1C2E 0%,#2A1220 100%)}
+  .vwall__stage{position:static;height:auto;overflow:visible;padding-block:clamp(46px,9svh,76px)}
+  .vwall__in{grid-template-columns:1fr;height:auto;gap:clamp(26px,4vw,40px)}
+  .vwall__l{max-width:none}
+  .vwall__col{height:auto}
+  .vwall__cards{position:static;width:100%;gap:14px}
+  .vcard{width:100%}
+}
+
+/* ==========================================================================
+   FEES + FAQ
+   ========================================================================== */
+.panel{background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-xl);padding:clamp(24px,3vw,34px)}
+.fees{margin:16px 0 0;padding:0;list-style:none}
+.fees li{display:flex;justify-content:space-between;gap:18px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--hairline-soft)}
+.fees li:last-child{border-bottom:0}
+.fees b{font-weight:600;font-size:.98rem;display:block}
+.fees i{font-style:normal;color:var(--muted);font-size:.87rem}
+.price{font-size:1.1rem;font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
+.price--free{color:var(--accent);font-weight:700}
+.price--slot{font-size:.79rem;font-weight:600;color:var(--muted);border:1px dashed var(--hairline);border-radius:var(--r-pill);padding:6px 13px;white-space:nowrap}
+.hint{margin-top:20px;padding-top:18px;border-top:1px solid var(--hairline);font-size:.9rem;color:var(--body)}
+
+.faq{display:flex;flex-direction:column;gap:10px}
+details.q{background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-md);overflow:hidden}
+details.q[open]{border-color:var(--bright)}
+details.q summary{
+  cursor:pointer;list-style:none;padding:18px 52px 18px 22px;position:relative;
+  font-size:1rem;font-weight:600;color:var(--ink);
+}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary::after{
+  content:"";position:absolute;right:22px;top:24px;width:10px;height:10px;
+  border-right:2px solid var(--accent);border-bottom:2px solid var(--accent);
+  transform:rotate(45deg);transition:transform .24s var(--ease-out);
+}
+details.q[open] summary::after{transform:rotate(-135deg);top:26px}
+details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64ch}
+
+/* ==========================================================================
+   CONTACT
+   ========================================================================== */
+.contact{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(28px,4vw,56px);align-items:start}
+.info{display:flex;flex-direction:column;gap:18px}
+.info dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:16px;font-size:.97rem;background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:24px}
+.info dt{color:var(--accent)}
+.info dt .ico{width:19px;height:19px}
+.info dd{margin:0;font-weight:500}
+.info dd a{font-weight:600}
+.mapcard{border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--hairline)}
+.mapcard svg{display:block;width:100%;height:164px}
+.mapcard__foot{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;padding:14px 18px;background:var(--canvas);border-top:1px solid var(--hairline);font-size:.91rem}
+.legal{font-size:.84rem;color:var(--muted);line-height:1.58;background:var(--wash-2);border-radius:var(--r-md);padding:18px 20px}
+
+/* ==========================================================================
+   FOOTER — dark close to the page, with the phone number as the final CTA.
+   The contact form sits directly above, so another "book now" button here
+   would only repeat it; a large tappable number is the useful last ask.
+   ========================================================================== */
+.foot{
+  --hairline:rgba(255,255,255,.16);          /* locally inverted for this band */
+  position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#33172A 0%,#24101D 100%);
+  color:#fff;padding-block:clamp(46px,5.5vw,72px) 26px;
+}
+.foot::before{                                /* same bloom motif as the fact cards */
+  content:"";position:absolute;top:-32%;right:-8%;width:46%;aspect-ratio:1;pointer-events:none;
+  background:radial-gradient(circle,rgba(217,123,168,.17) 0%,rgba(217,123,168,0) 68%);
+}
+/* The logo droplet as a watermark, cropped by the footer's own overflow.
+   The file is a flat black silhouette with the logo's alpha, so one invert()
+   turns it white — the two brand tones would both flatten anyway. */
+.foot__mark{
+  position:absolute;z-index:0;pointer-events:none;
+  left:-6%;bottom:-26%;width:min(46%,520px);
+  opacity:.03;filter:invert(1);
+}
+.foot > *:not(.foot__mark){position:relative}
+
+.footcta{
+  display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(26px,4vw,64px);align-items:center;
+  padding-bottom:clamp(36px,4.4vw,54px);border-bottom:1px solid var(--hairline);
+}
+.footcta .eyebrow{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
+.footcta .eyebrow::before{background:var(--bright)}
+.footcta h2{color:#fff;margin:17px 0 14px}
+.footcta p{font-size:1rem;color:rgba(255,255,255,.72);max-width:42ch;line-height:1.6}
+.footcta__r{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+
+.bigtel{
+  display:inline-flex;align-items:center;gap:clamp(14px,1.5vw,20px);
+  text-decoration:none;color:#fff;
+  transition:transform .16s var(--ease-out);
+}
+.bigtel__ring{
+  width:clamp(48px,4.4vw,60px);aspect-ratio:1;border-radius:50%;flex:none;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);
+  display:grid;place-items:center;
+  transition:background .2s var(--ease-out),color .2s var(--ease-out),border-color .2s var(--ease-out);
+}
+.bigtel__ring .ico{width:44%;height:44%;color:#fff;transition:color .2s var(--ease-out)}
+.bigtel__t{display:flex;flex-direction:column;line-height:1.15}
+.bigtel__t small{
+  font-size:.74rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--bright);margin-bottom:7px;
+}
+.bigtel__t b{
+  font-size:clamp(1.55rem,2.9vw,2.3rem);font-weight:400;letter-spacing:-.032em;
+  font-variant-numeric:tabular-nums;
+}
+@media (hover:hover) and (pointer:fine){
+  .bigtel:hover .bigtel__ring{background:var(--bright);border-color:var(--bright)}
+  .bigtel:hover .bigtel__ring .ico{color:#2A1018}
+}
+.bigtel:active{transform:scale(.985)}
+
+.footmail{
+  display:inline-flex;align-items:center;gap:10px;font-size:.97rem;font-weight:500;
+  color:rgba(255,255,255,.78);text-decoration:none;
+  transition:color .18s var(--ease-out);
+}
+.footmail .ico{width:17px;height:17px;color:var(--bright)}
+.footmail:hover{color:#fff}
+
+.foot__grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(22px,3vw,44px);margin-top:clamp(34px,4vw,52px)}
+.foot h4{font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--bright);margin-bottom:15px}
+.foot a{color:rgba(255,255,255,.78);text-decoration:none;transition:color .16s var(--ease-out)}
+.foot a:hover{color:#fff}
+.foot ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;font-size:.94rem;color:rgba(255,255,255,.78)}
+.foot__logo{height:38px;width:auto;margin-bottom:14px;filter:brightness(0) invert(1)}
+.foot__note{font-size:.88rem;color:rgba(255,255,255,.62);line-height:1.62;max-width:42ch}
+.foot__bar{margin-top:38px;padding-top:22px;border-top:1px solid var(--hairline);display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;font-size:.85rem;color:rgba(255,255,255,.55)}
+
+.mcta{
+  display:none;position:fixed;left:0;right:0;bottom:0;z-index:70;
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom));gap:10px;
+  background:color-mix(in srgb,var(--canvas) 94%,transparent);
+  backdrop-filter:blur(14px);border-top:1px solid var(--hairline);
+}
+.mcta .btn{flex:1;padding:15px 12px}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width:1140px){
+  .nav{display:none}
+  .burger{display:inline-flex}
+  .bar__tel span{display:none}
+  .bar__cta .btn{display:none}
+  .two,.about,.contact,.methods,.footcta{grid-template-columns:1fr}
+  .hero{min-height:0;padding-bottom:clamp(30px,5vw,48px)}
+  .hero__veil{background:
+    linear-gradient(180deg, rgba(44,18,32,.90) 0%, rgba(74,25,52,.86) 42%, rgba(123,34,85,.72) 100%),
+    linear-gradient(97deg, rgba(44,18,32,.5) 0%, rgba(140,44,96,0) 70%)}
+  .hero__bg img{object-position:62% 30%}
+  .hero .lede{max-width:46ch}
+  .voices,.steps{grid-template-columns:1fr 1fr}
+  .facts{grid-template-columns:1fr}
+  .fact{min-height:0}
+}
+@media (max-width:740px){
+  body{font-size:16px;padding-bottom:82px}
+  .voices,.steps,.symptoms,.row2,.foot__grid,.footcta{grid-template-columns:1fr}
+  .foot__mark{width:min(64%,320px);left:-12%;bottom:-10%}
+  .scard{flex-basis:82%}
+  .sfoot a{margin-left:0}
+  .fact{padding:26px 22px}
+  .fact__ico{width:38px;height:38px}
+  .fact__n{padding-top:20px}
+  .statement{max-width:none}
+  .afterline{gap:20px}
+  .mcta{display:flex}
+  .hero__actions .btn{width:100%}
+  .foot{padding-bottom:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+  /* animation-name:none, so the droplet rests visibly instead of ending hidden */
+  .scrollcue__drop{animation:none;transform:translateY(12px);opacity:.95}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.6 4.2 4.2L19 6.6"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.2 3.5h3l1.5 3.8-2 1.4a11.3 11.3 0 0 0 5.6 5.6l1.4-2 3.8 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.2 5.7a2 2 0 0 1 2-2.2Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m4 7.5 8 5.5 8-5.5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3.2 2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z"/><circle cx="12" cy="10.3" r="2.6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4.5 12h15"/><path d="m13.5 6 6 6-6 6"/></symbol>
+  <symbol id="i-lab" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.4L5.7 17a2.3 2.3 0 0 0 2 3.4h8.6a2.3 2.3 0 0 0 2-3.4L14 9.4V3"/><path d="M7.6 14.4h8.8"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.4S3.8 15.4 3.8 9.9A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8.2 2.9c0 5.5-8.2 10.5-8.2 10.5Z"/></symbol>
+  <symbol id="i-arrow-ne" viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M8.5 7H17v8.5"/></symbol>
+  <symbol id="i-child" viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.2"/><path d="M6.6 20.6c0-3.6 2.4-6.3 5.4-6.3s5.4 2.7 5.4 6.3"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 4c0 8.4-4.6 13.1-11 13.1-1.6 0-3-.3-4.2-.9C4.8 9.8 9.6 4.6 20 4Z"/><path d="M5 20c1.6-4.4 4.4-7.6 8.6-9.7"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 12 8.6 8.2"/><path d="M12 3.4v1.6M20.6 12H19M12 20.6V19M3.4 12H5"/></symbol>
+  <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 2.6s6.6 7 6.6 11.6a6.6 6.6 0 0 1-13.2 0C5.4 9.6 12 2.6 12 2.6Z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.6c0 4.4-2.9 8-7 9.8-4.1-1.8-7-5.4-7-9.8V5.6L12 3Z"/></symbol>
+  <symbol id="i-badge" viewBox="0 0 24 24"><circle cx="12" cy="9.5" r="5.8"/><path d="M8.4 14.3 7 21l5-2.4L17 21l-1.4-6.7"/></symbol>
+</svg>
+
+<header class="bar" id="bar">
+  <div class="wrap bar__in">
+    <a class="brand" href="#top" aria-label="Naturheilpraxis Cornelia Dinger — Startseite">
+      <img src="assets/clean/logo.png" alt="Naturheilpraxis Cornelia Dinger" width="404" height="85">
+    </a>
+    <nav class="nav" aria-label="Hauptnavigation">
+      <a href="#schwerpunkte">Schwerpunkte</a>
+      <a href="#ablauf">Ablauf</a>
+      <a href="#praxis">Über mich</a>
+      <a href="#stimmen">Erfahrungen</a>
+      <a href="#kosten">Kosten</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <div class="bar__cta">
+      <a class="bar__tel" href="tel:+491711242717"><svg class="ico"><use href="#i-phone"/></svg><span>0171 124 27 17</span></a>
+      <a class="btn btn--primary btn--sm" href="#kontakt">Vorgespräch anfragen</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="sheet">Menü</button>
+    </div>
+  </div>
+</header>
+
+<div class="sheet" id="sheet">
+  <a href="#schwerpunkte">Schwerpunkte</a>
+  <a href="#ablauf">Ablauf</a>
+  <a href="#praxis">Über mich</a>
+  <a href="#stimmen">Erfahrungen</a>
+  <a href="#kosten">Kosten &amp; Kasse</a>
+  <a href="#kontakt">Kontakt &amp; Anfahrt</a>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <!-- PLACEHOLDER IMAGE — replace before launch.
+         assets/clean/hero.jpg is an unlicensed iStock comp (id 1255606124, ElenaMist)
+         cropped (top 410px, ffmpeg) from hero-homepage-background.jpg to drop the watermarks. Swap in a licensed file or a real
+         photo of the practice at ~2400x1400; same path, no code change needed. -->
+    <div class="hero__bg" aria-hidden="true">
+      <img src="assets/clean/hero.jpg" alt="" width="1024" height="410">
+    </div>
+    <div class="hero__veil" aria-hidden="true"></div>
+
+    <div class="wrap hero__in">
+      <div class="hero__copy">
+        <span class="eyebrow">Heilpraktikerin in Bad Schönborn · Kraichgau</span>
+        <h1>Wo Ursachen sichtbar werden</h1>
+        <p class="lede">
+          Alle Werte in Ordnung und Ihnen geht es trotzdem nicht gut? Dann fehlt nicht
+          der Befund, sondern die Ursache.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#kontakt">Kostenloses Vorgespräch <svg class="ico"><use href="#i-arrow"/></svg></a>
+          <a class="btn btn--ghost" href="tel:+491711242717"><svg class="ico"><use href="#i-phone"/></svg> 0171 124 27 17</a>
+        </div>
+        <div class="hero__stat">
+          <span class="hero__stat-n">25+</span>
+          <span class="hero__stat-t">Jahre Erfahrung in Pflege, Psychiatrie und eigener Praxis</span>
+        </div>
+      </div>
+    </div>
+
+    <a class="scrollcue" id="scrollcue" href="#beschwerden">
+      <span class="scrollcue__label">Mehr entdecken</span>
+      <span class="scrollcue__track" aria-hidden="true">
+        <svg class="scrollcue__drop" viewBox="0 0 24 24"><use href="#i-droplet"/></svg>
+      </span>
+    </a>
+  </section>
+
+  <!-- STATEMENT + FACTS
+       The four photographs that used to sit here (1020 / 1021 / 1019 / 1447)
+       stay in assets/clean/ for a later section. -->
+  <section class="section tint" id="ueber">
+    <div class="wrap center">
+      <span class="eyebrow eyebrow--c">Über die Praxis</span>
+      <p class="statement">
+        Ich verbinde ausführliche Labordiagnostik mit dem Blick auf die Seele —
+        damit Sie endlich erfahren, <em>woher</em> Ihre Beschwerden wirklich kommen.
+      </p>
+
+      <div class="afterline">
+        <a class="btn-split" href="#praxis">
+          Mehr über mich
+          <span class="sq"><svg class="ico"><use href="#i-arrow-ne"/></svg></span>
+        </a>
+        <a class="proof" href="#stimmen">
+          <span class="proof__faces" aria-hidden="true"><span>C</span><span>H</span><span>P</span></span>
+          <span class="proof__t">
+            <small>Patientinnen berichten</small>
+            <b>Lesen Sie ihre Geschichten</b>
+          </span>
+        </a>
+      </div>
+
+      <div class="facts">
+        <div class="fact">
+          <svg class="fact__ico"><use href="#i-clock"/></svg>
+          <span class="fact__n">1,5 Stunden</span>
+          <span class="fact__l">Zeit für die ganze Geschichte</span>
+          <span class="fact__d">So lange dauert Ihre Erstanamnese. Genug Zeit, um zuzuhören, zu untersuchen und Ihre vorhandenen Befunde gemeinsam durchzugehen.</span>
+        </div>
+        <div class="fact">
+          <svg class="fact__ico"><use href="#i-lab"/></svg>
+          <span class="fact__n">42–70 Werte</span>
+          <span class="fact__l">Diagnostik, die tiefer schaut</span>
+          <span class="fact__d">Blut, Speichel und Stuhl statt der üblichen fünf Werte — inklusive Stoffwechseltyp, Hormonlage und Darmstatus.</span>
+        </div>
+        <a class="fact fact--offer" href="#kontakt">
+          <svg class="fact__ico"><use href="#i-heart"/></svg>
+          <span class="fact__n">30 Minuten</span>
+          <span class="fact__l">Kostenloses Vorgespräch</span>
+          <span class="fact__d">Unverbindlich und ohne Behandlung. Wir klären in Ruhe, ob und wie ich Ihnen helfen kann.</span>
+          <span class="fact__go">Termin anfragen <svg class="ico"><use href="#i-arrow"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYMPTOMS -->
+  <section class="section" id="beschwerden">
+    <div class="wrap two">
+      <div class="stack" style="gap:18px">
+        <span class="eyebrow">Kommt Ihnen das bekannt vor?</span>
+        <h2>Sie waren überall — und nirgends hat jemand richtig hingeschaut.</h2>
+        <p class="lede">Die meisten Menschen kommen zu mir, nachdem sie schon eine lange Runde hinter sich haben. Ein Punkt genügt.</p>
+      </div>
+      <div>
+        <ul class="symptoms">
+          <li><svg class="ico"><use href="#i-check"/></svg>Dauerhafte Erschöpfung und Müdigkeit</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Schlafstörungen, innere Unruhe</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Migräne, wiederkehrende Kopfschmerzen</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Blähbauch, Reizdarm, Verdauung</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Schilddrüse: Hashimoto, Unter-, Überfunktion</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Schmerzen ohne erkennbaren Befund</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Gewicht, das sich nicht bewegen lässt</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Ihr Kind ist unruhig oder zieht sich zurück</li>
+        </ul>
+        <div class="after">
+          <p class="lede">Im kostenlosen Vorgespräch klären wir in Ruhe, ob und wie ich Ihnen helfen kann.</p>
+          <a class="btn btn--primary" href="#kontakt">Vorgespräch vereinbaren <svg class="ico"><use href="#i-arrow"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES (dark band + slider) -->
+  <section class="section dark" id="schwerpunkte">
+    <div class="wrap stack" style="gap:16px;margin-bottom:clamp(30px,3.6vw,44px)">
+      <span class="eyebrow">Praxisschwerpunkte</span>
+      <h2>Sechs Wege, auf denen<br>wir zur Ursache kommen</h2>
+    </div>
+
+    <div class="wrap">
+      <div class="sliderwrap">
+      <div class="slider" id="slider" role="region" aria-label="Praxisschwerpunkte, horizontal scrollbar">
+        <a class="scard" href="pse.htm">
+          <img src="assets/clean/1021.jpg" alt="Hände der Heilpraktikerin bei der Testung am Arm" width="167" height="206">
+          <span class="scard__ico"><svg class="ico"><use href="#i-heart"/></svg></span>
+          <h3>Körper &amp; Seele — PSE</h3>
+          <p>Wir spüren den seelischen Konflikt auf, der Ihnen Lebensenergie entzieht — ohne dass Sie alles aussprechen müssen.</p>
+          <span class="scard__go">Methode ansehen <svg class="ico"><use href="#i-arrow"/></svg></span>
+        </a>
+        <a class="scard" href="vital-stoffwechsel.htm">
+          <img src="assets/clean/1019.jpg" alt="Blutröhrchen für die ganzheitliche Laboranalyse" width="167" height="206">
+          <span class="scard__ico"><svg class="ico"><use href="#i-lab"/></svg></span>
+          <h3>Vital- &amp; Stoffwechselanalyse</h3>
+          <p>42 bis 70 Blutwerte zeigen, wie Ihr Körper Energie gewinnt, entgiftet und regeneriert. Daraus entsteht Ihr Plan.</p>
+          <span class="scard__go">Werte &amp; Ablauf <svg class="ico"><use href="#i-arrow"/></svg></span>
+        </a>
+        <a class="scard" href="eswirdmiralleszuviel.htm">
+          <img src="assets/clean/ruhe.jpg" alt="Handtuch und ätherische Öle, Sinnbild für Ruhe und Regeneration" width="251" height="145">
+          <span class="scard__ico"><svg class="ico"><use href="#i-droplet"/></svg></span>
+          <h3>Erschöpfung &amp; Dauerstress</h3>
+          <p>„Es wird mir alles zu viel.“ Wer besonders müde kommt, berichtet oft schon nach wenigen Wochen von mehr Kraft.</p>
+          <span class="scard__go">Mehr erfahren <svg class="ico"><use href="#i-arrow"/></svg></span>
+        </a>
+        <a class="scard" href="kinder.htm">
+          <img src="assets/clean/kinder.jpg" alt="Kinderhände und Erwachsenenhände halten gemeinsam ein Herz" width="133" height="202">
+          <span class="scard__ico"><svg class="ico"><use href="#i-child"/></svg></span>
+          <h3>Kinder &amp; Jugendliche</h3>
+          <p>Unruhe, Konzentrationsprobleme, ADHS, Rückzug. Kinder reagieren auf PSE besonders schnell.</p>
+          <span class="scard__go">Für Eltern <svg class="ico"><use href="#i-arrow"/></svg></span>
+        </a>
+        <a class="scard" href="uebergewicht.htm">
+          <img src="assets/clean/1018.jpg" alt="Darstellung der Darmflora unter der Lupe" width="167" height="206">
+          <span class="scard__ico"><svg class="ico"><use href="#i-scale"/></svg></span>
+          <h3>Mit Genuss zum Wunschgewicht</h3>
+          <p>Abnehmen über Stoffwechsel und Darmgesundheit statt über Verzicht — mit Begleitung, nicht mit Verboten.</p>
+          <span class="scard__go">Konzept ansehen <svg class="ico"><use href="#i-arrow"/></svg></span>
+        </a>
+        <a class="scard" href="entspannung-pur.htm">
+          <img src="assets/clean/1020.jpg" alt="Braune Arzneiflaschen mit Lavendel und Heilkräutern" width="167" height="206">
+          <span class="scard__ico"><svg class="ico"><use href="#i-leaf"/></svg></span>
+          <h3>Entspannung pur</h3>
+          <p>Klangschalenmassage, energetische Heilmassage, Fußreflexzonen- und Sportmassage.</p>
+          <span class="scard__go">Massagen ansehen <svg class="ico"><use href="#i-arrow"/></svg></span>
+        </a>
+      </div>
+      </div>
+
+      <div class="sarrows">
+        <button class="sarrow sarrow--prev" id="sprev" aria-label="Vorherige Schwerpunkte" aria-controls="slider">
+          <svg class="ico"><use href="#i-arrow"/></svg>
+        </button>
+        <button class="sarrow sarrow--next" id="snext" aria-label="Weitere Schwerpunkte" aria-controls="slider">
+          <svg class="ico"><use href="#i-arrow"/></svg>
+        </button>
+      </div>
+
+      <div class="sfoot">
+        <p>Welcher Weg zu Ihnen passt, entscheiden wir nach der Anamnese — meist ist es eine Kombination.</p>
+        <a href="#kontakt">
+          Vorgespräch vereinbaren
+          <span class="sq"><svg class="ico"><use href="#i-arrow-ne"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEPS -->
+  <section class="section tint-2" id="ablauf">
+    <div class="wrap stack" style="gap:16px;margin-bottom:40px">
+      <span class="eyebrow">So läuft es ab</span>
+      <h2>Drei Schritte — und Sie wissen, woran Sie sind</h2>
+      <p class="lede">Kein Abo, kein Paket. Nach jedem Schritt entscheiden Sie, ob Sie weitergehen möchten.</p>
+    </div>
+    <div class="wrap steps">
+      <div class="step">
+        <span class="step__n">01</span>
+        <span class="step__t"><h3>Vorgespräch</h3><span class="step__meta">30 Min · kostenfrei</span></span>
+        <p>Sie schildern mir Ihr Anliegen, ich sage Ihnen offen, ob und mit welchen Methoden ich helfen kann. Am Telefon oder persönlich.</p>
+      </div>
+      <div class="step">
+        <span class="step__n">02</span>
+        <span class="step__t"><h3>Erstanamnese</h3><span class="step__meta">ca. 1,5 Std</span></span>
+        <p>Ausführliches Gespräch und Untersuchung, dazu je nach Bedarf Blut-, Speichel- oder Stuhlanalyse. Bringen Sie vorhandene Laborwerte gerne mit.</p>
+      </div>
+      <div class="step">
+        <span class="step__n">03</span>
+        <span class="step__t"><h3>Therapieplan</h3><span class="step__meta">schriftlich, vorab</span></span>
+        <p>Sie erhalten Therapie- und Kostenplan, bevor behandelt wird. Danach begleite ich Sie in Ihrem Tempo, mit festen Kontrollterminen.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section" id="praxis">
+    <div class="wrap about">
+      <div class="stack" style="gap:22px">
+        <span class="eyebrow">Über mich</span>
+        <h2>Cornelia Dinger, Heilpraktikerin</h2>
+        <p class="lede">
+          Bevor ich Heilpraktikerin wurde, habe ich viele Jahre in der Altenpflege, in der
+          Psychiatrie und in der Begleitung schwerstbehinderter Menschen gearbeitet. Dort
+          habe ich gelernt, was in keinem Laborwert steht: dass Beschwerden fast immer
+          eine Geschichte haben.
+        </p>
+        <p class="lede">
+          Heute verbinde ich beides — messbare Diagnostik und den Blick auf das, was
+          seelisch belastet. Mit Freude und Leidenschaft unterstütze ich Sie darin, Ihre
+          Selbstheilungskräfte zu aktivieren.
+        </p>
+        <blockquote class="pullquote">
+          Es kommt darauf an, den Körper durch die Seele und die Seele durch den Körper zu heilen.
+          <cite>Oscar Wilde</cite>
+        </blockquote>
+      </div>
+      <ul class="creds">
+        <li><b>Heilpraktikerin</b><span>seit 2017</span></li>
+        <li><b>Psychologische Heilpraktikerin</b><span>seit 1999</span></li>
+        <li><b>Psychologische Lebensberatung, Regressions- &amp; Traumaarbeit</b><span>3 Jahre</span></li>
+        <li><b>Systemische Aufstellungsarbeit</b><span>Bertold Ulsamer</span></li>
+        <li><b>Klangschalentherapie</b><span>Frank Plate</span></li>
+        <li><b>Marte Meo Practitioner</b><span>zertifiziert</span></li>
+        <li><b>Examinierte Altenpflegerin, Psychiatrie &amp; ambulante Pflege</b><span>viele Jahre</span></li>
+        <li><b>Bund Deutscher Heilpraktiker · Kneipp-Verein · Laborgemeinschaft für ganzheitliche Medizin</b><span>Mitglied</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- METHODS -->
+  <section class="section tint" id="methoden">
+    <div class="wrap stack" style="gap:16px;margin-bottom:40px">
+      <span class="eyebrow">Diagnostik &amp; Therapien</span>
+      <h2>Je genauer die Diagnostik, desto besser der Therapieplan</h2>
+      <p class="lede">Eine ausführliche Diagnostik ist unerlässlich — sie ist die Grundlage jeder Behandlung, nicht ein Zusatz.</p>
+    </div>
+    <div class="wrap methods">
+      <div class="mpanel">
+        <h3>Diagnostik</h3>
+        <ul>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Ihr Blut</b><i>Ganzheitliche Laboranalyse, 42–70 Werte</i></span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Speicheltest Geno-Line</b><i>Genetischer Stoffwechseltyp</i></span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Kinesiologie</b><i>Muskeltestung zur Verträglichkeit</i></span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Stuhlanalyse</b><i>Darmflora, Zonulin, Leaky Gut</i></span></li>
+        </ul>
+      </div>
+      <div class="mpanel">
+        <h3>Therapien</h3>
+        <ul>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Injektions- &amp; Infusionstherapie</b><i>Vitamine, Aminosäuren, Mesotherapie</i></span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Phytotherapie</b><i>Pflanzenheilkunde, individuell rezeptiert</i></span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Ozontherapie</b><i>Sauerstoff- und Durchblutungstherapie</i></span></li>
+          <li><svg class="ico"><use href="#i-check"/></svg><span><b>Induktionsbioresonanz</b><i>Regulation über Frequenzmuster</i></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOICE WALL (sticky 90svh stage, cards clipped inside it) -->
+  <section class="vwall" id="vwall">
+    <div class="vwall__stage">
+      <div class="vwall__bg" aria-hidden="true">
+        <img src="assets/clean/voices-bg.jpg" alt="" width="1800" height="1198" loading="lazy" decoding="async">
+      </div>
+      <div class="vwall__veil" aria-hidden="true"></div>
+
+      <div class="wrap vwall__in">
+        <div class="vwall__l" id="stimmen">
+          <span class="eyebrow">Patientinnen berichten</span>
+          <h2>Was sich für andere verändert hat</h2>
+          <p>Vier Menschen, die mit ganz unterschiedlichen Beschwerden zu mir kamen. Das sind ihre Worte, nicht meine.</p>
+        </div>
+        <div class="vwall__col">
+          <div class="vwall__cards" id="vwcards">
+      <figure class="vcard">
+        <blockquote>„Meine innere Unruhe war so groß, dass ich sogar in Ruhephasen Muskelzuckungen hatte. Zu meinem Erstaunen verschwand mit der Anspannung auch mein Asthma, obwohl ich dafür doch gar nicht gezielt behandelt wurde.“</blockquote>
+        <a class="vcard__more" href="patientenstimmen.htm">Ganzen Bericht lesen <span class="sq" aria-hidden="true">+</span></a>
+        <figcaption class="vcard__who"><b>Carolin</b><span>48 Jahre · Innere Unruhe · PSE</span></figcaption>
+      </figure>
+
+      <figure class="vcard">
+        <blockquote>„Ich hatte Bluthochdruck und ein fürchterliches Völlegefühl. Ich habe wieder Lebensenergie, bin lebensfroher und kann auch mal wieder eine Pizza mit Wohlgefühl und Genuss essen.“</blockquote>
+        <a class="vcard__more" href="patientenstimmen.htm">Ganzen Bericht lesen <span class="sq" aria-hidden="true">+</span></a>
+        <figcaption class="vcard__who"><b>Heidi</b><span>50 Jahre · Bluthochdruck, Völlegefühl</span></figcaption>
+      </figure>
+
+      <figure class="vcard">
+        <blockquote>„Die Schwellungen und Schmerzen sind alle weg, auch am Morgen wo es immer am schlimmsten war. Mittlerweile bin ich schmerzfrei, dank PSE und einer Stoffwechseloptimierung mit entsprechender Ernährung.“</blockquote>
+        <a class="vcard__more" href="patientenstimmen.htm">Ganzen Bericht lesen <span class="sq" aria-hidden="true">+</span></a>
+        <figcaption class="vcard__who"><b>Petra</b><span>36 Jahre · Polyarthritis, chronische Schmerzen</span></figcaption>
+      </figure>
+
+      <figure class="vcard">
+        <blockquote>„Sarah ist empathischer geworden, sie spricht wieder mit mir und erzählt auch, was in der Schule los ist. Sarahs Schulnoten haben sich in einigen Fächern um zwei Noten verbessert.“</blockquote>
+        <a class="vcard__more" href="patientenstimmen.htm">Ganzen Bericht lesen <span class="sq" aria-hidden="true">+</span></a>
+        <figcaption class="vcard__who"><b>Sarahs Mutter</b><span>Sarah, 13 Jahre · Schule, Rückzug</span></figcaption>
+      </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEES + FAQ -->
+  <section class="section tint-2" id="kosten">
+    <div class="wrap two" style="align-items:start">
+      <div class="panel">
+        <span class="eyebrow" style="margin-bottom:16px">Kosten &amp; Kasse</span>
+        <h2 style="font-size:clamp(1.5rem,2.4vw,1.9rem);margin-bottom:4px">Transparent, bevor behandelt wird</h2>
+        <ul class="fees">
+          <li><span><b>Vorgespräch</b><i>ca. 30 Minuten, telefonisch oder persönlich</i></span><span class="price price--free">kostenfrei</span></li>
+          <li><span><b>Erstanamnese &amp; Untersuchung</b><i>ca. 1,5 Stunden inkl. Auswertung</i></span><span class="price--slot">Betrag einsetzen</span></li>
+          <li><span><b>Folgetermin</b><i>je nach Methode und Dauer</i></span><span class="price--slot">Betrag einsetzen</span></li>
+          <li><span><b>Laboranalysen</b><i>Abrechnung direkt über das Labor</i></span><span class="price">nach Aufwand</span></li>
+        </ul>
+        <p class="hint">Abrechnung nach der Gebührenordnung für Heilpraktiker. Private Kassen und Zusatzversicherungen erstatten häufig; gesetzliche Kassen bezuschussen oft über Bonusprogramme.</p>
+      </div>
+      <div>
+        <span class="eyebrow" style="margin-bottom:16px">Häufige Fragen</span>
+        <h2 style="margin-bottom:24px">Das fragen mich fast alle</h2>
+        <div class="faq">
+          <details class="q" open>
+            <summary>Zahlt meine Krankenkasse die Behandlung?</summary>
+            <p>Privatversicherte und Patient:innen mit Heilpraktiker-Zusatzversicherung erhalten die Kosten je nach Tarif ganz oder teilweise zurück. Gesetzliche Kassen übernehmen die Behandlung nicht direkt, bezuschussen sie aber oft über Bonus- oder Wahltarife. Fragen Sie kurz bei Ihrer Kasse nach — Sie erhalten von mir eine Rechnung nach der Gebührenordnung für Heilpraktiker.</p>
+          </details>
+          <details class="q">
+            <summary>Was passiert beim ersten Termin?</summary>
+            <p>Wir nehmen uns rund 1,5 Stunden Zeit. Ich höre zu, frage nach Ihrer Vorgeschichte, untersuche Sie und sehe mir vorhandene Laborwerte an. Bringen Sie deshalb gerne alle Befunde mit, die Sie haben. Behandelt wird erst, wenn Sie den Therapie- und Kostenplan kennen.</p>
+          </details>
+          <details class="q">
+            <summary>Muss ich über belastende Themen sprechen?</summary>
+            <p>Nein. Genau das ist die Stärke der Psychosomatischen Energetik: Der seelische Konflikt wird über Testung ermittelt und mit homöopathischen Komplexmitteln gelöst. Sie müssen schmerzhafte Erlebnisse nicht erzählen, um sie loszulassen.</p>
+          </details>
+          <details class="q">
+            <summary>Wie schnell merke ich eine Veränderung?</summary>
+            <p>Das ist individuell. Viele Klient:innen, die besonders müde und erschöpft kommen, berichten schon nach wenigen Wochen von mehr Lebensenergie und besserem Schlaf. Chronische Beschwerden brauchen erfahrungsgemäß mehrere Monate Begleitung.</p>
+          </details>
+          <details class="q">
+            <summary>Ersetzen Sie meine Ärztin oder meinen Arzt?</summary>
+            <p>Nein. Ich arbeite ergänzend zur schulmedizinischen Behandlung und rate niemandem, verordnete Medikamente eigenmächtig abzusetzen. Wo eine ärztliche Abklärung nötig ist, sage ich Ihnen das deutlich.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="kontakt">
+    <div class="wrap stack" style="gap:16px;margin-bottom:40px">
+      <span class="eyebrow">Kontakt &amp; Anfahrt</span>
+      <h2>Lassen Sie uns 30 Minuten sprechen</h2>
+      <p class="lede">Ein persönliches Gespräch ist durch nichts ersetzbar. Termine finden ausschließlich nach Vereinbarung statt, damit ich genügend Zeit für Sie habe.</p>
+    </div>
+    <div class="wrap contact">
+      <form class="panel" id="form">
+        <div class="fbody">
+          <div class="row2">
+            <div class="field"><label for="f-name">Ihr Name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="f-tel">Telefon</label><input id="f-tel" name="tel" type="tel" autocomplete="tel" placeholder="für den Rückruf"></div>
+          </div>
+          <div class="field"><label for="f-mail">E-Mail</label><input id="f-mail" name="email" type="email" autocomplete="email" required></div>
+          <div class="field">
+            <label for="f-topic">Worum geht es?</label>
+            <select id="f-topic" name="topic">
+              <option>Kostenloses Vorgespräch</option>
+              <option>Erschöpfung, Stress, Schlaf</option>
+              <option>Stoffwechsel, Schilddrüse, Darm</option>
+              <option>Schmerzen</option>
+              <option>Mein Kind</option>
+              <option>Gewicht</option>
+              <option>Massage / Entspannung</option>
+              <option>Etwas anderes</option>
+            </select>
+          </div>
+          <div class="field"><label for="f-msg">Ihre Nachricht</label><textarea id="f-msg" name="message" placeholder="Erzählen Sie mir in zwei, drei Sätzen, was Sie beschäftigt."></textarea></div>
+          <label class="check">
+            <input type="checkbox" name="consent" required>
+            <span>Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage gespeichert werden. <a href="datenschutz.htm">Datenschutzerklärung</a></span>
+          </label>
+          <button class="btn btn--primary" type="submit" style="width:100%">Anfrage senden <svg class="ico"><use href="#i-arrow"/></svg></button>
+          <p class="appt__foot">Ihre Anfrage ist keine Terminbestätigung — ich melde mich persönlich zurück.</p>
+        </div>
+        <div class="sent" role="status">
+          <svg class="ico"><use href="#i-check"/></svg>
+          <h3 style="font-size:1.3rem">Vielen Dank für Ihre Nachricht.</h3>
+          <p style="color:var(--body)">Ich melde mich persönlich bei Ihnen zurück. Wenn es dringend ist, erreichen Sie mich unter <a href="tel:+491711242717">0171 124 27 17</a>.</p>
+          <p class="appt__foot">Entwurf: im Livebetrieb an das Praxis-Postfach angebunden.</p>
+        </div>
+      </form>
+
+      <div class="info">
+        <dl>
+          <dt><svg class="ico"><use href="#i-pin"/></svg></dt>
+          <dd>Naturheilpraxis Cornelia Dinger<br>Schubertstraße 7<br>76669 Bad Schönborn</dd>
+          <dt><svg class="ico"><use href="#i-phone"/></svg></dt>
+          <dd><a href="tel:+491711242717">0171 124 27 17</a></dd>
+          <dt><svg class="ico"><use href="#i-mail"/></svg></dt>
+          <dd><a href="mailto:info@naturheilpraxis-dinger.de">info@naturheilpraxis-dinger.de</a></dd>
+          <dt><svg class="ico"><use href="#i-clock"/></svg></dt>
+          <dd>Termine nur nach Vereinbarung<br><span style="color:var(--muted);font-weight:400">Zeiten stimmen wir im Vorgespräch ab</span></dd>
+        </dl>
+
+        <div class="mapcard">
+          <svg viewBox="0 0 480 164" role="img" aria-label="Lageplan: Schubertstraße 7, 76669 Bad Schönborn">
+            <rect width="480" height="164" fill="var(--wash-2)"/>
+            <g stroke="var(--hairline)" stroke-width="1"><path d="M0 38h480M0 116h480M96 0v164M292 0v164M398 0v164"/></g>
+            <path d="M0 78h480" stroke="var(--wash-3)" stroke-width="10" fill="none"/>
+            <path d="M196 0v164" stroke="var(--wash-3)" stroke-width="7" fill="none"/>
+            <g fill="var(--wash-3)">
+              <rect x="112" y="46" width="62" height="24" rx="3"/><rect x="216" y="46" width="58" height="24" rx="3"/>
+              <rect x="112" y="90" width="48" height="18" rx="3"/><rect x="314" y="90" width="66" height="18" rx="3"/>
+              <rect x="314" y="46" width="40" height="24" rx="3"/>
+            </g>
+            <text x="14" y="72" fill="var(--muted)" font-family="Figtree,sans-serif" font-size="9" font-weight="600" letter-spacing=".08em">HUTTENSTRASSE</text>
+            <text x="204" y="20" fill="var(--muted)" font-family="Figtree,sans-serif" font-size="9" font-weight="600" letter-spacing=".08em">SCHUBERTSTRASSE</text>
+            <g transform="translate(196 78)"><circle r="19" fill="var(--accent)" opacity=".15"/><circle r="9" fill="var(--accent)"/><circle r="3.4" fill="var(--canvas)"/></g>
+          </svg>
+          <div class="mapcard__foot">
+            <span style="color:var(--muted)">Schubertstraße 7 · 76669 Bad Schönborn</span>
+            <a href="https://www.google.de/maps/place/Schubertstra%C3%9Fe+7,+76669+Bad+Sch%C3%B6nborn" target="_blank" rel="noopener">In Google Maps öffnen →</a>
+          </div>
+        </div>
+
+        <p class="legal"><strong style="color:var(--ink)">Hinweis gemäß § 3 Heilmittelwerbegesetz:</strong> Bei vielen naturheilkundlichen Behandlungsmethoden handelt es sich um Verfahren der Erfahrungsmedizin, die wissenschaftlich nicht anerkannt sind.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <img class="foot__mark" src="assets/clean/mark.png" alt="" aria-hidden="true" width="560" height="580" loading="lazy" decoding="async">
+  <div class="wrap">
+    <div class="footcta">
+      <div>
+        <span class="eyebrow">Lieber direkt sprechen?</span>
+        <h2>Sie müssen nicht alles<br>allein herausfinden.</h2>
+        <p>Ein Satz am Telefon reicht mir, um Ihnen zu sagen, ob ich der richtige Weg für Sie bin. Das Vorgespräch kostet nichts.</p>
+      </div>
+      <div class="footcta__r">
+        <a class="bigtel" href="tel:+491711242717">
+          <span class="bigtel__ring"><svg class="ico"><use href="#i-phone"/></svg></span>
+          <span class="bigtel__t">
+            <small>30 Minuten · kostenfrei</small>
+            <b>0171 124 27 17</b>
+          </span>
+        </a>
+        <a class="footmail" href="mailto:info@naturheilpraxis-dinger.de">
+          <svg class="ico"><use href="#i-mail"/></svg> info@naturheilpraxis-dinger.de
+        </a>
+      </div>
+    </div>
+
+    <div class="foot__grid">
+      <div>
+        <img class="foot__logo" src="assets/clean/logo.png" alt="Naturheilpraxis Cornelia Dinger" width="404" height="85">
+        <p class="foot__note">Praxis für ganzheitliche Gesundheit und Ursachenbehandlung in Bad Schönborn — für Patientinnen und Patienten aus Bad Schönborn, Kronau, Ubstadt-Weiher, Bruchsal, Waghäusel und dem Kraichgau.</p>
+      </div>
+      <div>
+        <h4>Praxis</h4>
+        <ul>
+          <li><a href="praxis.htm">Über mich</a></li>
+          <li><a href="#schwerpunkte">Schwerpunkte</a></li>
+          <li><a href="#methoden">Diagnostik &amp; Therapien</a></li>
+          <li><a href="patientenstimmen.htm">Erfahrungsberichte</a></li>
+          <li><a href="gebuehren.htm">Gebühren</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Kontakt</h4>
+        <ul>
+          <li>Schubertstraße 7<br>76669 Bad Schönborn</li>
+          <li><a href="tel:+491711242717">0171 124 27 17</a></li>
+          <li><a href="mailto:info@naturheilpraxis-dinger.de">info@naturheilpraxis-dinger.de</a></li>
+          <li><a href="https://de-de.facebook.com/pg/NaturheilpraxisDinger" target="_blank" rel="noopener">Facebook</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><a href="impressum.htm">Impressum</a></li>
+          <li><a href="datenschutz.htm">Datenschutz</a></li>
+          <li><a href="#kosten">Kosten &amp; Kasse</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__bar">
+      <span>© 2026 Naturheilpraxis Cornelia Dinger</span>
+      <span>Mitglied im Bund Deutscher Heilpraktiker</span>
+    </div>
+  </div>
+</footer>
+
+<div class="mcta">
+  <a class="btn btn--ghost" href="tel:+491711242717"><svg class="ico"><use href="#i-phone"/></svg> Anrufen</a>
+  <a class="btn btn--primary" href="#kontakt">Vorgespräch</a>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":["MedicalBusiness","HealthAndBeautyBusiness"],
+      "@id":"https://naturheilpraxis-dinger.de/#praxis",
+      "name":"Naturheilpraxis Cornelia Dinger",
+      "description":"Praxis für ganzheitliche Gesundheit und Ursachenbehandlung in Bad Schönborn: Psychosomatische Energetik (PSE), Vital- und Stoffwechselanalyse, Labordiagnostik, Phytotherapie.",
+      "url":"https://naturheilpraxis-dinger.de/",
+      "telephone":"+49-171-1242717",
+      "email":"info@naturheilpraxis-dinger.de",
+      "priceRange":"$$",
+      "address":{"@type":"PostalAddress","streetAddress":"Schubertstraße 7","postalCode":"76669","addressLocality":"Bad Schönborn","addressRegion":"Baden-Württemberg","addressCountry":"DE"},
+      "geo":{"@type":"GeoCoordinates","latitude":49.2220392,"longitude":8.6625043},
+      "areaServed":["Bad Schönborn","Kronau","Ubstadt-Weiher","Bruchsal","Waghäusel","Kraichgau","Karlsruhe"],
+      "sameAs":["https://de-de.facebook.com/pg/NaturheilpraxisDinger"],
+      "founder":{"@type":"Person","name":"Cornelia Dinger","jobTitle":"Heilpraktikerin"},
+      "availableService":[
+        {"@type":"MedicalTherapy","name":"Psychosomatische Energetik (PSE)"},
+        {"@type":"MedicalTest","name":"Vital- und Stoffwechselanalyse"},
+        {"@type":"MedicalTherapy","name":"Phytotherapie"},
+        {"@type":"MedicalTherapy","name":"Ozontherapie"},
+        {"@type":"MedicalTherapy","name":"Injektions- und Infusionstherapie"}
+      ]
+    },
+    {
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Zahlt meine Krankenkasse die Behandlung?","acceptedAnswer":{"@type":"Answer","text":"Privatversicherte und Patienten mit Heilpraktiker-Zusatzversicherung erhalten die Kosten je nach Tarif ganz oder teilweise zurück. Gesetzliche Kassen übernehmen die Behandlung nicht direkt, bezuschussen sie aber oft über Bonus- oder Wahltarife. Die Abrechnung erfolgt nach der Gebührenordnung für Heilpraktiker."}},
+        {"@type":"Question","name":"Was passiert beim ersten Termin?","acceptedAnswer":{"@type":"Answer","text":"Die Erstanamnese dauert rund 1,5 Stunden: ausführliches Gespräch, Untersuchung und Sichtung vorhandener Laborwerte. Behandelt wird erst, wenn ein schriftlicher Therapie- und Kostenplan vorliegt."}},
+        {"@type":"Question","name":"Muss ich über belastende Themen sprechen?","acceptedAnswer":{"@type":"Answer","text":"Nein. Bei der Psychosomatischen Energetik wird der seelische Konflikt über Testung ermittelt und mit homöopathischen Komplexmitteln gelöst, ohne dass schmerzhafte Erlebnisse erzählt werden müssen."}},
+        {"@type":"Question","name":"Wie schnell merke ich eine Veränderung?","acceptedAnswer":{"@type":"Answer","text":"Das ist individuell. Viele erschöpfte Klienten berichten schon nach wenigen Wochen von mehr Lebensenergie und besserem Schlaf. Chronische Beschwerden brauchen erfahrungsgemäß mehrere Monate Begleitung."}},
+        {"@type":"Question","name":"Ersetzen Sie meine Ärztin oder meinen Arzt?","acceptedAnswer":{"@type":"Answer","text":"Nein. Die Behandlung erfolgt ergänzend zur schulmedizinischen Versorgung. Verordnete Medikamente sollten nicht eigenmächtig abgesetzt werden."}}
+      ]
+    }
+  ]
+}
+</script>
+
+<script>
+(function(){
+  var bar = document.getElementById('bar');
+  var cue = document.getElementById('scrollcue');
+  var onScroll = function(){
+    bar.classList.toggle('is-stuck', window.scrollY > 8);
+    if (cue) cue.classList.toggle('is-gone', window.scrollY > 90);
+  };
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+  var burger = document.getElementById('burger'), sheet = document.getElementById('sheet');
+  burger.addEventListener('click', function(){
+    var open = sheet.hasAttribute('open');
+    if (open) sheet.removeAttribute('open'); else sheet.setAttribute('open','');
+    burger.setAttribute('aria-expanded', String(!open));
+    burger.textContent = open ? 'Menü' : 'Schließen';
+    document.body.style.overflow = open ? '' : 'hidden';
+  });
+  sheet.addEventListener('click', function(e){
+    if (e.target.tagName === 'A') {
+      sheet.removeAttribute('open');
+      burger.setAttribute('aria-expanded','false');
+      burger.textContent = 'Menü';
+      document.body.style.overflow = '';
+    }
+  });
+
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute('href');
+    if (id === '#' || id.length < 2) return;
+    var t = document.querySelector(id);
+    if (!t) return;
+    e.preventDefault();
+    window.scrollTo({top: t.getBoundingClientRect().top + window.scrollY - 96, behavior:'smooth'});
+  });
+
+  // Services slider: arrows page by one card. Native smooth scrolling runs on
+  // the compositor and cooperates with scroll-snap; driving scrollLeft frame by
+  // frame instead makes the snap engine re-snap mid-animation, which stutters.
+  var sl = document.getElementById('slider');
+  if (sl) {
+    var prev = document.getElementById('sprev'), next = document.getElementById('snext');
+    var step = function(){
+      var card = sl.querySelector('.scard');
+      var gap = parseFloat(getComputedStyle(sl).columnGap) || 0;
+      return card ? card.getBoundingClientRect().width + gap : sl.clientWidth * 0.8;
+    };
+    var ease = function(){
+      return matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    };
+    var sync = function(){
+      prev.disabled = sl.scrollLeft <= 2;
+      next.disabled = sl.scrollLeft >= sl.scrollWidth - sl.clientWidth - 2;
+    };
+    prev.addEventListener('click', function(){ sl.scrollBy({left:-step(), behavior:ease()}); });
+    next.addEventListener('click', function(){ sl.scrollBy({left: step(), behavior:ease()}); });
+    sl.addEventListener('scroll', sync, {passive:true});
+    addEventListener('resize', sync);
+    sync();
+  }
+
+  // Voice wall: the cards sit inside the 90svh sticky stage (so overflow:hidden
+  // on it really clips them) and are moved by scroll position instead of flow.
+  // The runway height is set from the measured travel, so it scrolls ~1:1.
+  var vw = document.getElementById('vwall');
+  var vwCards = document.getElementById('vwcards');
+  if (vw && vwCards) {
+    var vwStage = vw.querySelector('.vwall__stage');
+    var vwLeft  = vw.querySelector('.vwall__l');
+    var stageH = 0, travel = 0, ticking = false;
+
+    var pinned = function(){ return getComputedStyle(vwStage).position === 'sticky'; };
+
+    var measure = function(){
+      if (!pinned()) {                       // mobile: hand it back to the browser
+        vw.style.height = '';
+        vwCards.style.transform = '';
+        stageH = travel = 0;
+        return;
+      }
+      vwCards.style.transform = '';          // measure at rest
+      stageH = vwStage.offsetHeight;
+
+      // Stop when the last card's bottom is level with the bottom of the
+      // headline block, not when the column has cleared the window. The
+      // headline is vertically centred, so this is measured, not assumed.
+      var endOffset = vwLeft.getBoundingClientRect().bottom - vwStage.getBoundingClientRect().top;
+      travel = vwCards.offsetHeight + stageH - endOffset;
+      if (travel < 1) travel = vwCards.offsetHeight;   // guard: very short column
+
+      vw.style.height = (stageH + travel) + 'px';
+      draw();
+    };
+
+    var draw = function(){
+      ticking = false;
+      if (!travel) return;
+      var p = -vw.getBoundingClientRect().top / travel;
+      p = p < 0 ? 0 : p > 1 ? 1 : p;
+      vwCards.style.transform = 'translate3d(0,' + (stageH - p * travel) + 'px,0)';
+    };
+
+    var onScroll = function(){ if (!ticking) { ticking = true; requestAnimationFrame(draw); } };
+    addEventListener('scroll', onScroll, {passive:true});
+    addEventListener('resize', measure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    measure();
+  }
+
+  // Contact form: validate required fields, then swap to the thank-you panel.
+  [['form',['f-name','f-mail']]].forEach(function(pair){
+    var el = document.getElementById(pair[0]);
+    if (!el) return;
+    el.addEventListener('submit', function(e){
+      e.preventDefault();
+      var missing = false;
+      pair[1].forEach(function(id){
+        var f = document.getElementById(id);
+        if (f && !f.value.trim()) { f.style.borderColor = 'var(--accent)'; missing = true; }
+      });
+      var c = el.querySelector('input[name="consent"]');
+      if (c && !c.checked) { missing = true; c.focus(); }
+      if (missing) return;
+      el.classList.add('is-sent');
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+    });
+  });
+})();
+</script>

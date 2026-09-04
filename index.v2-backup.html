@@ -1,0 +1,987 @@
+<!--
+  ============================================================================
+  Naturheilpraxis Cornelia Dinger — Startseite (Redesign v2)
+  ----------------------------------------------------------------------------
+  Design language derived from the Airbnb DESIGN.md spec
+  (~/.claude/skills/design-md-library/references/airbnb/DESIGN.md):
+    · pure white canvas, near-black ink, ONE accent voltage used scarcely
+    · photography carries visual weight — display type stays at modest sizes/weights
+    · soft shape language: pill CTAs, 14px media, 20px panels, no hard corners
+  Tokens remapped to the practice's own brand plum (taken from the real logo).
+
+  All photography is the practice's own, pulled from the existing site and
+  re-cropped to remove the baked-in pink frames and baked-in German text:
+    assets/clean/1020.jpg  amber bottles + lavender      (was index_htm_files/1020.jpg)
+    assets/clean/1021.jpg  hands on a forearm            (was index_htm_files/1021.jpg)
+    assets/clean/1447.jpg  vials + syringes              (was index_htm_files/1447.jpg)
+    assets/clean/1095.jpg  test tubes                    (was index_htm_files/1095.jpg)
+    assets/clean/1019.jpg  blood tubes                   (was index_htm_files/1019.jpg)
+    assets/clean/1018.jpg  gut / microbiome illustration  (was index_htm_files/1018.jpg)
+    assets/clean/1371.jpg  injection                     (was index_htm_files/1371.jpg)
+    assets/clean/ruhe.jpg  towel + oils                  (cropped out of 1912.png)
+    assets/clean/kinder.jpg hands cradling a heart       (cropped out of 1903.png)
+    assets/clean/logo.png  the practice wordmark          (was index_htm_files/1910.png)
+
+  NOTE ON RESOLUTION: the source files are only 167–251px wide. Every image here
+  is therefore placed at or below its native size so it stays sharp. For
+  production, re-shoot or re-export at 2x the displayed size.
+
+  SEO HEAD for the live domain:
+  <title>Naturheilpraxis Cornelia Dinger | Heilpraktikerin in Bad Schönborn</title>
+  <meta name="description" content="Ganzheitliche Ursachenbehandlung in Bad Schönborn:
+    Psychosomatische Energetik (PSE), Vital- & Stoffwechselanalyse, Labordiagnostik.
+    Kostenloses Vorgespräch – Heilpraktikerin Cornelia Dinger. Tel. 0171 124 27 17">
+  <link rel="canonical" href="https://naturheilpraxis-dinger.de/">
+  ============================================================================
+-->
+<title>Naturheilpraxis Cornelia Dinger</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Manrope:wght@400;500;600;700&display=swap">
+
+<style>
+/* ==========================================================================
+   TOKENS
+   Canvas is white and ink is near-black; --accent is the single voltage and
+   appears ONLY on primary CTAs, links, the logo mark and two small moments.
+   ========================================================================== */
+:root{
+  --canvas:#FFFFFF;
+  --soft:#F7F4F5;          /* barely-warm grey, biased a hair toward the plum */
+  --strong:#EFEAEC;
+  --ink:#1F1A1C;
+  --body:#4B4247;
+  --muted:#7D7278;
+  --faint:#9C9298;
+  --hairline:#E5DFE1;
+  --hairline-soft:#F0EBED;
+
+  --accent:#7B2255;        /* sampled from the practice logo */
+  --accent-active:#631843;
+  --accent-tint:#FBF3F7;
+  --brand-pink:#D97BA8;    /* logo-only, like a sub-brand token */
+  --on-accent:#FFFFFF;
+
+  --r-sm:8px; --r-md:14px; --r-lg:20px; --r-full:9999px;
+
+  --shadow-lift:0 1px 2px rgba(31,26,28,.04), 0 12px 28px -14px rgba(31,26,28,.16);
+  --shadow-cta:0 8px 18px -10px rgba(123,34,85,.5);
+
+  --measure:1180px;
+  --gutter:clamp(20px,5vw,44px);
+  --sect:clamp(58px,7vw,100px);
+
+  --f-display:"Newsreader",Georgia,"Times New Roman",serif;
+  --f-ui:"Manrope","Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --canvas:#141011; --soft:#1C1719; --strong:#251E21;
+    --ink:#F6F1F2; --body:#C9BFC3; --muted:#9C9095; --faint:#7E7378;
+    --hairline:#332A2E; --hairline-soft:#271F22;
+    --accent:#E893BC; --accent-active:#F2A9CA; --accent-tint:#2A1A22;
+    --brand-pink:#E9A6C4; --on-accent:#25101A;
+    --shadow-lift:0 1px 2px rgba(0,0,0,.4), 0 12px 28px -14px rgba(0,0,0,.7);
+    --shadow-cta:0 8px 18px -10px rgba(232,147,188,.32);
+  }
+}
+:root[data-theme="dark"]{
+  --canvas:#141011; --soft:#1C1719; --strong:#251E21;
+  --ink:#F6F1F2; --body:#C9BFC3; --muted:#9C9095; --faint:#7E7378;
+  --hairline:#332A2E; --hairline-soft:#271F22;
+  --accent:#E893BC; --accent-active:#F2A9CA; --accent-tint:#2A1A22;
+  --brand-pink:#E9A6C4; --on-accent:#25101A;
+  --shadow-lift:0 1px 2px rgba(0,0,0,.4), 0 12px 28px -14px rgba(0,0,0,.7);
+  --shadow-cta:0 8px 18px -10px rgba(232,147,188,.32);
+}
+
+/* ==========================================================================
+   BASE — modest display sizes; photography does the heavy lifting
+   ========================================================================== */
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;background:var(--canvas);color:var(--ink);
+  font-family:var(--f-ui);font-size:16.5px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+h1,h2,h3,h4{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--f-display);font-weight:500;line-height:1.15;letter-spacing:-.014em}
+h1{font-size:clamp(2rem,4.1vw,2.85rem)}
+h2{font-size:clamp(1.5rem,2.7vw,2rem)}
+h3{font-family:var(--f-ui);font-size:1.05rem;font-weight:600;line-height:1.3;letter-spacing:-.005em}
+p{margin:0}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px}
+img{max-width:100%;display:block}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+.wrap{max-width:var(--measure);margin-inline:auto;padding-inline:var(--gutter)}
+.section{padding-block:var(--sect)}
+.soft{background:var(--soft)}
+.stack{display:flex;flex-direction:column}
+.lede{font-size:clamp(1rem,1.35vw,1.1rem);color:var(--body);max-width:60ch}
+.small{font-size:.9rem;color:var(--muted)}
+
+/* eyebrow: muted, NOT accent — the accent stays scarce */
+.eyebrow{
+  font-size:.72rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--faint);margin:0;
+}
+.ico{width:1em;height:1em;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-family:var(--f-ui);font-size:1rem;font-weight:600;line-height:1;
+  padding:16px 26px;border-radius:var(--r-full);border:1.5px solid transparent;
+  cursor:pointer;text-decoration:none;
+  transition:transform .18s ease,background .18s ease,box-shadow .18s ease,border-color .18s ease;
+}
+.btn--primary{background:var(--accent);color:var(--on-accent);box-shadow:var(--shadow-cta)}
+.btn--primary:hover{background:var(--accent-active);transform:translateY(-2px)}
+.btn--ghost{background:var(--canvas);color:var(--ink);border-color:var(--hairline)}
+.btn--ghost:hover{border-color:var(--ink);transform:translateY(-2px)}
+.btn--sm{padding:11px 20px;font-size:.92rem}
+.btn .ico{width:18px;height:18px}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+.bar{
+  position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--canvas) 90%,transparent);
+  backdrop-filter:saturate(150%) blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .25s ease;
+}
+.bar.is-stuck{border-bottom-color:var(--hairline-soft)}
+.bar__in{display:flex;align-items:center;gap:clamp(14px,3vw,36px);height:80px}
+.brand{flex:none;display:block}
+.brand img{height:38px;width:auto}
+.nav{display:flex;gap:clamp(10px,1.6vw,26px);margin-left:auto}
+.nav a{
+  color:var(--body);text-decoration:none;font-size:.94rem;font-weight:600;white-space:nowrap;
+  padding:6px 0;border-bottom:2px solid transparent;transition:color .16s ease,border-color .16s ease;
+}
+.nav a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+.bar__cta{display:flex;align-items:center;gap:12px;flex:none}
+.bar__tel{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:.94rem;color:var(--ink);text-decoration:none;white-space:nowrap}
+.bar__tel .ico{width:17px;height:17px;color:var(--muted)}
+.burger{display:none;background:none;border:1.5px solid var(--hairline);border-radius:var(--r-full);padding:9px 15px;color:var(--ink);font:inherit;font-size:.88rem;font-weight:600;cursor:pointer;align-items:center}
+.sheet{display:none}
+.sheet[open]{display:block;position:fixed;inset:80px 0 0;z-index:55;background:var(--canvas);padding:22px var(--gutter) 40px;overflow-y:auto}
+.sheet a{display:block;padding:15px 0;border-bottom:1px solid var(--hairline-soft);color:var(--ink);text-decoration:none;font-size:1.12rem;font-weight:500;font-family:var(--f-display)}
+
+/* ==========================================================================
+   HERO — copy left, three native-scale photographs right
+   ========================================================================== */
+.hero{padding-block:clamp(40px,5.5vw,74px) clamp(34px,4.5vw,58px)}
+.hero__in{display:grid;grid-template-columns:1fr auto;gap:clamp(30px,4.5vw,68px);align-items:center}
+.hero__copy{display:flex;flex-direction:column;gap:20px;max-width:36em}
+.hero h1 em{font-style:italic;font-weight:400}
+.hero__actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.hero__note{display:flex;flex-wrap:wrap;align-items:center;gap:7px 18px;font-size:.88rem;color:var(--muted);font-weight:500}
+.hero__note span{display:inline-flex;align-items:center;gap:6px}
+.hero__note .ico{width:15px;height:15px;color:var(--faint)}
+
+/* three photos, staggered, each at ~native width so they stay crisp */
+.trio{display:flex;gap:14px;align-items:flex-end;flex:none}
+.trio figure{margin:0;width:152px}
+.trio img{width:152px;height:188px;object-fit:cover;border-radius:var(--r-md);background:var(--strong);
+  box-shadow:inset 0 0 0 1px rgba(31,26,28,.07)}
+.trio figure:nth-child(1){padding-bottom:34px}
+.trio figure:nth-child(3){padding-bottom:64px}
+.trio figcaption{font-size:.73rem;color:var(--faint);margin-top:9px;letter-spacing:.01em}
+
+/* ==========================================================================
+   BEFUND STRIP — styled as a lab result sheet, a motif only this practice owns
+   ========================================================================== */
+.befund{border-top:1px solid var(--ink);border-bottom:1px solid var(--hairline)}
+.befund__in{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.befund__col{padding:20px 26px 20px 0;border-right:1px solid var(--hairline-soft)}
+.befund__col:last-child{border-right:0}
+.befund__k{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:6px}
+.befund__v{font-family:var(--f-display);font-size:1.3rem;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;display:block;line-height:1.2}
+.befund__n{font-size:.83rem;color:var(--muted);display:block;margin-top:3px}
+
+/* ==========================================================================
+   SYMPTOM LIST
+   ========================================================================== */
+.two{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(28px,5vw,76px);align-items:start}
+.symptoms{display:grid;grid-template-columns:1fr 1fr;gap:0 clamp(20px,3vw,44px);margin:0;padding:0;list-style:none}
+.symptoms li{
+  display:flex;gap:11px;align-items:flex-start;padding:13px 0;
+  border-bottom:1px solid var(--hairline-soft);font-size:.99rem;color:var(--ink);font-weight:500;
+}
+.symptoms .ico{width:18px;height:18px;color:var(--muted);margin-top:3px}
+.after{margin-top:28px;display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+
+/* ==========================================================================
+   FOCUS ROWS — square thumb + text. Image is the object; no icon boxes,
+   no borders, no shadows, no accent rails.
+   ========================================================================== */
+.focus{display:grid;grid-template-columns:1fr 1fr;gap:2px clamp(26px,4vw,60px)}
+.frow{
+  display:flex;gap:18px;align-items:flex-start;padding:20px 0;
+  border-bottom:1px solid var(--hairline-soft);text-decoration:none;color:var(--ink);
+}
+.frow img{width:96px;height:96px;object-fit:cover;border-radius:var(--r-md);flex:none;background:var(--strong);
+  box-shadow:inset 0 0 0 1px rgba(31,26,28,.07);transition:transform .25s ease}
+.frow:hover img{transform:scale(1.03)}
+.frow__t{display:flex;flex-direction:column;gap:5px}
+.frow h3{transition:color .16s ease}
+.frow:hover h3{color:var(--accent)}
+.frow p{font-size:.93rem;color:var(--body);line-height:1.55}
+.frow__go{font-size:.83rem;font-weight:700;color:var(--muted);display:inline-flex;align-items:center;gap:6px;margin-top:2px}
+.frow:hover .frow__go{color:var(--accent)}
+.frow__go .ico{width:14px;height:14px}
+
+/* ==========================================================================
+   STEPS
+   ========================================================================== */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(22px,3.4vw,44px)}
+.step{display:flex;flex-direction:column;gap:9px;padding-top:22px;border-top:1px solid var(--hairline);position:relative}
+.step::before{content:"";position:absolute;top:-4px;left:0;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.step__n{font-size:.7rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-variant-numeric:tabular-nums}
+.step__t{display:flex;flex-wrap:wrap;align-items:baseline;gap:9px}
+.step h3{font-size:1.1rem}
+.step__meta{font-size:.78rem;font-weight:600;color:var(--muted);white-space:nowrap}
+.step p{font-size:.94rem;color:var(--body)}
+
+/* ==========================================================================
+   ABOUT
+   ========================================================================== */
+.about{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(30px,5vw,72px);align-items:start}
+.creds{margin:0;padding:0;list-style:none;border-top:1px solid var(--ink)}
+.creds li{display:flex;gap:16px;justify-content:space-between;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--hairline-soft);font-size:.94rem}
+.creds b{font-weight:600;color:var(--ink)}
+.creds span{color:var(--muted);font-size:.86rem;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.pullquote{
+  font-family:var(--f-display);font-style:italic;font-weight:400;
+  font-size:clamp(1.25rem,2.2vw,1.6rem);line-height:1.34;color:var(--ink);
+  margin:0;padding-left:20px;border-left:2px solid var(--accent);
+}
+.pullquote cite{display:block;margin-top:12px;font-family:var(--f-ui);font-style:normal;font-size:.74rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--faint)}
+
+/* ==========================================================================
+   METHODS
+   ========================================================================== */
+.methods{display:grid;grid-template-columns:1fr 1fr;gap:clamp(26px,4vw,60px)}
+.methods h3{padding-bottom:11px;border-bottom:1px solid var(--ink);margin-bottom:2px}
+.methods ul{margin:0;padding:0;list-style:none}
+.methods li{padding:13px 0;border-bottom:1px solid var(--hairline-soft);font-size:.96rem}
+.methods li b{font-weight:600;display:block}
+.methods li i{font-style:normal;color:var(--muted);font-size:.88rem}
+.methods__lead{display:flex;gap:16px;align-items:center;padding:13px 0;border-bottom:1px solid var(--hairline-soft)}
+.methods__lead img{width:76px;height:76px;object-fit:cover;border-radius:var(--r-sm);flex:none;background:var(--strong);
+  box-shadow:inset 0 0 0 1px rgba(31,26,28,.07)}
+
+/* ==========================================================================
+   VOICES — hairline-separated quotes, no cards
+   ========================================================================== */
+.voices{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,3.4vw,48px)}
+.voice{display:flex;flex-direction:column;gap:14px;padding-top:20px;border-top:1px solid var(--hairline)}
+.voice blockquote{
+  margin:0;font-family:var(--f-display);font-size:1.06rem;line-height:1.52;color:var(--ink);
+}
+.voice__who{margin-top:auto;display:flex;flex-direction:column;gap:2px}
+.voice__who b{font-size:.92rem;font-weight:600}
+.voice__who span{font-size:.82rem;color:var(--muted)}
+.voice__tag{font-size:.68rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--faint)}
+
+/* ==========================================================================
+   FEES + FAQ
+   ========================================================================== */
+.fees__list{margin:14px 0 0;padding:0;list-style:none;border-top:1px solid var(--ink)}
+.fees__list li{display:flex;justify-content:space-between;gap:18px;align-items:baseline;padding:15px 0;border-bottom:1px solid var(--hairline-soft)}
+.fees__list b{font-weight:600;font-size:.97rem;display:block}
+.fees__list i{font-style:normal;color:var(--muted);font-size:.86rem}
+.price{font-family:var(--f-display);font-size:1.06rem;font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--ink)}
+.price--free{color:var(--accent);font-weight:600}
+.price--slot{font-family:var(--f-ui);font-size:.78rem;font-weight:600;color:var(--muted);border:1px dashed var(--hairline);border-radius:var(--r-full);padding:5px 12px;white-space:nowrap}
+.hint{margin-top:18px;font-size:.89rem;color:var(--body);max-width:52ch}
+
+.faq{border-top:1px solid var(--ink)}
+details.q{border-bottom:1px solid var(--hairline-soft)}
+details.q summary{
+  cursor:pointer;list-style:none;padding:17px 40px 17px 0;position:relative;
+  font-family:var(--f-ui);font-size:1rem;font-weight:600;color:var(--ink);
+}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary::after{
+  content:"";position:absolute;right:8px;top:25px;width:11px;height:11px;
+  border-right:1.8px solid var(--muted);border-bottom:1.8px solid var(--muted);
+  transform:rotate(45deg);transition:transform .2s ease;
+}
+details.q[open] summary::after{transform:rotate(-135deg);top:27px}
+details.q p{padding:0 0 20px;color:var(--body);font-size:.96rem;max-width:64ch}
+
+/* ==========================================================================
+   CONTACT
+   ========================================================================== */
+.contact{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,4vw,60px);align-items:start}
+.form{background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:clamp(22px,3vw,32px)}
+.soft .form{background:var(--canvas)}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:15px}
+.field label{font-size:.84rem;font-weight:600}
+.field input,.field select,.field textarea{
+  font:inherit;font-size:.96rem;color:var(--ink);background:var(--canvas);
+  border:1.5px solid var(--hairline);border-radius:var(--r-sm);padding:13px 14px;width:100%;
+  transition:border-color .16s ease;
+}
+.field textarea{min-height:102px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--ink);outline:none}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.check{display:flex;gap:11px;align-items:flex-start;font-size:.85rem;color:var(--body);line-height:1.5;margin:4px 0 18px}
+.check input{margin:2px 0 0;accent-color:var(--accent);width:18px;height:18px;flex:none}
+.form__foot{font-size:.79rem;color:var(--faint);margin-top:13px}
+.sent{display:none;flex-direction:column;gap:10px;padding:6px 0}
+.sent .ico{width:32px;height:32px;color:var(--accent)}
+.form.is-sent .form__body{display:none}
+.form.is-sent .sent{display:flex}
+
+.info{display:flex;flex-direction:column;gap:22px}
+.info dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:13px 15px;font-size:.96rem;border-top:1px solid var(--ink);padding-top:18px}
+.info dt{color:var(--faint)}
+.info dt .ico{width:17px;height:17px}
+.info dd{margin:0;font-weight:500}
+.info dd a{font-weight:600}
+.mapcard{border-radius:var(--r-md);overflow:hidden;border:1px solid var(--hairline)}
+.mapcard svg{display:block;width:100%;height:158px}
+.mapcard__foot{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;padding:13px 16px;background:var(--canvas);border-top:1px solid var(--hairline);font-size:.9rem}
+.legal{font-size:.82rem;color:var(--muted);line-height:1.55}
+
+/* ==========================================================================
+   FOOTER + MOBILE CTA
+   ========================================================================== */
+.foot{background:var(--ink);color:#F6F1F2;padding-block:clamp(40px,5vw,60px) 24px}
+.foot__grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(22px,3vw,44px)}
+.foot h4{font-family:var(--f-ui);font-size:.7rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;opacity:.55;margin-bottom:14px}
+.foot a{color:#F6F1F2;text-decoration:none;opacity:.84}
+.foot a:hover{opacity:1;text-decoration:underline}
+.foot ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px;font-size:.93rem}
+.foot__brand{font-family:var(--f-display);font-size:1.16rem;font-weight:500;margin-bottom:9px}
+.foot__note{font-size:.85rem;opacity:.62;line-height:1.6;max-width:42ch}
+.foot__bar{margin-top:34px;padding-top:20px;border-top:1px solid rgba(255,255,255,.13);display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;font-size:.82rem;opacity:.6}
+
+.mcta{
+  display:none;position:fixed;left:0;right:0;bottom:0;z-index:70;
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom));gap:10px;
+  background:color-mix(in srgb,var(--canvas) 95%,transparent);
+  backdrop-filter:blur(14px);border-top:1px solid var(--hairline);
+}
+.mcta .btn{flex:1;padding:15px 12px}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width:1120px){
+  .nav{display:none}
+  .burger{display:inline-flex}
+  .bar__tel span{display:none}
+  .bar__cta .btn{display:none}
+  .hero__in{grid-template-columns:1fr}
+  .trio{order:-1;display:grid;grid-template-columns:repeat(3,1fr);align-items:start;gap:14px}
+  .trio figure{width:auto}
+  .trio img{width:100%;height:200px}
+  .trio figure:nth-child(1),.trio figure:nth-child(3){padding-bottom:0}
+  .two,.about,.contact{grid-template-columns:1fr}
+  .befund__in{grid-template-columns:1fr 1fr}
+  .befund__col:nth-child(2){border-right:0}
+  .voices{grid-template-columns:1fr}
+  .voice{padding-top:18px}
+}
+@media (max-width:720px){
+  body{font-size:16px;padding-bottom:80px}
+  .focus,.methods,.symptoms,.row2,.foot__grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr;gap:26px}
+  .trio figure:nth-child(1),.trio figure:nth-child(3){padding-bottom:0}
+  .trio{gap:10px;overflow-x:auto;padding-bottom:4px}
+  .trio figure,.trio img{width:132px}
+  .trio img{height:162px}
+  .mcta{display:flex}
+  .hero__actions .btn{width:100%}
+  .foot{padding-bottom:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.6 4.2 4.2L19 6.6"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.2 3.5h3l1.5 3.8-2 1.4a11.3 11.3 0 0 0 5.6 5.6l1.4-2 3.8 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.2 5.7a2 2 0 0 1 2-2.2Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m4 7.5 8 5.5 8-5.5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3.2 2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z"/><circle cx="12" cy="10.3" r="2.6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4.5 12h15"/><path d="m13.5 6 6 6-6 6"/></symbol>
+</svg>
+
+<header class="bar" id="bar">
+  <div class="wrap bar__in">
+    <a class="brand" href="#top" aria-label="Naturheilpraxis Cornelia Dinger — Startseite">
+      <img src="assets/clean/logo.png" alt="Naturheilpraxis Cornelia Dinger" width="404" height="85">
+    </a>
+    <nav class="nav" aria-label="Hauptnavigation">
+      <a href="#schwerpunkte">Schwerpunkte</a>
+      <a href="#ablauf">Ablauf</a>
+      <a href="#praxis">Über mich</a>
+      <a href="#stimmen">Erfahrungen</a>
+      <a href="#kosten">Kosten</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <div class="bar__cta">
+      <a class="bar__tel" href="tel:+491711242717"><svg class="ico"><use href="#i-phone"/></svg><span>0171 124 27 17</span></a>
+      <a class="btn btn--primary btn--sm" href="#kontakt">Vorgespräch anfragen</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="sheet">Menü</button>
+    </div>
+  </div>
+</header>
+
+<div class="sheet" id="sheet">
+  <a href="#schwerpunkte">Schwerpunkte</a>
+  <a href="#ablauf">Ablauf</a>
+  <a href="#praxis">Über mich</a>
+  <a href="#stimmen">Erfahrungen</a>
+  <a href="#kosten">Kosten &amp; Kasse</a>
+  <a href="#kontakt">Kontakt &amp; Anfahrt</a>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero__in">
+      <div class="hero__copy">
+        <p class="eyebrow">Heilpraktikerin in Bad Schönborn · Kraichgau</p>
+        <h1>Alle Werte in Ordnung — und Ihnen geht es <em>trotzdem</em> nicht gut?</h1>
+        <p class="lede">
+          Dann fehlt meist nicht der Befund, sondern die Ursache. Ich nehme mir die Zeit,
+          Ihren Körper, Ihren Stoffwechsel und Ihre Seele zusammen zu betrachten — mit
+          ausführlicher Labordiagnostik und Psychosomatischer Energetik.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#kontakt">Kostenloses Vorgespräch <svg class="ico"><use href="#i-arrow"/></svg></a>
+          <a class="btn btn--ghost" href="tel:+491711242717"><svg class="ico"><use href="#i-phone"/></svg> 0171 124 27 17</a>
+        </div>
+        <p class="hero__note">
+          <span><svg class="ico"><use href="#i-clock"/></svg> 30 Minuten, kostenfrei</span>
+          <span><svg class="ico"><use href="#i-check"/></svg> unverbindlich, ohne Behandlung</span>
+        </p>
+      </div>
+
+      <div class="trio">
+        <figure>
+          <img src="assets/clean/1020.jpg" alt="Braune Arzneiflaschen mit Lavendel und Heilkräutern auf Holz" width="152" height="188">
+          <figcaption>Phytotherapie</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/clean/1021.jpg" alt="Hände der Heilpraktikerin bei der kinesiologischen Testung am Arm" width="152" height="188">
+          <figcaption>Kinesiologische Testung</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/clean/1447.jpg" alt="Ampullen und Spritzen für die Infusions- und Injektionstherapie" width="152" height="188">
+          <figcaption>Infusionstherapie</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEFUND STRIP -->
+  <section aria-label="Qualifikation und Rahmen">
+    <div class="wrap">
+      <div class="befund">
+        <div class="befund__in">
+          <div class="befund__col">
+            <span class="befund__k">Heilpraktikerin</span>
+            <span class="befund__v">seit 2017</span>
+            <span class="befund__n">eigene Praxis, Schubertstraße 7</span>
+          </div>
+          <div class="befund__col">
+            <span class="befund__k">Psychologische HP</span>
+            <span class="befund__v">seit 1999</span>
+            <span class="befund__n">Regressions- &amp; Traumaarbeit</span>
+          </div>
+          <div class="befund__col">
+            <span class="befund__k">Stoffwechselanalyse</span>
+            <span class="befund__v">42–70 Werte</span>
+            <span class="befund__n">Blut, Speichel, Stuhl</span>
+          </div>
+          <div class="befund__col">
+            <span class="befund__k">Erstanamnese</span>
+            <span class="befund__v">1,5 Stunden</span>
+            <span class="befund__n">Gespräch und Untersuchung</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYMPTOMS -->
+  <section class="section" id="beschwerden">
+    <div class="wrap two">
+      <div class="stack" style="gap:15px">
+        <p class="eyebrow">Kommt Ihnen das bekannt vor?</p>
+        <h2>Sie waren überall — und nirgends hat jemand richtig hingeschaut.</h2>
+        <p class="lede">Die meisten Menschen kommen zu mir, nachdem sie schon eine lange Runde hinter sich haben. Ein Punkt genügt.</p>
+      </div>
+      <div>
+        <ul class="symptoms">
+          <li><svg class="ico"><use href="#i-check"/></svg>Dauerhafte Erschöpfung und Müdigkeit</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Schlafstörungen, innere Unruhe</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Migräne, wiederkehrende Kopfschmerzen</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Blähbauch, Reizdarm, Verdauung</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Schilddrüse: Hashimoto, Unter-, Überfunktion</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Schmerzen ohne erkennbaren Befund</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Gewicht, das sich nicht bewegen lässt</li>
+          <li><svg class="ico"><use href="#i-check"/></svg>Ihr Kind ist unruhig oder zieht sich zurück</li>
+        </ul>
+        <div class="after">
+          <p class="lede">Im kostenlosen Vorgespräch klären wir in Ruhe, ob und wie ich Ihnen helfen kann.</p>
+          <a class="btn btn--primary" href="#kontakt">Vorgespräch vereinbaren <svg class="ico"><use href="#i-arrow"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOCUS -->
+  <section class="section soft" id="schwerpunkte">
+    <div class="wrap stack" style="gap:13px;margin-bottom:34px">
+      <p class="eyebrow">Praxisschwerpunkte</p>
+      <h2>Sechs Wege, auf denen wir zur Ursache kommen</h2>
+    </div>
+    <div class="wrap focus">
+      <a class="frow" href="pse.htm">
+        <img src="assets/clean/1095.jpg" alt="Reagenzgläser für die energetische Testung" width="96" height="96">
+        <span class="frow__t">
+          <h3>Körper &amp; Seele — PSE</h3>
+          <p>Psychosomatische Energetik nach Dr. Banis: Wir spüren den seelischen Konflikt auf, der Ihnen Lebensenergie entzieht — ohne dass Sie alles aussprechen müssen.</p>
+          <span class="frow__go">Methode ansehen <svg class="ico"><use href="#i-arrow"/></svg></span>
+        </span>
+      </a>
+      <a class="frow" href="vital-stoffwechsel.htm">
+        <img src="assets/clean/1019.jpg" alt="Blutröhrchen für die ganzheitliche Laboranalyse" width="96" height="96">
+        <span class="frow__t">
+          <h3>Vital- &amp; Stoffwechselanalyse</h3>
+          <p>42 bis 70 Blutwerte zeigen, wie Ihr Körper Energie gewinnt, entgiftet und regeneriert. Daraus entsteht Ihr Plan — kein Diätblatt von der Stange.</p>
+          <span class="frow__go">Werte &amp; Ablauf <svg class="ico"><use href="#i-arrow"/></svg></span>
+        </span>
+      </a>
+      <a class="frow" href="eswirdmiralleszuviel.htm">
+        <img src="assets/clean/ruhe.jpg" alt="Handtuch und ätherische Öle, Sinnbild für Ruhe und Regeneration" width="96" height="96">
+        <span class="frow__t">
+          <h3>Erschöpfung &amp; Dauerstress</h3>
+          <p>„Es wird mir alles zu viel.“ Wer besonders müde in die Praxis kommt, berichtet oft schon nach wenigen Wochen von mehr Kraft und besserem Schlaf.</p>
+          <span class="frow__go">Mehr erfahren <svg class="ico"><use href="#i-arrow"/></svg></span>
+        </span>
+      </a>
+      <a class="frow" href="kinder.htm">
+        <img src="assets/clean/kinder.jpg" alt="Kinderhände und Erwachsenenhände halten gemeinsam ein Herz" width="96" height="96">
+        <span class="frow__t">
+          <h3>Kinder &amp; Jugendliche</h3>
+          <p>Unruhe, Konzentrationsprobleme, ADHS, Rückzug. Kinder reagieren auf PSE besonders schnell — häufig verändert sich zuerst das Miteinander in der Familie.</p>
+          <span class="frow__go">Für Eltern <svg class="ico"><use href="#i-arrow"/></svg></span>
+        </span>
+      </a>
+      <a class="frow" href="uebergewicht.htm">
+        <img src="assets/clean/1018.jpg" alt="Darstellung der Darmflora unter der Lupe" width="96" height="96">
+        <span class="frow__t">
+          <h3>Mit Genuss zum Wunschgewicht</h3>
+          <p>Abnehmen über Stoffwechsel und Darmgesundheit statt über Verzicht: individueller Plan nach Stoffwechseltyp und Hormonlage, mit Begleitung.</p>
+          <span class="frow__go">Konzept ansehen <svg class="ico"><use href="#i-arrow"/></svg></span>
+        </span>
+      </a>
+      <a class="frow" href="entspannung-pur.htm">
+        <img src="assets/clean/1020.jpg" alt="Ätherische Öle und Heilkräuter für die Massage" width="96" height="96">
+        <span class="frow__t">
+          <h3>Entspannung pur</h3>
+          <p>Klangschalenmassage, energetische Heilmassage, Fußreflexzonen- und Sportmassage — als eigene Auszeit oder als Begleitung Ihrer Therapie.</p>
+          <span class="frow__go">Massagen ansehen <svg class="ico"><use href="#i-arrow"/></svg></span>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <!-- STEPS -->
+  <section class="section" id="ablauf">
+    <div class="wrap stack" style="gap:13px;margin-bottom:40px">
+      <p class="eyebrow">So läuft es ab</p>
+      <h2>Drei Schritte — und Sie wissen, woran Sie sind</h2>
+      <p class="lede">Kein Abo, kein Paket. Nach jedem Schritt entscheiden Sie, ob Sie weitergehen möchten.</p>
+    </div>
+    <div class="wrap steps">
+      <div class="step">
+        <span class="step__n">Schritt 01</span>
+        <span class="step__t"><h3>Vorgespräch</h3><span class="step__meta">30 Min · kostenfrei</span></span>
+        <p>Sie schildern mir Ihr Anliegen, ich sage Ihnen offen, ob und mit welchen Methoden ich helfen kann. Am Telefon oder persönlich.</p>
+      </div>
+      <div class="step">
+        <span class="step__n">Schritt 02</span>
+        <span class="step__t"><h3>Erstanamnese</h3><span class="step__meta">ca. 1,5 Stunden</span></span>
+        <p>Ausführliches Gespräch und Untersuchung, dazu je nach Bedarf Blut-, Speichel- oder Stuhlanalyse. Bringen Sie vorhandene Laborwerte gerne mit.</p>
+      </div>
+      <div class="step">
+        <span class="step__n">Schritt 03</span>
+        <span class="step__t"><h3>Therapieplan</h3><span class="step__meta">schriftlich, vorab</span></span>
+        <p>Sie erhalten Therapie- und Kostenplan, bevor behandelt wird. Danach begleite ich Sie in Ihrem Tempo, mit festen Kontrollterminen.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section soft" id="praxis">
+    <div class="wrap about">
+      <div class="stack" style="gap:20px">
+        <p class="eyebrow">Über mich</p>
+        <h2>Cornelia Dinger, Heilpraktikerin</h2>
+        <p class="lede">
+          Bevor ich Heilpraktikerin wurde, habe ich viele Jahre in der Altenpflege, in der
+          Psychiatrie und in der Begleitung schwerstbehinderter Menschen gearbeitet. Dort
+          habe ich gelernt, was in keinem Laborwert steht: dass Beschwerden fast immer
+          eine Geschichte haben.
+        </p>
+        <p class="lede">
+          Heute verbinde ich beides — messbare Diagnostik und den Blick auf das, was
+          seelisch belastet. Mit Freude und Leidenschaft unterstütze ich Sie darin, Ihre
+          Selbstheilungskräfte zu aktivieren.
+        </p>
+        <blockquote class="pullquote">
+          Es kommt darauf an, den Körper durch die Seele und die Seele durch den Körper zu heilen.
+          <cite>Oscar Wilde</cite>
+        </blockquote>
+      </div>
+      <div>
+        <ul class="creds">
+          <li><b>Heilpraktikerin</b><span>seit 2017</span></li>
+          <li><b>Psychologische Heilpraktikerin</b><span>seit 1999</span></li>
+          <li><b>Psychologische Lebensberatung, Regressions- &amp; Traumaarbeit</b><span>3 Jahre</span></li>
+          <li><b>Systemische Aufstellungsarbeit</b><span>Bertold Ulsamer</span></li>
+          <li><b>Klangschalentherapie</b><span>Frank Plate</span></li>
+          <li><b>Marte Meo Practitioner</b><span>zertifiziert</span></li>
+          <li><b>Examinierte Altenpflegerin, Psychiatrie &amp; ambulante Pflege</b><span>viele Jahre</span></li>
+          <li><b>Bund Deutscher Heilpraktiker · Kneipp-Verein · Laborgemeinschaft für ganzheitliche Medizin</b><span>Mitglied</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHODS -->
+  <section class="section" id="methoden">
+    <div class="wrap stack" style="gap:13px;margin-bottom:34px">
+      <p class="eyebrow">Diagnostik &amp; Therapien</p>
+      <h2>Je genauer die Diagnostik, desto besser der Therapieplan</h2>
+      <p class="lede">Eine ausführliche Diagnostik ist unerlässlich — sie ist die Grundlage jeder Behandlung, nicht ein Zusatz.</p>
+    </div>
+    <div class="wrap methods">
+      <div>
+        <h3>Diagnostik</h3>
+        <ul>
+          <li><b>Ihr Blut</b><i>Ganzheitliche Laboranalyse, 42–70 Werte</i></li>
+          <li><b>Speicheltest Geno-Line</b><i>Genetischer Stoffwechseltyp</i></li>
+          <li><b>Kinesiologie</b><i>Muskeltestung zur Verträglichkeit</i></li>
+          <li><b>Stuhlanalyse</b><i>Darmflora, Zonulin, Leaky Gut</i></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Therapien</h3>
+        <div class="methods__lead">
+          <img src="assets/clean/1371.jpg" alt="Injektionstherapie in der Praxis" width="76" height="76">
+          <span><b>Injektions- &amp; Infusionstherapie</b><i>Vitamine, Aminosäuren, Mesotherapie</i></span>
+        </div>
+        <ul>
+          <li><b>Phytotherapie</b><i>Pflanzenheilkunde, individuell rezeptiert</i></li>
+          <li><b>Ozontherapie</b><i>Sauerstoff- und Durchblutungstherapie</i></li>
+          <li><b>Induktionsbioresonanz</b><i>Regulation über Frequenzmuster</i></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOICES -->
+  <section class="section" id="stimmen" style="padding-top:0">
+    <div class="wrap stack" style="gap:13px;margin-bottom:34px">
+      <p class="eyebrow">Patientinnen berichten</p>
+      <h2>Was sich für andere verändert hat</h2>
+    </div>
+    <div class="wrap voices">
+      <figure class="voice">
+        <span class="voice__tag">Innere Unruhe · Asthma</span>
+        <blockquote>„Meine innere Unruhe war so groß, dass ich sogar in Ruhephasen Muskelzuckungen hatte. Heute bin ich ruhiger, spüre meine Familie wieder — und mein Asthma ist verschwunden.“</blockquote>
+        <span class="voice__who"><b>Carolin</b><span>48 Jahre · PSE</span></span>
+      </figure>
+      <figure class="voice">
+        <span class="voice__tag">Bluthochdruck · Blähbauch</span>
+        <blockquote>„Ich wollte gar nicht mehr essen, weil alles wieder hochkam. Nach PSE und Stoffwechseloptimierung ist der Blutdruck gut, die Energie zurück — und ich kann wieder mit Freude essen.“</blockquote>
+        <span class="voice__who"><b>Heidi</b><span>50 Jahre · PSE &amp; Stoffwechselanalyse</span></span>
+      </figure>
+      <figure class="voice">
+        <span class="voice__tag">Polyarthritis · Schmerzen</span>
+        <blockquote>„Eigentlich kam ich wegen meines Sohnes. Aber Frau Dinger hat sofort erkannt, wie krank ich selbst war. Die morgendlichen Schmerzen in Händen, Knien und Füßen sind weg.“</blockquote>
+        <span class="voice__who"><b>Petra</b><span>36 Jahre · PSE &amp; Stoffwechsel</span></span>
+      </figure>
+    </div>
+    <div class="wrap" style="margin-top:30px">
+      <a class="btn btn--ghost" href="patientenstimmen.htm">Alle Erfahrungsberichte lesen <svg class="ico"><use href="#i-arrow"/></svg></a>
+    </div>
+  </section>
+
+  <!-- FEES + FAQ -->
+  <section class="section soft" id="kosten">
+    <div class="wrap two" style="align-items:start">
+      <div>
+        <p class="eyebrow" style="margin-bottom:13px">Kosten &amp; Kasse</p>
+        <h2 style="margin-bottom:6px">Transparent, bevor behandelt wird</h2>
+        <ul class="fees__list">
+          <li><span><b>Vorgespräch</b><i>ca. 30 Minuten, telefonisch oder persönlich</i></span><span class="price price--free">kostenfrei</span></li>
+          <li><span><b>Erstanamnese &amp; Untersuchung</b><i>ca. 1,5 Stunden inkl. Auswertung</i></span><span class="price--slot">Betrag einsetzen</span></li>
+          <li><span><b>Folgetermin</b><i>je nach Methode und Dauer</i></span><span class="price--slot">Betrag einsetzen</span></li>
+          <li><span><b>Laboranalysen</b><i>Abrechnung direkt über das Labor</i></span><span class="price">nach Aufwand</span></li>
+        </ul>
+        <p class="hint">Abrechnung nach der Gebührenordnung für Heilpraktiker. Private Kassen und Zusatzversicherungen erstatten häufig; gesetzliche Kassen bezuschussen oft über Bonusprogramme.</p>
+      </div>
+      <div>
+        <p class="eyebrow" style="margin-bottom:13px">Häufige Fragen</p>
+        <h2 style="margin-bottom:22px">Das fragen mich fast alle</h2>
+        <div class="faq">
+          <details class="q" open>
+            <summary>Zahlt meine Krankenkasse die Behandlung?</summary>
+            <p>Privatversicherte und Patient:innen mit Heilpraktiker-Zusatzversicherung erhalten die Kosten je nach Tarif ganz oder teilweise zurück. Gesetzliche Kassen übernehmen die Behandlung nicht direkt, bezuschussen sie aber oft über Bonus- oder Wahltarife. Fragen Sie kurz bei Ihrer Kasse nach — Sie erhalten von mir eine Rechnung nach der Gebührenordnung für Heilpraktiker.</p>
+          </details>
+          <details class="q">
+            <summary>Was passiert beim ersten Termin?</summary>
+            <p>Wir nehmen uns rund 1,5 Stunden Zeit. Ich höre zu, frage nach Ihrer Vorgeschichte, untersuche Sie und sehe mir vorhandene Laborwerte an. Bringen Sie deshalb gerne alle Befunde mit, die Sie haben. Behandelt wird erst, wenn Sie den Therapie- und Kostenplan kennen.</p>
+          </details>
+          <details class="q">
+            <summary>Muss ich über belastende Themen sprechen?</summary>
+            <p>Nein. Genau das ist die Stärke der Psychosomatischen Energetik: Der seelische Konflikt wird über Testung ermittelt und mit homöopathischen Komplexmitteln gelöst. Sie müssen schmerzhafte Erlebnisse nicht erzählen, um sie loszulassen.</p>
+          </details>
+          <details class="q">
+            <summary>Wie schnell merke ich eine Veränderung?</summary>
+            <p>Das ist individuell. Viele Klient:innen, die besonders müde und erschöpft kommen, berichten schon nach wenigen Wochen von mehr Lebensenergie und besserem Schlaf. Chronische Beschwerden brauchen erfahrungsgemäß mehrere Monate Begleitung.</p>
+          </details>
+          <details class="q">
+            <summary>Ersetzen Sie meine Ärztin oder meinen Arzt?</summary>
+            <p>Nein. Ich arbeite ergänzend zur schulmedizinischen Behandlung und rate niemandem, verordnete Medikamente eigenmächtig abzusetzen. Wo eine ärztliche Abklärung nötig ist, sage ich Ihnen das deutlich.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section" id="kontakt">
+    <div class="wrap stack" style="gap:13px;margin-bottom:34px">
+      <p class="eyebrow">Kontakt &amp; Anfahrt</p>
+      <h2>Lassen Sie uns 30 Minuten sprechen</h2>
+      <p class="lede">Ein persönliches Gespräch ist durch nichts ersetzbar. Termine finden ausschließlich nach Vereinbarung statt, damit ich genügend Zeit für Sie habe.</p>
+    </div>
+    <div class="wrap contact">
+      <form class="form" id="form" novalidate>
+        <div class="form__body">
+          <div class="row2">
+            <div class="field"><label for="f-name">Ihr Name</label><input id="f-name" name="name" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="f-tel">Telefon</label><input id="f-tel" name="tel" type="tel" autocomplete="tel" placeholder="für den Rückruf"></div>
+          </div>
+          <div class="field"><label for="f-mail">E-Mail</label><input id="f-mail" name="email" type="email" autocomplete="email" required></div>
+          <div class="field">
+            <label for="f-topic">Worum geht es?</label>
+            <select id="f-topic" name="topic">
+              <option>Kostenloses Vorgespräch</option>
+              <option>Erschöpfung, Stress, Schlaf</option>
+              <option>Stoffwechsel, Schilddrüse, Darm</option>
+              <option>Schmerzen</option>
+              <option>Mein Kind</option>
+              <option>Gewicht</option>
+              <option>Massage / Entspannung</option>
+              <option>Etwas anderes</option>
+            </select>
+          </div>
+          <div class="field"><label for="f-msg">Ihre Nachricht</label><textarea id="f-msg" name="message" placeholder="Erzählen Sie mir in zwei, drei Sätzen, was Sie beschäftigt."></textarea></div>
+          <label class="check">
+            <input type="checkbox" name="consent" required>
+            <span>Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage gespeichert werden. <a href="datenschutz.htm">Datenschutzerklärung</a></span>
+          </label>
+          <button class="btn btn--primary" type="submit" style="width:100%">Anfrage senden <svg class="ico"><use href="#i-arrow"/></svg></button>
+          <p class="form__foot">Ihre Anfrage ist keine Terminbestätigung — ich melde mich persönlich zurück.</p>
+        </div>
+        <div class="sent" role="status">
+          <svg class="ico"><use href="#i-check"/></svg>
+          <h3 style="font-family:var(--f-display);font-size:1.3rem;font-weight:500">Vielen Dank für Ihre Nachricht.</h3>
+          <p style="color:var(--body)">Ich melde mich persönlich bei Ihnen zurück. Wenn es dringend ist, erreichen Sie mich direkt unter <a href="tel:+491711242717">0171 124 27 17</a>.</p>
+          <p class="form__foot">Entwurf: im Livebetrieb an das Praxis-Postfach angebunden.</p>
+        </div>
+      </form>
+
+      <div class="info">
+        <dl>
+          <dt><svg class="ico"><use href="#i-pin"/></svg></dt>
+          <dd>Naturheilpraxis Cornelia Dinger<br>Schubertstraße 7<br>76669 Bad Schönborn</dd>
+          <dt><svg class="ico"><use href="#i-phone"/></svg></dt>
+          <dd><a href="tel:+491711242717">0171 124 27 17</a></dd>
+          <dt><svg class="ico"><use href="#i-mail"/></svg></dt>
+          <dd><a href="mailto:info@naturheilpraxis-dinger.de">info@naturheilpraxis-dinger.de</a></dd>
+          <dt><svg class="ico"><use href="#i-clock"/></svg></dt>
+          <dd>Termine nur nach Vereinbarung<br><span style="color:var(--muted);font-weight:400">Zeiten stimmen wir im Vorgespräch ab</span></dd>
+        </dl>
+
+        <div class="mapcard">
+          <svg viewBox="0 0 480 158" role="img" aria-label="Lageplan: Schubertstraße 7, 76669 Bad Schönborn">
+            <rect width="480" height="158" fill="var(--soft)"/>
+            <g stroke="var(--hairline)" stroke-width="1"><path d="M0 36h480M0 112h480M96 0v158M292 0v158M398 0v158"/></g>
+            <path d="M0 76h480" stroke="var(--strong)" stroke-width="9" fill="none"/>
+            <path d="M196 0v158" stroke="var(--strong)" stroke-width="6" fill="none"/>
+            <g fill="var(--hairline-soft)">
+              <rect x="112" y="44" width="62" height="24" rx="2"/><rect x="216" y="44" width="58" height="24" rx="2"/>
+              <rect x="112" y="88" width="48" height="18" rx="2"/><rect x="314" y="88" width="66" height="18" rx="2"/>
+              <rect x="314" y="44" width="40" height="24" rx="2"/>
+            </g>
+            <text x="14" y="70" fill="var(--faint)" font-family="Manrope,sans-serif" font-size="9" font-weight="600" letter-spacing=".08em">HUTTENSTRASSE</text>
+            <text x="204" y="18" fill="var(--faint)" font-family="Manrope,sans-serif" font-size="9" font-weight="600" letter-spacing=".08em">SCHUBERTSTRASSE</text>
+            <g transform="translate(196 76)"><circle r="18" fill="var(--accent)" opacity=".14"/><circle r="8" fill="var(--accent)"/><circle r="3" fill="var(--canvas)"/></g>
+          </svg>
+          <div class="mapcard__foot">
+            <span style="color:var(--muted)">Schubertstraße 7 · 76669 Bad Schönborn</span>
+            <a href="https://www.google.de/maps/place/Schubertstra%C3%9Fe+7,+76669+Bad+Sch%C3%B6nborn" target="_blank" rel="noopener">In Google Maps öffnen →</a>
+          </div>
+        </div>
+
+        <p class="legal"><strong style="color:var(--ink)">Hinweis gemäß § 3 Heilmittelwerbegesetz:</strong> Bei vielen naturheilkundlichen Behandlungsmethoden handelt es sich um Verfahren der Erfahrungsmedizin, die wissenschaftlich nicht anerkannt sind.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__grid">
+      <div>
+        <p class="foot__brand">Naturheilpraxis Cornelia Dinger</p>
+        <p class="foot__note">Praxis für ganzheitliche Gesundheit und Ursachenbehandlung in Bad Schönborn — für Patientinnen und Patienten aus Bad Schönborn, Kronau, Ubstadt-Weiher, Bruchsal, Waghäusel und dem Kraichgau.</p>
+      </div>
+      <div>
+        <h4>Praxis</h4>
+        <ul>
+          <li><a href="praxis.htm">Über mich</a></li>
+          <li><a href="#schwerpunkte">Schwerpunkte</a></li>
+          <li><a href="#methoden">Diagnostik &amp; Therapien</a></li>
+          <li><a href="patientenstimmen.htm">Erfahrungsberichte</a></li>
+          <li><a href="gebuehren.htm">Gebühren</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Kontakt</h4>
+        <ul>
+          <li>Schubertstraße 7<br>76669 Bad Schönborn</li>
+          <li><a href="tel:+491711242717">0171 124 27 17</a></li>
+          <li><a href="mailto:info@naturheilpraxis-dinger.de">info@naturheilpraxis-dinger.de</a></li>
+          <li><a href="https://de-de.facebook.com/pg/NaturheilpraxisDinger" target="_blank" rel="noopener">Facebook</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><a href="impressum.htm">Impressum</a></li>
+          <li><a href="datenschutz.htm">Datenschutz</a></li>
+          <li><a href="#kosten">Kosten &amp; Kasse</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__bar">
+      <span>© 2026 Naturheilpraxis Cornelia Dinger</span>
+      <span>Mitglied im Bund Deutscher Heilpraktiker</span>
+    </div>
+  </div>
+</footer>
+
+<div class="mcta">
+  <a class="btn btn--ghost" href="tel:+491711242717"><svg class="ico"><use href="#i-phone"/></svg> Anrufen</a>
+  <a class="btn btn--primary" href="#kontakt">Vorgespräch</a>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {
+      "@type":["MedicalBusiness","HealthAndBeautyBusiness"],
+      "@id":"https://naturheilpraxis-dinger.de/#praxis",
+      "name":"Naturheilpraxis Cornelia Dinger",
+      "description":"Praxis für ganzheitliche Gesundheit und Ursachenbehandlung in Bad Schönborn: Psychosomatische Energetik (PSE), Vital- und Stoffwechselanalyse, Labordiagnostik, Phytotherapie.",
+      "url":"https://naturheilpraxis-dinger.de/",
+      "telephone":"+49-171-1242717",
+      "email":"info@naturheilpraxis-dinger.de",
+      "priceRange":"$$",
+      "address":{"@type":"PostalAddress","streetAddress":"Schubertstraße 7","postalCode":"76669","addressLocality":"Bad Schönborn","addressRegion":"Baden-Württemberg","addressCountry":"DE"},
+      "geo":{"@type":"GeoCoordinates","latitude":49.2220392,"longitude":8.6625043},
+      "areaServed":["Bad Schönborn","Kronau","Ubstadt-Weiher","Bruchsal","Waghäusel","Kraichgau","Karlsruhe"],
+      "sameAs":["https://de-de.facebook.com/pg/NaturheilpraxisDinger"],
+      "founder":{"@type":"Person","name":"Cornelia Dinger","jobTitle":"Heilpraktikerin"},
+      "availableService":[
+        {"@type":"MedicalTherapy","name":"Psychosomatische Energetik (PSE)"},
+        {"@type":"MedicalTest","name":"Vital- und Stoffwechselanalyse"},
+        {"@type":"MedicalTherapy","name":"Phytotherapie"},
+        {"@type":"MedicalTherapy","name":"Ozontherapie"},
+        {"@type":"MedicalTherapy","name":"Injektions- und Infusionstherapie"}
+      ]
+    },
+    {
+      "@type":"FAQPage",
+      "mainEntity":[
+        {"@type":"Question","name":"Zahlt meine Krankenkasse die Behandlung?","acceptedAnswer":{"@type":"Answer","text":"Privatversicherte und Patienten mit Heilpraktiker-Zusatzversicherung erhalten die Kosten je nach Tarif ganz oder teilweise zurück. Gesetzliche Kassen übernehmen die Behandlung nicht direkt, bezuschussen sie aber oft über Bonus- oder Wahltarife. Die Abrechnung erfolgt nach der Gebührenordnung für Heilpraktiker."}},
+        {"@type":"Question","name":"Was passiert beim ersten Termin?","acceptedAnswer":{"@type":"Answer","text":"Die Erstanamnese dauert rund 1,5 Stunden: ausführliches Gespräch, Untersuchung und Sichtung vorhandener Laborwerte. Behandelt wird erst, wenn ein schriftlicher Therapie- und Kostenplan vorliegt."}},
+        {"@type":"Question","name":"Muss ich über belastende Themen sprechen?","acceptedAnswer":{"@type":"Answer","text":"Nein. Bei der Psychosomatischen Energetik wird der seelische Konflikt über Testung ermittelt und mit homöopathischen Komplexmitteln gelöst, ohne dass schmerzhafte Erlebnisse erzählt werden müssen."}},
+        {"@type":"Question","name":"Wie schnell merke ich eine Veränderung?","acceptedAnswer":{"@type":"Answer","text":"Das ist individuell. Viele erschöpfte Klienten berichten schon nach wenigen Wochen von mehr Lebensenergie und besserem Schlaf. Chronische Beschwerden brauchen erfahrungsgemäß mehrere Monate Begleitung."}},
+        {"@type":"Question","name":"Ersetzen Sie meine Ärztin oder meinen Arzt?","acceptedAnswer":{"@type":"Answer","text":"Nein. Die Behandlung erfolgt ergänzend zur schulmedizinischen Versorgung. Verordnete Medikamente sollten nicht eigenmächtig abgesetzt werden."}}
+      ]
+    }
+  ]
+}
+</script>
+
+<script>
+(function(){
+  var bar = document.getElementById('bar');
+  var onScroll = function(){ bar.classList.toggle('is-stuck', window.scrollY > 8); };
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+  var burger = document.getElementById('burger'), sheet = document.getElementById('sheet');
+  burger.addEventListener('click', function(){
+    var open = sheet.hasAttribute('open');
+    if (open) sheet.removeAttribute('open'); else sheet.setAttribute('open','');
+    burger.setAttribute('aria-expanded', String(!open));
+    burger.textContent = open ? 'Menü' : 'Schließen';
+    document.body.style.overflow = open ? '' : 'hidden';
+  });
+  sheet.addEventListener('click', function(e){
+    if (e.target.tagName === 'A') {
+      sheet.removeAttribute('open');
+      burger.setAttribute('aria-expanded','false');
+      burger.textContent = 'Menü';
+      document.body.style.overflow = '';
+    }
+  });
+
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute('href');
+    if (id === '#' || id.length < 2) return;
+    var t = document.querySelector(id);
+    if (!t) return;
+    e.preventDefault();
+    window.scrollTo({top: t.getBoundingClientRect().top + window.scrollY - 92, behavior:'smooth'});
+  });
+
+  var form = document.getElementById('form');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var missing = false;
+    ['f-name','f-mail'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (!el.value.trim()) { el.style.borderColor = 'var(--accent)'; missing = true; }
+    });
+    var consent = form.querySelector('input[name="consent"]');
+    if (!consent.checked) { missing = true; consent.focus(); }
+    if (missing) return;
+    form.classList.add('is-sent');
+    form.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+})();
+</script>

@@ -1,0 +1,30 @@
+# --- Unlicensed stock placeholder -------------------------------------------
+# These three files all derive from an iStock comp (id 1255606124, ElenaMist)
+# that has NOT been licensed. This repository is public, so they are excluded
+# to avoid redistributing it. The page still builds; the hero and the quote
+# wall simply fall back to their plum gradients.
+#
+# To restore locally, or to include them once the image is licensed:
+#   1. put hero-homepage-background.jpg back in the project root
+#   2. python3 - <<'PY'
+#      import subprocess
+#      subprocess.run(['ffmpeg','-y','-i','hero-homepage-background.jpg',
+#        '-vf','crop=1024:410:0:0','-q:v','2','assets/clean/hero.jpg'])
+#      subprocess.run(['ffmpeg','-y','-i','hero-homepage-background.jpg','-vf',
+#        'scale=1800:-2:flags=lanczos,gblur=sigma=26,eq=saturation=0.78:brightness=-0.05',
+#        '-q:v','5','assets/clean/voices-bg.jpg'])
+#      PY
+#   3. remove the three lines below
+hero-homepage-background.jpg
+assets/clean/hero.jpg
+assets/clean/voices-bg.jpg
+
+# --- Generated ---------------------------------------------------------------
+# Rebuilt from index.html with `python3 build-inline.py`. Excluded because it
+# base64-embeds every image, including the unlicensed hero above.
+index.inlined.html
+
+# --- OS / editor ------------------------------------------------------------
+.DS_Store
+Thumbs.db
+*.swp
