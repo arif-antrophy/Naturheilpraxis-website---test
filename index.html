@@ -1,3 +1,7 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+
 <!--
   ============================================================================
   Naturheilpraxis Cornelia Dinger — Startseite (Redesign v3)
@@ -6,7 +10,9 @@
   (~/Downloads/clireo_framer_website.html), remapped onto the practice's own
   brand plum. What was ported from it:
 
-    · LIGHT, AIRY GROUNDS — white plus brand-tinted washes; no dark sections
+    · LIGHT, AIRY GROUNDS — white plus brand-tinted washes, punctuated by
+      exactly two dark bands (the services slider and the footer) plus the
+      hero's gradient-over-photo
     · INK IS THE BRAND HUE, NOT BLACK — Clireo uses navy #1b2978 for all text;
       here that role is a deep plum, so nothing on the page is near-black
     · SURFACES + HAIRLINES DERIVED FROM THE HUE AT LOW ALPHA (2% / 5% / 13%)
@@ -35,7 +41,6 @@
   <link rel="canonical" href="https://naturheilpraxis-dinger.de/">
   ============================================================================
 -->
-<meta charset="utf-8">
 <title>Naturheilpraxis Cornelia Dinger</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -207,8 +212,8 @@ img{max-width:100%;display:block}
     linear-gradient(to bottom, rgba(44,18,32,.5) 0, rgba(44,18,32,.18) 90px, rgba(44,18,32,0) 150px);
 }
 .hero__in{position:relative;z-index:1;width:100%}
-.hero__copy{display:flex;flex-direction:column;gap:24px;align-items:flex-start;max-width:640px}
-.hero h1{color:#fff;font-size:clamp(2.9rem,5.85vw,4.85rem);font-weight:500;letter-spacing:-.036em;line-height:1.0}
+.hero__copy{display:flex;flex-direction:column;gap:24px;align-items:flex-start;max-width:780px}
+.hero h1{color:#fff;font-size:clamp(2.9rem,6.5vw,5.4rem);font-weight:500;letter-spacing:-.038em;line-height:.98}
 .hero .lede{color:rgba(255,255,255,.9);max-width:34ch;font-size:clamp(1rem,1.45vw,1.125rem)}
 .hero .eyebrow{
   color:#fff;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);
@@ -294,7 +299,7 @@ img{max-width:100%;display:block}
 .is-sent .sent{display:flex}
 
 /* ==========================================================================
-   STATEMENT — centred eyebrow, one large claim, CTA + proof, then fact cards
+   STATEMENT — centred eyebrow, one large claim, one primary CTA, then fact cards
    ========================================================================== */
 .center{display:flex;flex-direction:column;align-items:center;text-align:center}
 .eyebrow--c{align-self:center}
@@ -303,39 +308,25 @@ img{max-width:100%;display:block}
   color:var(--ink);max-width:20em;margin-top:22px;
 }
 .statement em{font-style:normal;color:var(--accent)}
+
+/* The statement types itself in, word by word, the first time it is scrolled
+   to. Words are inline-block because a transform needs a block box; the spaces
+   between them stay real text nodes, so wrapping and screen-reader reading are
+   unchanged. The hidden state lives ONLY in the animation's backwards fill —
+   never in a separate opacity:0 — so if the animation is cancelled for any
+   reason the words are visible rather than stranded. Armed paused, then run,
+   so the cascade cannot be caught half-finished on the way in. */
+.statement .w{display:inline-block}
+.statement.is-armed .w{
+  animation:wordin .42s var(--ease-out) both;
+  animation-play-state:paused;
+}
+.statement.is-armed.is-typing .w{animation-play-state:running}
+@keyframes wordin{
+  from{opacity:0;transform:translateY(.32em)}
+  to{opacity:1;transform:none}
+}
 .afterline{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(18px,3vw,44px);margin-top:34px}
-
-/* pill with a filled square action, the way Clireo pairs label + arrow */
-.btn-split{
-  display:inline-flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink);
-  font-size:1rem;font-weight:600;background:var(--canvas);border:1px solid var(--hairline);
-  border-radius:var(--r-pill);padding:7px 8px 7px 24px;box-shadow:var(--shadow-card);
-  transition:transform .16s var(--ease-out),box-shadow .16s var(--ease-out);
-}
-@media (hover:hover) and (pointer:fine){
-  .btn-split:hover{transform:translateY(-2px);box-shadow:var(--shadow-panel)}
-}
-.btn-split:active{transform:scale(.98)}
-.btn-split .sq{
-  width:42px;height:42px;border-radius:13px;background:var(--accent);color:var(--on-accent);
-  display:grid;place-items:center;flex:none;transition:background .18s var(--ease-out);
-}
-.btn-split:hover .sq{background:var(--accent-hover)}
-.btn-split .sq .ico{width:19px;height:19px}
-
-/* proof cluster — real patient initials, not stock avatars */
-.proof{display:flex;align-items:center;gap:14px;text-decoration:none}
-.proof__faces{display:flex}
-.proof__faces span{
-  width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
-  background:var(--wash-3);color:var(--accent);font-size:.86rem;font-weight:700;
-  border:2px solid var(--canvas);margin-left:-11px;
-}
-.proof__faces span:first-child{margin-left:0}
-.proof__t{text-align:left;display:flex;flex-direction:column;line-height:1.3}
-.proof__t small{font-size:.85rem;color:var(--muted)}
-.proof__t b{font-size:.95rem;font-weight:600;color:var(--ink)}
-.proof:hover .proof__t b{color:var(--accent)}
 
 .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,26px);margin-top:clamp(40px,5vw,68px);width:100%}
 .fact{
@@ -379,13 +370,38 @@ a.fact:active{transform:scale(.985)}
    SYMPTOM LIST
    ========================================================================== */
 .two{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,80px);align-items:start}
-.symptoms{display:grid;grid-template-columns:1fr 1fr;gap:11px clamp(12px,1.6vw,20px);margin:0;padding:0;list-style:none}
+/* A recognition list, not a feature list: the visitor reads down it to find
+   herself — "Ein Punkt genügt". So no cards and no check icons. A ✓ says
+   "included" or "done", which is the wrong thing to say about someone's
+   migraines; it is correct on the Diagnostik lists further down, and that is
+   the difference. Each entry names the complaint, then says what we actually
+   look at — process, not promised outcomes. Bracketed by a hairline top and
+   bottom so it reads as one list, divided by softer ones between entries.
+
+   The left column is sticky: the claim and the list she is checking herself
+   against belong on screen together. top:96px is the same clearance the
+   in-page anchor links already scroll to, so a stuck column and a jumped-to
+   heading sit at the same height under the header. Sticky needs an ancestor
+   that is not a scroll container — body is overflow-x:clip for exactly this
+   reason; hidden there would silently kill it. */
+.two--sticky{grid-template-columns:.85fr 1.15fr;gap:clamp(30px,7vw,120px)}
+.two--sticky > :first-child{position:sticky;top:96px}
+/* No room to stick: stacked layout, or a viewport shorter than the column. */
+@media (max-height:640px){.two--sticky > :first-child{position:static}}
+
+.symptoms{margin:0;padding:0;list-style:none;border-block:1px solid var(--hairline)}
 .symptoms li{
-  display:flex;gap:11px;align-items:flex-start;font-size:.98rem;font-weight:500;color:var(--ink);
-  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-md);padding:15px 17px;
+  padding:clamp(24px,2.6vw,34px) 0;
+  border-bottom:1px solid var(--hairline-soft);
 }
-.symptoms .ico{width:18px;height:18px;color:var(--accent);margin-top:3px}
-.after{margin-top:28px;display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+.symptoms li:last-child{border-bottom:0}
+.symptoms h3{
+  font-size:clamp(1.18rem,1.45vw,1.38rem);font-weight:600;
+  letter-spacing:-.018em;line-height:1.25;color:var(--ink);
+}
+.symptoms p{margin-top:9px;font-size:.95rem;line-height:1.55;color:var(--body);max-width:52ch}
+.after{margin-top:clamp(6px,1vw,14px);display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+.after p{color:var(--body);max-width:34ch}
 
 /* ==========================================================================
    SERVICES — the one dark band on the page: image-filled cards in a
@@ -457,7 +473,16 @@ a.fact:active{transform:scale(.985)}
 .scard__go .ico{width:15px;height:15px;transition:transform .2s var(--ease-out)}
 .scard:hover .scard__go .ico{transform:translateX(4px)}
 
-.sarrows{display:flex;justify-content:center;gap:12px;margin-top:clamp(22px,2.6vw,32px)}
+/* Heading row: title left, arrows hard right. The arrows must align to the
+   centred --measure, so they live in the .wrap ABOVE the slider — .sliderwrap
+   is full-bleed and would drag them out to the viewport edge. flex-end bottom-
+   aligns the circles with the last heading line rather than floating them. */
+.shead{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:clamp(20px,4vw,48px);margin-bottom:clamp(30px,3.6vw,44px);
+}
+.shead__t{flex:1 1 auto;min-width:0;gap:16px}
+.sarrows{display:flex;gap:12px;flex:none}
 .sarrow{
   width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.28);
   background:rgba(255,255,255,.1);color:#fff;cursor:pointer;display:grid;place-items:center;
@@ -491,21 +516,88 @@ a.fact:active{transform:scale(.985)}
 .sfoot a .sq .ico{width:17px;height:17px}
 
 /* ==========================================================================
-   STEPS
+   ABLAUF — a segmented rail, not three cards.
+
+   The section sits directly under the dark slider's hard full-bleed edge, so
+   it answers that edge with its opposite: one fine horizontal line across the
+   whole measure, and nothing enclosed. No panel, no radius, no shadow — the
+   sequence is carried by the line and, more importantly, by the breaks in it.
+
+   Each step is a segment of that rail. A short accent tick marks where a
+   segment begins; the segment simply stops, and the gap that follows carries
+   the thing the lede promises and the old cards never showed — after each step
+   the visitor decides whether to go on. Two gaps, two decisions. The rail past
+   step three is left open on purpose: what follows is her pace, not a fourth box.
+
+   The numerals stay (this really is an ordered, gated process) but stop being
+   badges: set large at 300 — the same weight as the hero stats, the lightest
+   on the page — they become the structure above the line instead of chrome
+   inside a box.
    ========================================================================== */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,28px)}
-.step{
-  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-lg);
-  padding:28px 26px;display:flex;flex-direction:column;gap:10px;
+.flow{
+  --gate:clamp(76px,8.5vw,132px);
+  list-style:none;margin:0;padding:0;
+  display:grid;
+  grid-template-columns:1fr var(--gate) 1fr var(--gate) 1fr;
+  align-items:start;
 }
-.step__n{
-  width:38px;height:38px;border-radius:50%;background:var(--accent-wash);color:var(--accent);
-  display:grid;place-items:center;font-size:.92rem;font-weight:700;font-variant-numeric:tabular-nums;
-  margin-bottom:6px;
+/* Explicit placement: the gate columns are structural gutters, not items. */
+.flow__step:nth-child(1){grid-column:1}
+.flow__step:nth-child(2){grid-column:3}
+.flow__step:nth-child(3){grid-column:5}
+
+.flow__n{
+  display:block;
+  font-size:clamp(2.5rem,4.8vw,3.9rem);font-weight:300;line-height:1;
+  letter-spacing:-.04em;font-variant-numeric:tabular-nums;
+  color:var(--muted);
+  margin-bottom:clamp(15px,1.7vw,22px);
 }
-.step__t{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
-.step__meta{font-size:.79rem;font-weight:600;color:var(--accent);white-space:nowrap;background:var(--accent-wash);border-radius:var(--r-pill);padding:4px 11px}
-.step p{font-size:.95rem;color:var(--body)}
+/* The rail lives on the body, so the numeral sits above the line. */
+.flow__body{
+  position:relative;
+  border-top:1px solid var(--hairline);
+  padding-top:clamp(19px,2.1vw,27px);
+}
+/* Segment start: 2px of voltage where this step begins. */
+.flow__body::before{
+  content:"";position:absolute;left:0;top:-1px;
+  width:clamp(30px,3.4vw,44px);height:2px;background:var(--accent);
+}
+.flow__body h3{font-size:clamp(1.2rem,1.45vw,1.4rem)}
+.flow__meta{
+  display:block;margin-top:7px;
+  font-size:.82rem;font-weight:600;color:var(--accent);
+  font-variant-numeric:tabular-nums;
+}
+.flow__body p{margin:13px 0 0;font-size:.95rem;line-height:1.55;color:var(--body)}
+
+/* The decision beat. Hangs in the gutter, level with the rail, dropping away
+   from it — the point where the line stops and the visitor chooses. */
+.flow__gate{
+  position:absolute;top:0;left:100%;width:var(--gate);
+  display:flex;flex-direction:column;align-items:center;gap:9px;
+  padding-inline:11px;text-align:center;
+  font-size:.75rem;font-weight:600;line-height:1.3;color:var(--muted);
+}
+.flow__gate::before{content:"";width:1px;height:clamp(20px,2.2vw,28px);background:var(--accent)}
+
+/* Under 900 the rail cannot hold three segments side by side, so each step
+   keeps its own rail and they stack; the gate drops out of the gutter and
+   becomes an inline beat between them, tick laid flat. */
+@media (max-width:900px){
+  .flow{grid-template-columns:1fr;row-gap:clamp(32px,5vw,46px)}
+  .flow__step:nth-child(1),.flow__step:nth-child(2),.flow__step:nth-child(3){grid-column:1}
+  .flow__n{font-size:clamp(2.1rem,7vw,2.9rem)}
+  .flow__body p{max-width:62ch}
+  .flow__gate{
+    position:static;width:auto;
+    flex-direction:row;align-items:center;gap:13px;
+    padding-inline:0;text-align:left;
+    margin-top:clamp(20px,3.5vw,28px);
+  }
+  .flow__gate::before{width:clamp(26px,7vw,44px);height:1px}
+}
 
 /* ==========================================================================
    ABOUT
@@ -759,21 +851,26 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
   .bar__tel span{display:none}
   .bar__cta .btn{display:none}
   .two,.about,.contact,.methods,.footcta{grid-template-columns:1fr}
+  .two--sticky > :first-child{position:static}
   .hero{min-height:0;padding-bottom:clamp(30px,5vw,48px)}
   .hero__veil{background:
     linear-gradient(180deg, rgba(44,18,32,.90) 0%, rgba(74,25,52,.86) 42%, rgba(123,34,85,.72) 100%),
     linear-gradient(97deg, rgba(44,18,32,.5) 0%, rgba(140,44,96,0) 70%)}
   .hero__bg img{object-position:62% 30%}
   .hero .lede{max-width:46ch}
-  .voices,.steps{grid-template-columns:1fr 1fr}
+  .voices{grid-template-columns:1fr 1fr}
   .facts{grid-template-columns:1fr}
   .fact{min-height:0}
 }
 @media (max-width:740px){
   body{font-size:16px;padding-bottom:82px}
-  .voices,.steps,.symptoms,.row2,.foot__grid,.footcta{grid-template-columns:1fr}
+  .voices,.row2,.foot__grid,.footcta{grid-template-columns:1fr}
   .foot__mark{width:min(64%,320px);left:-12%;bottom:-10%}
   .scard{flex-basis:82%}
+  /* The heading can no longer give up 104px and still set two comfortable
+     lines, so the arrows drop under it — still above the cards, left-aligned
+     with the heading rather than orphaned against the right edge. */
+  .shead{flex-direction:column;align-items:flex-start;gap:24px}
   .sfoot a{margin-left:0}
   .fact{padding:26px 22px}
   .fact__ico{width:38px;height:38px}
@@ -788,6 +885,9 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
   *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
   /* animation-name:none, so the droplet rests visibly instead of ending hidden */
   .scrollcue__drop{animation:none;transform:translateY(12px);opacity:.95}
+  /* animation:none, not the .01ms clamp above: that clamps duration but not
+     the per-word delay, which would leave the words popping in one by one. */
+  .statement.is-armed .w{animation:none}
 }
 </style>
 
@@ -891,17 +991,7 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
       </p>
 
       <div class="afterline">
-        <a class="btn-split" href="#praxis">
-          Mehr über mich
-          <span class="sq"><svg class="ico"><use href="#i-arrow-ne"/></svg></span>
-        </a>
-        <a class="proof" href="#stimmen">
-          <span class="proof__faces" aria-hidden="true"><span>C</span><span>H</span><span>P</span></span>
-          <span class="proof__t">
-            <small>Patientinnen berichten</small>
-            <b>Lesen Sie ihre Geschichten</b>
-          </span>
-        </a>
+        <a class="btn btn--primary" href="#praxis">Mehr über mich <svg class="ico"><use href="#i-arrow"/></svg></a>
       </div>
 
       <div class="facts">
@@ -930,36 +1020,68 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
 
   <!-- SYMPTOMS -->
   <section class="section" id="beschwerden">
-    <div class="wrap two">
+    <div class="wrap two two--sticky">
       <div class="stack" style="gap:18px">
         <span class="eyebrow">Kommt Ihnen das bekannt vor?</span>
         <h2>Sie waren überall — und nirgends hat jemand richtig hingeschaut.</h2>
         <p class="lede">Die meisten Menschen kommen zu mir, nachdem sie schon eine lange Runde hinter sich haben. Ein Punkt genügt.</p>
-      </div>
-      <div>
-        <ul class="symptoms">
-          <li><svg class="ico"><use href="#i-check"/></svg>Dauerhafte Erschöpfung und Müdigkeit</li>
-          <li><svg class="ico"><use href="#i-check"/></svg>Schlafstörungen, innere Unruhe</li>
-          <li><svg class="ico"><use href="#i-check"/></svg>Migräne, wiederkehrende Kopfschmerzen</li>
-          <li><svg class="ico"><use href="#i-check"/></svg>Blähbauch, Reizdarm, Verdauung</li>
-          <li><svg class="ico"><use href="#i-check"/></svg>Schilddrüse: Hashimoto, Unter-, Überfunktion</li>
-          <li><svg class="ico"><use href="#i-check"/></svg>Schmerzen ohne erkennbaren Befund</li>
-          <li><svg class="ico"><use href="#i-check"/></svg>Gewicht, das sich nicht bewegen lässt</li>
-          <li><svg class="ico"><use href="#i-check"/></svg>Ihr Kind ist unruhig oder zieht sich zurück</li>
-        </ul>
         <div class="after">
-          <p class="lede">Im kostenlosen Vorgespräch klären wir in Ruhe, ob und wie ich Ihnen helfen kann.</p>
+          <p>Im kostenlosen Vorgespräch klären wir in Ruhe, ob und wie ich Ihnen helfen kann.</p>
           <a class="btn btn--primary" href="#kontakt">Vorgespräch vereinbaren <svg class="ico"><use href="#i-arrow"/></svg></a>
         </div>
       </div>
+      <ul class="symptoms">
+        <li>
+          <h3>Dauerhafte Erschöpfung und Müdigkeit</h3>
+          <p>Wir sehen uns Schilddrüse, Eisen, Vitamin D und die Nebennieren an — und was Ihnen im Alltag tatsächlich Energie entzieht.</p>
+        </li>
+        <li>
+          <h3>Schlafstörungen, innere Unruhe</h3>
+          <p>Einschlafen, Durchschlafen, nächtliches Grübeln: Wir suchen die Regulationsstörung dahinter, statt nur den Schlaf zu behandeln.</p>
+        </li>
+        <li>
+          <h3>Migräne, wiederkehrende Kopfschmerzen</h3>
+          <p>Wir tragen zusammen, was Ihre Attacken gemeinsam haben — Auslöser, Zyklus, Nahrungsmittel, Verspannungen.</p>
+        </li>
+        <li>
+          <h3>Blähbauch, Reizdarm, Verdauung</h3>
+          <p>Stuhlanalyse und Darmflora zeigen, ob Zonulin, Leaky Gut oder eine Unverträglichkeit beteiligt ist.</p>
+        </li>
+        <li>
+          <h3>Schilddrüse: Hashimoto, Unter-, Überfunktion</h3>
+          <p>Auch bei unauffälligem TSH betrachten wir die freien Werte, die Antikörper und den Stoffwechsel im Zusammenhang.</p>
+        </li>
+        <li>
+          <h3>Schmerzen ohne erkennbaren Befund</h3>
+          <p>Wenn Bildgebung und Labor nichts zeigen, heißt das nicht, dass nichts ist. Wir suchen auf der funktionellen Ebene weiter.</p>
+        </li>
+        <li>
+          <h3>Gewicht, das sich nicht bewegen lässt</h3>
+          <p>Stoffwechseltyp, Insulin, Entzündungswerte: Wir klären, warum Ihr Körper hält, statt Ihnen noch eine Diät zu geben.</p>
+        </li>
+        <li>
+          <h3>Ihr Kind ist unruhig oder zieht sich zurück</h3>
+          <p>Schlaf, Konzentration, Bauchweh, Rückzug — bei Kindern arbeite ich besonders behutsam und ohne Druck.</p>
+        </li>
+      </ul>
     </div>
   </section>
 
   <!-- SERVICES (dark band + slider) -->
   <section class="section dark" id="schwerpunkte">
-    <div class="wrap stack" style="gap:16px;margin-bottom:clamp(30px,3.6vw,44px)">
-      <span class="eyebrow">Praxisschwerpunkte</span>
-      <h2>Sechs Wege, auf denen<br>wir zur Ursache kommen</h2>
+    <div class="wrap shead">
+      <div class="stack shead__t">
+        <span class="eyebrow">Praxisschwerpunkte</span>
+        <h2>Sechs Wege, auf denen<br>wir zur Ursache kommen</h2>
+      </div>
+      <div class="sarrows">
+        <button class="sarrow sarrow--prev" id="sprev" aria-label="Vorherige Schwerpunkte" aria-controls="slider">
+          <svg class="ico"><use href="#i-arrow"/></svg>
+        </button>
+        <button class="sarrow sarrow--next" id="snext" aria-label="Weitere Schwerpunkte" aria-controls="slider">
+          <svg class="ico"><use href="#i-arrow"/></svg>
+        </button>
+      </div>
     </div>
 
     <div class="wrap">
@@ -1010,15 +1132,6 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
       </div>
       </div>
 
-      <div class="sarrows">
-        <button class="sarrow sarrow--prev" id="sprev" aria-label="Vorherige Schwerpunkte" aria-controls="slider">
-          <svg class="ico"><use href="#i-arrow"/></svg>
-        </button>
-        <button class="sarrow sarrow--next" id="snext" aria-label="Weitere Schwerpunkte" aria-controls="slider">
-          <svg class="ico"><use href="#i-arrow"/></svg>
-        </button>
-      </div>
-
       <div class="sfoot">
         <p>Welcher Weg zu Ihnen passt, entscheiden wir nach der Anamnese — meist ist es eine Kombination.</p>
         <a href="#kontakt">
@@ -1029,29 +1142,42 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
     </div>
   </section>
 
-  <!-- STEPS -->
+  <!-- ABLAUF -->
   <section class="section tint-2" id="ablauf">
-    <div class="wrap stack" style="gap:16px;margin-bottom:40px">
+    <div class="wrap stack" style="gap:16px;margin-bottom:clamp(44px,5vw,68px)">
       <span class="eyebrow">So läuft es ab</span>
       <h2>Drei Schritte — und Sie wissen, woran Sie sind</h2>
       <p class="lede">Kein Abo, kein Paket. Nach jedem Schritt entscheiden Sie, ob Sie weitergehen möchten.</p>
     </div>
-    <div class="wrap steps">
-      <div class="step">
-        <span class="step__n">01</span>
-        <span class="step__t"><h3>Vorgespräch</h3><span class="step__meta">30 Min · kostenfrei</span></span>
-        <p>Sie schildern mir Ihr Anliegen, ich sage Ihnen offen, ob und mit welchen Methoden ich helfen kann. Am Telefon oder persönlich.</p>
-      </div>
-      <div class="step">
-        <span class="step__n">02</span>
-        <span class="step__t"><h3>Erstanamnese</h3><span class="step__meta">ca. 1,5 Std</span></span>
-        <p>Ausführliches Gespräch und Untersuchung, dazu je nach Bedarf Blut-, Speichel- oder Stuhlanalyse. Bringen Sie vorhandene Laborwerte gerne mit.</p>
-      </div>
-      <div class="step">
-        <span class="step__n">03</span>
-        <span class="step__t"><h3>Therapieplan</h3><span class="step__meta">schriftlich, vorab</span></span>
-        <p>Sie erhalten Therapie- und Kostenplan, bevor behandelt wird. Danach begleite ich Sie in Ihrem Tempo, mit festen Kontrollterminen.</p>
-      </div>
+    <div class="wrap">
+      <ol class="flow" role="list">
+        <li class="flow__step">
+          <span class="flow__n">01</span>
+          <div class="flow__body">
+            <h3>Vorgespräch</h3>
+            <span class="flow__meta">30 Min · kostenfrei</span>
+            <p>Sie schildern mir Ihr Anliegen, ich sage Ihnen offen, ob und mit welchen Methoden ich helfen kann. Am Telefon oder persönlich.</p>
+            <span class="flow__gate">Sie entscheiden</span>
+          </div>
+        </li>
+        <li class="flow__step">
+          <span class="flow__n">02</span>
+          <div class="flow__body">
+            <h3>Erstanamnese</h3>
+            <span class="flow__meta">ca. 1,5 Std</span>
+            <p>Ausführliches Gespräch und Untersuchung, dazu je nach Bedarf Blut-, Speichel- oder Stuhlanalyse. Bringen Sie vorhandene Laborwerte gerne mit.</p>
+            <span class="flow__gate">Sie entscheiden</span>
+          </div>
+        </li>
+        <li class="flow__step">
+          <span class="flow__n">03</span>
+          <div class="flow__body">
+            <h3>Therapieplan</h3>
+            <span class="flow__meta">schriftlich, vorab</span>
+            <p>Sie erhalten Therapie- und Kostenplan, bevor behandelt wird. Danach begleite ich Sie in Ihrem Tempo, mit festen Kontrollterminen.</p>
+          </div>
+        </li>
+      </ol>
     </div>
   </section>
 
@@ -1527,5 +1653,46 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
       el.scrollIntoView({behavior:'smooth', block:'center'});
     });
   });
+
+  // Statement: types itself in word by word the first time it is scrolled to.
+  // The split happens here rather than in the markup so the sentence stays
+  // plain text — if this never runs, it is simply there, unanimated. Recursing
+  // into elements keeps <em>woher</em> and its accent colour intact.
+  var st = document.querySelector('.statement');
+  if (st && 'IntersectionObserver' in window &&
+      !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var n = 0;
+    var split = function(node){
+      [].slice.call(node.childNodes).forEach(function(kid){
+        if (kid.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          kid.nodeValue.split(/(\s+)/).forEach(function(part){
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+            var w = document.createElement('span');
+            w.className = 'w';
+            w.textContent = part;
+            w.style.animationDelay = (n++ * 45) + 'ms';
+            frag.appendChild(w);
+          });
+          node.replaceChild(frag, kid);
+        } else if (kid.nodeType === 1) {
+          split(kid);
+        }
+      });
+    };
+    split(st);
+    st.classList.add('is-armed');
+    // Fires ~180px before the statement reaches the viewport, so the armed
+    // (hidden) state is never on screen and the cascade reads from its start.
+    var stIO = new IntersectionObserver(function(es){
+      if (!es[0].isIntersecting) return;
+      st.classList.add('is-typing');
+      stIO.disconnect();
+    }, {rootMargin: '0px 0px 180px 0px'});
+    stIO.observe(st);
+  }
+
 })();
 </script>
+</html>
