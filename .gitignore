@@ -19,6 +19,12 @@ hero-homepage-background.jpg
 assets/clean/hero.jpg
 assets/clean/voices-bg.jpg
 
+# Placeholder footage for the client presentation: a watermarked iStock comp
+# (id 1140371472) plus the poster frame extracted from it. Same reason as
+# above — this repository is public, so neither is committed.
+assets/istockphoto-*.mp4
+assets/clean/hero-video-poster.jpg
+
 # --- Generated ---------------------------------------------------------------
 # Rebuilt from index.html with `python3 build-inline.py`. Excluded because it
 # base64-embeds every image, including the unlicensed hero above.

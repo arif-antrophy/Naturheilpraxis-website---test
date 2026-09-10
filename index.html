@@ -197,7 +197,18 @@ img{max-width:100%;display:block}
   padding-bottom:clamp(96px,11vh,132px);   /* room for the scroll cue */
 }
 .hero__bg{position:absolute;inset:0;z-index:-2}
-.hero__bg img{width:100%;height:100%;object-fit:cover;object-position:56% 34%}
+/* PLACEHOLDER FOOTAGE — a watermarked iStock comp, in for the client
+   presentation only. It is 768x432, so a full-bleed hero upscales it about 2x;
+   the veil above carries enough density to hide most of that, but a licensed
+   1920px file is a straight filename swap here. Excluded from git for the same
+   reason as the other iStock derivatives — see .gitignore.
+
+   muted + playsinline are what make autoplay permitted at all; the poster is
+   the video's own first frame, so there is no cross-fade between two different
+   images on first paint. Reduced motion is handled in JS, since CSS cannot
+   pause a video. */
+.hero__bg img,
+.hero__vid{width:100%;height:100%;object-fit:cover;object-position:56% 34%;display:block}
 .hero__veil{
   position:absolute;inset:0;z-index:-1;
   background:
@@ -214,6 +225,41 @@ img{max-width:100%;display:block}
 .hero__in{position:relative;z-index:1;width:100%}
 .hero__copy{display:flex;flex-direction:column;gap:24px;align-items:flex-start;max-width:780px}
 .hero h1{color:#fff;font-size:clamp(2.9rem,6.5vw,5.4rem);font-weight:500;letter-spacing:-.038em;line-height:.98}
+
+/* One word carries an inked underline. Not a colour swap on the word itself —
+   recolouring a single word in a headline is the commonest tell of a generated
+   page — but a drawn stroke under it, bowed the way a hand bows a pen, in the
+   pink already inside the logo (--bright is the system's second accent, kept
+   for exactly this kind of small highlight).
+
+   preserveAspectRatio="none" lets the path stretch to whatever the word
+   measures. The stroke stays in user units so the dash maths and the path share
+   one coordinate space — see the note on the path rule below.
+
+   The resting value is drawn (dashoffset 0) and the animation fills backwards
+   into the hidden state — so if it never runs, the underline is simply there
+   rather than stranded invisible. */
+.mark{position:relative;display:inline-block}
+.mark__line{
+  position:absolute;left:-.5%;bottom:-.2em;
+  width:101%;height:.2em;overflow:visible;pointer-events:none;
+}
+.mark__line path{
+  fill:none;stroke:var(--bright);stroke-linecap:round;
+  /* User units, not px, and no vector-effect: non-scaling-stroke measures the
+     dash pattern in SCREEN pixels, so a 100-unit dasharray became 100px against
+     a ~292px stroke and drew it as two dashes with a gap. In user units the
+     path is ~97 long, so 100 is one continuous dash. Thickness then scales with
+     the SVG box (.2em tall), which tracks the headline for free: ~6px at
+     desktop, ~3px at mobile. */
+  stroke-width:4.2;
+  stroke-dasharray:100;stroke-dashoffset:0;
+  /* --ease-in-out, not --ease-out: a strong ease-out puts 96% of the draw in
+     the first half, which reads as a snap rather than a stroke. This is
+     movement across the screen, so it wants the symmetric curve. */
+  animation:markdraw .8s var(--ease-in-out) .5s backwards;
+}
+@keyframes markdraw{from{stroke-dashoffset:100}}
 .hero .lede{color:rgba(255,255,255,.9);max-width:34ch;font-size:clamp(1rem,1.45vw,1.125rem)}
 .hero .eyebrow{
   color:#fff;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);
@@ -384,7 +430,23 @@ a.fact:active{transform:scale(.985)}
    heading sit at the same height under the header. Sticky needs an ancestor
    that is not a scroll container — body is overflow-x:clip for exactly this
    reason; hidden there would silently kill it. */
-.two--sticky{grid-template-columns:.85fr 1.15fr;gap:clamp(30px,7vw,120px)}
+.two--sticky{
+  --split:.85fr 1.15fr;
+  --split-gap:clamp(30px,7vw,120px);
+  grid-template-columns:var(--split);gap:var(--split-gap);
+}
+/* Symptoms only: the claim needs room to set in two or three lines instead of
+   four, so this pair runs 65/35. The About timeline keeps the default — its
+   year column alone is 134px and would be starved at 35%. A narrower gap here
+   too, or the 35% column pays for the whitespace twice. */
+.two--wideleft{--split:65fr 35fr;--split-gap:clamp(28px,4.6vw,72px)}
+/* About: an even split. The timeline carries a year gutter plus prose — the
+   quote and the "heute" paragraph both live in it — so it needs as much of the
+   row as the bio. The year gutter still runs narrower than the default: those
+   pixels are worth more to the paragraph at the terminus than to the numeral. */
+.two--even{--split:1fr 1fr;--split-gap:clamp(26px,3.4vw,56px)}
+.two--even .path__era{grid-template-columns:clamp(72px,7.6vw,104px) 1fr}
+.two--even .path__when{font-size:clamp(1.4rem,1.9vw,1.78rem);padding-right:clamp(16px,1.8vw,24px)}
 .two--sticky > :first-child{position:sticky;top:96px}
 /* No room to stick: stacked layout, or a viewport shorter than the column. */
 @media (max-height:640px){.two--sticky > :first-child{position:static}}
@@ -397,7 +459,7 @@ a.fact:active{transform:scale(.985)}
 .symptoms li:last-child{border-bottom:0}
 .symptoms h3{
   font-size:clamp(1.18rem,1.45vw,1.38rem);font-weight:600;
-  letter-spacing:-.018em;line-height:1.25;color:var(--ink);
+  letter-spacing:-.018em;line-height:1.25;color:var(--accent);
 }
 .symptoms p{margin-top:9px;font-size:.95rem;line-height:1.55;color:var(--body);max-width:52ch}
 .after{margin-top:clamp(6px,1vw,14px);display:flex;flex-direction:column;gap:18px;align-items:flex-start}
@@ -635,7 +697,11 @@ a.fact:active{transform:scale(.985)}
 .bio p{max-width:60ch}
 .path__now{margin:11px 0 0;font-size:1rem;line-height:1.6;color:var(--body);max-width:46ch}
 
-.path{list-style:none;margin:0;padding:0;max-width:800px}
+.path{
+  list-style:none;margin:0;padding:0;max-width:800px;
+  /* one place to size the node; the spine's start and end follow it */
+  --dot:9px;--dot-top:9px;
+}
 .path__era{
   display:grid;
   grid-template-columns:clamp(84px,11vw,134px) 1fr;
@@ -646,23 +712,49 @@ a.fact:active{transform:scale(.985)}
   font-size:clamp(1.5rem,2.4vw,2.05rem);font-weight:300;line-height:1.05;
   letter-spacing:-.03em;color:var(--accent);font-variant-numeric:tabular-nums;
 }
-/* The spine lives on the content side so the year hangs clear of it. */
+/* The spine lives on the content side so the year hangs clear of it. It is an
+   element rather than a border-left, because a border runs the full height of
+   the column: it started above the first node and stopped short of the last.
+   As a positioned line it can begin at the first node's centre and end at the
+   last node's centre, which is also what makes it drawable on scroll. */
 .path__what{
   position:relative;
-  border-left:1px solid var(--hairline);
   padding:0 0 clamp(46px,5.4vw,82px) clamp(24px,3vw,38px);
 }
-/* Today is not part of the documented line, so the line does not reach it.
-   Colour, not width — a 0 border would shift the content 1px left. */
-.path__what::before{
-  content:"";position:absolute;left:-5px;top:9px;
-  width:9px;height:9px;border-radius:50%;background:var(--accent);
+.path__what::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:1px;
+  background:var(--hairline);
 }
-.path__era--now > .path__what{border-left-color:transparent;padding-bottom:0}
+/* Begins at the first node, not above it. */
+.path__era:first-child > .path__what::after{top:calc(var(--dot-top) + var(--dot)/2)}
+/* And ends at the last: a stub down to the ring, nothing past it. */
+.path__era--now > .path__what{padding-bottom:0}
+.path__era--now > .path__what::after{bottom:auto;height:calc(var(--dot-top) + var(--dot)/2)}
+/* The node, centred on the spine's own 1px. */
+.path__what::before{
+  content:"";position:absolute;top:var(--dot-top);
+  left:calc(.5px - var(--dot)/2);
+  width:var(--dot);height:var(--dot);border-radius:50%;background:var(--accent);
+}
 /* Today is open, so its node is too — a ring, filled with the section ground.
    box-sizing is border-box, so 9px with a 2px border leaves a 5px hole. */
 .path__era--now > .path__what::before{background:var(--canvas);border:2px solid var(--accent)}
 .path__what h3{font-size:clamp(1.18rem,1.4vw,1.34rem)}
+
+/* Draws itself as it is scrolled to. Armed by JS only, so without the script
+   the timeline is simply there, fully drawn. Transitions rather than keyframes:
+   a fast scroll can trip several eras at once and a transition retargets from
+   wherever it is instead of restarting. Never scale(0) on the node — it grows
+   from .5 and fades, so it is never something appearing out of nothing. */
+.path--armed .path__what::after{transform:scaleY(0);transform-origin:top center}
+.path--armed .path__what::before{opacity:0;transform:scale(.5)}
+.path--armed .is-in > .path__what::after{
+  transform:scaleY(1);transition:transform .45s var(--ease-out) .12s;
+}
+.path--armed .is-in > .path__what::before{
+  opacity:1;transform:scale(1);
+  transition:opacity .2s var(--ease-out),transform .2s var(--ease-out);
+}
 .path__cred{margin:9px 0 0;font-size:.98rem;line-height:1.5;color:var(--ink);max-width:46ch}
 .path__cred i{font-style:normal;color:var(--body)}
 
@@ -733,13 +825,16 @@ a.fact:active{transform:scale(.985)}
 }
 .vwall__in{
   position:relative;height:100%;display:grid;
-  grid-template-columns:min(46%,500px) 1fr;gap:clamp(28px,4vw,72px);
+  grid-template-columns:min(50%,560px) 1fr;gap:clamp(28px,4vw,72px);
   align-items:stretch;
 }
-.vwall__l{color:#fff;align-self:center;max-width:500px}
+.vwall__l{color:#fff;align-self:center;max-width:560px}
 .vwall__l .eyebrow{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
 .vwall__l .eyebrow::before{background:var(--bright)}
-.vwall__l h2{color:#fff;margin:18px 0 16px}
+.vwall__l h2{
+  color:#fff;margin:20px 0 18px;
+  font-size:clamp(2.6rem,5vw,4.2rem);line-height:1.02;letter-spacing:-.036em;
+}
 .vwall__l p{color:rgba(255,255,255,.76);font-size:1.02rem;line-height:1.6}
 
 .vwall__col{position:relative;height:100%}
@@ -795,18 +890,76 @@ a.fact:active{transform:scale(.985)}
 /* ==========================================================================
    FEES + FAQ
    ========================================================================== */
-.panel{background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-xl);padding:clamp(24px,3vw,34px)}
-.fees{margin:16px 0 0;padding:0;list-style:none}
-.fees li{display:flex;justify-content:space-between;gap:18px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--hairline-soft)}
-.fees li:last-child{border-bottom:0}
-.fees b{font-weight:600;font-size:.98rem;display:block}
-.fees i{font-style:normal;color:var(--muted);font-size:.87rem}
-.price{font-size:1.1rem;font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
-.price--free{color:var(--accent);font-weight:700}
-.price--slot{font-size:.79rem;font-weight:600;color:var(--muted);border:1px dashed var(--hairline);border-radius:var(--r-pill);padding:6px 13px;white-space:nowrap}
-.hint{margin-top:20px;padding-top:18px;border-top:1px solid var(--hairline);font-size:.9rem;color:var(--body)}
+/* Only the contact form uses this now, and it is the primary object in its
+   section, so it carries the deeper shadow. */
+.panel{
+  background:var(--canvas);border:1px solid var(--hairline);
+  border-radius:var(--r-xl);padding:clamp(24px,3vw,34px);
+  box-shadow:var(--shadow-panel);
+}
+/* KOSTEN — pricing cards. Costs and questions used to share one grid, each
+   with its own eyebrow and headline; they are two sections now, costs first,
+   so the FAQ's opening question about insurance follows from the prices.
 
-.faq{display:flex;flex-direction:column;gap:10px}
+   Cards are right here specifically, where they are wrong elsewhere on this
+   page: each one binds a price to what that appointment actually includes, and
+   the four are peers meant to be read against each other. That is the card
+   doing structural work rather than decorating. They stay inside the system —
+   the dominant --r-lg radius, --hairline borders, and the plum-tinted
+   --shadow-card, never a grey one.
+
+   The free first step carries the section's single action, because it is the
+   way in and the CTA the whole page points at. */
+.fees{
+  list-style:none;margin:clamp(30px,3.4vw,46px) 0 0;padding:0;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,22px);
+  align-items:stretch;
+}
+.fees > li{
+  display:flex;flex-direction:column;align-items:flex-start;
+  background:var(--canvas);border:1px solid var(--hairline);
+  border-radius:var(--r-lg);box-shadow:var(--shadow-card);
+  padding:clamp(20px,2vw,26px);
+}
+.fees > li.is-entry{border-color:var(--bright);box-shadow:var(--shadow-panel)}
+.fees b{font-weight:600;font-size:1.02rem;letter-spacing:-.01em;color:var(--ink)}
+.fees i{font-style:normal;margin-top:5px;font-size:.86rem;line-height:1.45;color:var(--body)}
+.price{
+  margin-top:clamp(13px,1.5vw,18px);
+  font-size:clamp(1.3rem,1.7vw,1.6rem);font-weight:400;letter-spacing:-.024em;
+  white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--ink);
+}
+.price--free{color:var(--accent);font-weight:500}
+/* Still a placeholder, and it should keep looking like one until a real number
+   replaces it — see the launch list in README.md. */
+.price--slot{
+  margin-top:clamp(13px,1.5vw,18px);font-size:.8rem;font-weight:600;color:var(--body);
+  border:1px dashed var(--hairline);border-radius:var(--r-pill);
+  padding:6px 13px;white-space:nowrap;
+}
+/* What the appointment includes. The tick is correct here — these really are
+   included items, the same sense it carries on the Diagnostik lists — unlike
+   on the symptom list, where it described complaints and was wrong. */
+.incl{
+  list-style:none;width:100%;
+  margin:clamp(15px,1.7vw,20px) 0 0;padding:clamp(14px,1.6vw,18px) 0 0;
+  border-top:1px solid var(--hairline-soft);
+  display:flex;flex-direction:column;gap:9px;
+}
+.incl li{display:flex;gap:9px;align-items:flex-start;font-size:.87rem;line-height:1.45;color:var(--body)}
+.incl .ico{width:15px;height:15px;flex:none;margin-top:3px;color:var(--accent)}
+/* Only the entry card has an action, so a fixed gap reads better than
+   margin-top:auto — there is no sibling button to line it up with. */
+.fees .btn{margin-top:clamp(16px,1.8vw,22px);width:100%;padding-top:14px;padding-bottom:14px}
+.hint{
+  margin:clamp(28px,3vw,40px) 0 0;padding-top:clamp(18px,2vw,24px);
+  border-top:1px solid var(--hairline-soft);
+  font-size:.9rem;line-height:1.6;color:var(--body);max-width:74ch;
+}
+
+/* The accordions are unchanged. They just get their own section, and a reading
+   measure now that nothing sits beside them. */
+.faq{display:flex;flex-direction:column;gap:10px;max-width:880px;margin-top:clamp(26px,3vw,38px)}
 details.q{background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-md);overflow:hidden}
 details.q[open]{border-color:var(--bright)}
 details.q summary{
@@ -825,17 +978,51 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
 /* ==========================================================================
    CONTACT
    ========================================================================== */
-.contact{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(28px,4vw,56px);align-items:start}
-.info{display:flex;flex-direction:column;gap:18px}
-.info dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:16px;font-size:.97rem;background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:24px}
+/* CONTACT — the form is the action; everything else is reference.
+
+   The section used to present four objects at one weight: the form as a card,
+   and then three more cards beside it (details, map, legal note), so nothing
+   read as primary. Now only the form is a card. Three things carry the
+   hierarchy instead of one:
+
+   1. the grid leans to the form — 1.3fr against .7fr, not an even split;
+   2. the form gets a shadow, because a white card on a white section has
+      nothing but a 1px border to stand on;
+   3. the details, the map and the legal note lose their frames entirely.
+
+   The legal note also leaves the column: a § 3 HWG disclaimer belongs as a
+   footnote under the whole section, not stacked as a third card in a corner. */
+.contact{display:grid;grid-template-columns:1.3fr .7fr;gap:clamp(28px,4.4vw,68px);align-items:start}
+
+/* Reference, not an object: no ground, no frame, no padding — just the icon
+   column and generous row spacing. */
+.info{display:flex;flex-direction:column;gap:clamp(26px,3vw,36px)}
+.info dl{
+  margin:0;display:grid;grid-template-columns:auto 1fr;
+  gap:clamp(15px,1.7vw,19px) 14px;font-size:.95rem;align-items:start;
+}
 .info dt{color:var(--accent)}
-.info dt .ico{width:19px;height:19px}
-.info dd{margin:0;font-weight:500}
+.info dt .ico{width:18px;height:18px;display:block;margin-top:2px}
+.info dd{margin:0;font-weight:500;line-height:1.5;color:var(--ink)}
 .info dd a{font-weight:600}
-.mapcard{border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--hairline)}
-.mapcard svg{display:block;width:100%;height:164px}
-.mapcard__foot{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;padding:14px 18px;background:var(--canvas);border-top:1px solid var(--hairline);font-size:.91rem}
-.legal{font-size:.84rem;color:var(--muted);line-height:1.58;background:var(--wash-2);border-radius:var(--r-md);padding:18px 20px}
+.info__sub{display:block;font-weight:400;color:var(--body)}
+
+/* The map's own ground separates it; it does not need a frame as well. */
+.mapcard{border-radius:var(--r-lg);overflow:hidden}
+.mapcard svg{display:block;width:100%;height:auto}
+.mapcard__foot{
+  display:flex;flex-wrap:wrap;gap:7px 14px;justify-content:space-between;align-items:baseline;
+  padding:12px 2px 0;font-size:.87rem;color:var(--body);
+}
+
+/* A disclaimer has to stay readable — --muted is ~3.4:1 on white and fails AA
+   at this size, so this sits at --body. */
+.legal{
+  margin:clamp(34px,4vw,54px) 0 0;padding-top:clamp(18px,2vw,24px);
+  border-top:1px solid var(--hairline-soft);
+  font-size:.85rem;line-height:1.6;color:var(--body);max-width:92ch;
+}
+.legal strong{color:var(--ink);font-weight:600}
 
 /* ==========================================================================
    FOOTER — dark close to the page, with the phone number as the final CTA.
@@ -935,12 +1122,13 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
   .two,.contact,.methods,.footcta{grid-template-columns:1fr}
   .path{margin-top:clamp(38px,4.5vw,60px)}
   .coda__list{grid-template-columns:repeat(2,1fr)}
+  .fees{grid-template-columns:repeat(2,1fr)}
   .two--sticky > :first-child{position:static}
   .hero{min-height:0;padding-bottom:clamp(30px,5vw,48px)}
   .hero__veil{background:
     linear-gradient(180deg, rgba(44,18,32,.90) 0%, rgba(74,25,52,.86) 42%, rgba(123,34,85,.72) 100%),
     linear-gradient(97deg, rgba(44,18,32,.5) 0%, rgba(140,44,96,0) 70%)}
-  .hero__bg img{object-position:62% 30%}
+  .hero__bg img,.hero__vid{object-position:62% 30%}
   .hero .lede{max-width:46ch}
   .voices{grid-template-columns:1fr 1fr}
   .facts{grid-template-columns:1fr}
@@ -963,8 +1151,9 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
   .path__era{grid-template-columns:clamp(52px,15vw,78px) 1fr}
   .path__when{font-size:clamp(1.05rem,4.6vw,1.4rem);padding-right:clamp(12px,3.4vw,18px)}
   .path__what{padding-left:clamp(16px,4.6vw,24px)}
-  .path__what::before{width:7px;height:7px;left:-4px;top:8px}
+  .path{--dot:7px;--dot-top:8px}
   .coda__list{grid-template-columns:1fr}
+  .fees{grid-template-columns:1fr;gap:clamp(20px,5vw,28px)}
   .afterline{gap:20px}
   .mcta{display:flex}
   .hero__actions .btn{width:100%}
@@ -979,6 +1168,10 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
   .statement.is-armed .w{animation:none}
   /* .01ms x infinite would strobe. Kill it and rest the bars drawn. */
   .flow__body::before{animation:none;transform:scaleX(1)}
+  .mark__line path{animation:none;stroke-dashoffset:0}
+  /* the timeline must never be left half-drawn */
+  .path--armed .path__what::after{transform:scaleY(1)}
+  .path--armed .path__what::before{opacity:1;transform:scale(1)}
 }
 </style>
 
@@ -1039,14 +1232,17 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
          cropped (top 410px, ffmpeg) from hero-homepage-background.jpg to drop the watermarks. Swap in a licensed file or a real
          photo of the practice at ~2400x1400; same path, no code change needed. -->
     <div class="hero__bg" aria-hidden="true">
-      <img src="assets/clean/hero.jpg" alt="" width="1024" height="410">
+      <video class="hero__vid" autoplay muted loop playsinline preload="auto"
+             poster="assets/clean/hero-video-poster.jpg" width="768" height="432">
+        <source src="assets/istockphoto-1140371472-640_adpp_is.mp4" type="video/mp4">
+      </video>
     </div>
     <div class="hero__veil" aria-hidden="true"></div>
 
     <div class="wrap hero__in">
       <div class="hero__copy">
         <span class="eyebrow">Heilpraktikerin in Bad Schönborn · Kraichgau</span>
-        <h1>Wo Ursachen sichtbar werden</h1>
+        <h1>Wo Ursachen <span class="mark">sichtbar<svg class="mark__line" viewBox="0 0 100 12" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M1.5 4.4C26 9.9 70 9.6 98.6 3.9"/></svg></span> werden</h1>
         <p class="lede">
           Alle Werte in Ordnung und Ihnen geht es trotzdem nicht gut? Dann fehlt nicht
           der Befund, sondern die Ursache.
@@ -1111,7 +1307,7 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
 
   <!-- SYMPTOMS -->
   <section class="section" id="beschwerden">
-    <div class="wrap two two--sticky">
+    <div class="wrap two two--sticky two--wideleft">
       <div class="stack" style="gap:18px">
         <span class="eyebrow">Kommt Ihnen das bekannt vor?</span>
         <h2>Sie waren überall — und nirgends hat jemand richtig hingeschaut.</h2>
@@ -1272,7 +1468,7 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
 
   <!-- ABOUT -->
   <section class="section" id="praxis">
-    <div class="wrap two two--sticky">
+    <div class="wrap two two--sticky two--even">
       <div class="bio">
         <span class="eyebrow">Über mich</span>
         <h2>Cornelia Dinger, Heilpraktikerin</h2>
@@ -1416,44 +1612,88 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
   </section>
 
   <!-- FEES + FAQ -->
+  <!-- KOSTEN -->
   <section class="section tint-2" id="kosten">
-    <div class="wrap two" style="align-items:start">
-      <div class="panel">
-        <span class="eyebrow" style="margin-bottom:16px">Kosten &amp; Kasse</span>
-        <h2 style="font-size:clamp(1.5rem,2.4vw,1.9rem);margin-bottom:4px">Transparent, bevor behandelt wird</h2>
-        <ul class="fees">
-          <li><span><b>Vorgespräch</b><i>ca. 30 Minuten, telefonisch oder persönlich</i></span><span class="price price--free">kostenfrei</span></li>
-          <li><span><b>Erstanamnese &amp; Untersuchung</b><i>ca. 1,5 Stunden inkl. Auswertung</i></span><span class="price--slot">Betrag einsetzen</span></li>
-          <li><span><b>Folgetermin</b><i>je nach Methode und Dauer</i></span><span class="price--slot">Betrag einsetzen</span></li>
-          <li><span><b>Laboranalysen</b><i>Abrechnung direkt über das Labor</i></span><span class="price">nach Aufwand</span></li>
-        </ul>
-        <p class="hint">Abrechnung nach der Gebührenordnung für Heilpraktiker. Private Kassen und Zusatzversicherungen erstatten häufig; gesetzliche Kassen bezuschussen oft über Bonusprogramme.</p>
-      </div>
-      <div>
-        <span class="eyebrow" style="margin-bottom:16px">Häufige Fragen</span>
-        <h2 style="margin-bottom:24px">Das fragen mich fast alle</h2>
-        <div class="faq">
-          <details class="q" open>
-            <summary>Zahlt meine Krankenkasse die Behandlung?</summary>
-            <p>Privatversicherte und Patient:innen mit Heilpraktiker-Zusatzversicherung erhalten die Kosten je nach Tarif ganz oder teilweise zurück. Gesetzliche Kassen übernehmen die Behandlung nicht direkt, bezuschussen sie aber oft über Bonus- oder Wahltarife. Fragen Sie kurz bei Ihrer Kasse nach — Sie erhalten von mir eine Rechnung nach der Gebührenordnung für Heilpraktiker.</p>
-          </details>
-          <details class="q">
-            <summary>Was passiert beim ersten Termin?</summary>
-            <p>Wir nehmen uns rund 1,5 Stunden Zeit. Ich höre zu, frage nach Ihrer Vorgeschichte, untersuche Sie und sehe mir vorhandene Laborwerte an. Bringen Sie deshalb gerne alle Befunde mit, die Sie haben. Behandelt wird erst, wenn Sie den Therapie- und Kostenplan kennen.</p>
-          </details>
-          <details class="q">
-            <summary>Muss ich über belastende Themen sprechen?</summary>
-            <p>Nein. Genau das ist die Stärke der Psychosomatischen Energetik: Der seelische Konflikt wird über Testung ermittelt und mit homöopathischen Komplexmitteln gelöst. Sie müssen schmerzhafte Erlebnisse nicht erzählen, um sie loszulassen.</p>
-          </details>
-          <details class="q">
-            <summary>Wie schnell merke ich eine Veränderung?</summary>
-            <p>Das ist individuell. Viele Klient:innen, die besonders müde und erschöpft kommen, berichten schon nach wenigen Wochen von mehr Lebensenergie und besserem Schlaf. Chronische Beschwerden brauchen erfahrungsgemäß mehrere Monate Begleitung.</p>
-          </details>
-          <details class="q">
-            <summary>Ersetzen Sie meine Ärztin oder meinen Arzt?</summary>
-            <p>Nein. Ich arbeite ergänzend zur schulmedizinischen Behandlung und rate niemandem, verordnete Medikamente eigenmächtig abzusetzen. Wo eine ärztliche Abklärung nötig ist, sage ich Ihnen das deutlich.</p>
-          </details>
-        </div>
+    <div class="wrap stack" style="gap:16px">
+      <span class="eyebrow">Kosten &amp; Kasse</span>
+      <h2>Transparent, bevor behandelt wird</h2>
+    </div>
+    <div class="wrap">
+      <ul class="fees">
+        <li class="is-entry">
+          <b>Vorgespräch</b>
+          <i>ca. 30 Minuten, telefonisch oder persönlich</i>
+          <span class="price price--free">kostenfrei</span>
+          <ul class="incl">
+            <li><svg class="ico"><use href="#i-check"/></svg>Sie schildern Ihr Anliegen in Ruhe</li>
+            <li><svg class="ico"><use href="#i-check"/></svg>Offene Einschätzung, ob und wie ich helfen kann</li>
+            <li><svg class="ico"><use href="#i-check"/></svg>Telefonisch oder in der Praxis</li>
+          </ul>
+          <a class="btn btn--primary btn--sm" href="#kontakt">Vorgespräch anfragen <svg class="ico"><use href="#i-arrow"/></svg></a>
+        </li>
+        <li>
+          <b>Erstanamnese &amp; Untersuchung</b>
+          <i>ca. 1,5 Stunden inkl. Auswertung</i>
+          <span class="price--slot">Betrag einsetzen</span>
+          <ul class="incl">
+            <li><svg class="ico"><use href="#i-check"/></svg>Ausführliches Gespräch und Untersuchung</li>
+            <li><svg class="ico"><use href="#i-check"/></svg>Vorhandene Laborwerte beurteile ich mit</li>
+            <li><svg class="ico"><use href="#i-check"/></svg>Therapie- und Kostenplan im Anschluss</li>
+          </ul>
+        </li>
+        <li>
+          <b>Folgetermin</b>
+          <i>je nach Methode und Dauer</i>
+          <span class="price--slot">Betrag einsetzen</span>
+          <ul class="incl">
+            <li><svg class="ico"><use href="#i-check"/></svg>Kontrolle und Anpassung der Therapie</li>
+            <li><svg class="ico"><use href="#i-check"/></svg>Dauer richtet sich nach der Methode</li>
+            <li><svg class="ico"><use href="#i-check"/></svg>Kein Abo, kein Paket</li>
+          </ul>
+        </li>
+        <li>
+          <b>Laboranalysen</b>
+          <i>Abrechnung direkt über das Labor</i>
+          <span class="price">nach Aufwand</span>
+          <ul class="incl">
+            <li><svg class="ico"><use href="#i-check"/></svg>Blut, Speichel oder Stuhl je nach Bedarf</li>
+            <li><svg class="ico"><use href="#i-check"/></svg>42 bis 70 Blutwerte bei der Vitalanalyse</li>
+            <li><svg class="ico"><use href="#i-check"/></svg>Die Rechnung kommt direkt vom Labor</li>
+          </ul>
+        </li>
+      </ul>
+      <p class="hint">Abrechnung nach der Gebührenordnung für Heilpraktiker. Private Kassen und Zusatzversicherungen erstatten häufig; gesetzliche Kassen bezuschussen oft über Bonusprogramme.</p>
+    </div>
+  </section>
+
+  <!-- HÄUFIGE FRAGEN -->
+  <section class="section tint" id="fragen">
+    <div class="wrap stack" style="gap:16px">
+      <span class="eyebrow">Häufige Fragen</span>
+      <h2>Das fragen mich fast alle</h2>
+    </div>
+    <div class="wrap">
+      <div class="faq">
+        <details class="q" open>
+          <summary>Zahlt meine Krankenkasse die Behandlung?</summary>
+          <p>Privatversicherte und Patient:innen mit Heilpraktiker-Zusatzversicherung erhalten die Kosten je nach Tarif ganz oder teilweise zurück. Gesetzliche Kassen übernehmen die Behandlung nicht direkt, bezuschussen sie aber oft über Bonus- oder Wahltarife. Fragen Sie kurz bei Ihrer Kasse nach — Sie erhalten von mir eine Rechnung nach der Gebührenordnung für Heilpraktiker.</p>
+        </details>
+        <details class="q">
+          <summary>Was passiert beim ersten Termin?</summary>
+          <p>Wir nehmen uns rund 1,5 Stunden Zeit. Ich höre zu, frage nach Ihrer Vorgeschichte, untersuche Sie und sehe mir vorhandene Laborwerte an. Bringen Sie deshalb gerne alle Befunde mit, die Sie haben. Behandelt wird erst, wenn Sie den Therapie- und Kostenplan kennen.</p>
+        </details>
+        <details class="q">
+          <summary>Muss ich über belastende Themen sprechen?</summary>
+          <p>Nein. Genau das ist die Stärke der Psychosomatischen Energetik: Der seelische Konflikt wird über Testung ermittelt und mit homöopathischen Komplexmitteln gelöst. Sie müssen schmerzhafte Erlebnisse nicht erzählen, um sie loszulassen.</p>
+        </details>
+        <details class="q">
+          <summary>Wie schnell merke ich eine Veränderung?</summary>
+          <p>Das ist individuell. Viele Klient:innen, die besonders müde und erschöpft kommen, berichten schon nach wenigen Wochen von mehr Lebensenergie und besserem Schlaf. Chronische Beschwerden brauchen erfahrungsgemäß mehrere Monate Begleitung.</p>
+        </details>
+        <details class="q">
+          <summary>Ersetzen Sie meine Ärztin oder meinen Arzt?</summary>
+          <p>Nein. Ich arbeite ergänzend zur schulmedizinischen Behandlung und rate niemandem, verordnete Medikamente eigenmächtig abzusetzen. Wo eine ärztliche Abklärung nötig ist, sage ich Ihnen das deutlich.</p>
+        </details>
       </div>
     </div>
   </section>
@@ -1511,7 +1751,7 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
           <dt><svg class="ico"><use href="#i-mail"/></svg></dt>
           <dd><a href="mailto:info@naturheilpraxis-dinger.de">info@naturheilpraxis-dinger.de</a></dd>
           <dt><svg class="ico"><use href="#i-clock"/></svg></dt>
-          <dd>Termine nur nach Vereinbarung<br><span style="color:var(--muted);font-weight:400">Zeiten stimmen wir im Vorgespräch ab</span></dd>
+          <dd>Termine nur nach Vereinbarung<br><span class="info__sub">Zeiten stimmen wir im Vorgespräch ab</span></dd>
         </dl>
 
         <div class="mapcard">
@@ -1530,13 +1770,15 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
             <g transform="translate(196 78)"><circle r="19" fill="var(--accent)" opacity=".15"/><circle r="9" fill="var(--accent)"/><circle r="3.4" fill="var(--canvas)"/></g>
           </svg>
           <div class="mapcard__foot">
-            <span style="color:var(--muted)">Schubertstraße 7 · 76669 Bad Schönborn</span>
+            <span>Schubertstraße 7 · 76669 Bad Schönborn</span>
             <a href="https://www.google.de/maps/place/Schubertstra%C3%9Fe+7,+76669+Bad+Sch%C3%B6nborn" target="_blank" rel="noopener">In Google Maps öffnen →</a>
           </div>
         </div>
-
-        <p class="legal"><strong style="color:var(--ink)">Hinweis gemäß § 3 Heilmittelwerbegesetz:</strong> Bei vielen naturheilkundlichen Behandlungsmethoden handelt es sich um Verfahren der Erfahrungsmedizin, die wissenschaftlich nicht anerkannt sind.</p>
       </div>
+    </div>
+
+    <div class="wrap">
+      <p class="legal"><strong>Hinweis gemäß § 3 Heilmittelwerbegesetz:</strong> Bei vielen naturheilkundlichen Behandlungsmethoden handelt es sich um Verfahren der Erfahrungsmedizin, die wissenschaftlich nicht anerkannt sind.</p>
     </div>
   </section>
 </main>
@@ -1816,6 +2058,39 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
       stIO.disconnect();
     }, {rootMargin: '0px 0px 180px 0px'});
     stIO.observe(st);
+  }
+
+
+  // The timeline draws itself as it is scrolled to: each era's node appears and
+  // its segment of the spine draws down toward the next. Arming happens here
+  // rather than in the markup so that without this script — or under reduced
+  // motion — the timeline is simply present and fully drawn.
+  var pathEl = document.querySelector('.path');
+  if (pathEl && 'IntersectionObserver' in window &&
+      !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    pathEl.classList.add('path--armed');
+    var pathIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        en.target.classList.add('is-in');
+        pathIO.unobserve(en.target);          // one-shot per era
+      });
+    }, {rootMargin: '0px 0px -15% 0px'});
+    [].slice.call(pathEl.querySelectorAll('.path__era')).forEach(function(era){
+      pathIO.observe(era);
+    });
+  }
+
+
+  // A 15s looping background is exactly what prefers-reduced-motion is for, and
+  // CSS cannot pause a video — so it is paused here and left showing a still
+  // frame instead.
+  var heroVid = document.querySelector('.hero__vid');
+  if (heroVid && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    heroVid.autoplay = false;
+    heroVid.removeAttribute('autoplay');
+    heroVid.pause();
+    try { heroVid.currentTime = 0; } catch (e) {}
   }
 
 })();
