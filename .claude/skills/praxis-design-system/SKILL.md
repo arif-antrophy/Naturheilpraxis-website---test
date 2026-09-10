@@ -169,7 +169,13 @@ by or cancelling `.section`.
 
 ## Before launch
 
-`README.md` holds the open list. The two that constrain *code* decisions:
-**self-host Figtree** (the Google Fonts CDN request is a GDPR liability in
-Germany — Munich regional court, 2022), and the hero image needs licensing or
-replacing. Don't add a second CDN font request in the meantime.
+`README.md` holds the open list. The one that still constrains *code*
+decisions: the hero footage is an unlicensed, watermarked iStock comp, in only
+for the client presentation, and it is gitignored along with its poster because
+this repository is public.
+
+Figtree is now self-hosted in `assets/fonts/` — variable woff2, roman and
+italic, latin and latin-ext, under the OFL. **The page makes no external
+requests, and it should stay that way**: a Google Fonts request transmits the
+visitor's IP to Google, which LG München I held to be a GDPR violation without
+consent. Don't reintroduce a CDN for a font, a script, or an icon set.

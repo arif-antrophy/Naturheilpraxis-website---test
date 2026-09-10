@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Inline referenced assets as data URIs -> index.inlined.html (self-contained single file).
 
-Covers src= and poster=, anywhere under assets/ — not just assets/clean/ and not
+Covers src=, poster= and CSS url(), anywhere under assets/ — not just assets/clean/ and not
 just images. The hero is a <video> with a poster frame, and both were being left
 as external paths, which quietly broke the whole point of this build.
 """
@@ -16,8 +16,7 @@ mime = {
 }
 seen = {}
 
-def repl(m):
-    attr, path = m.group(1), m.group(2)
+def inline(path):
     if path not in seen:
         if not os.path.exists(path):
             sys.exit('missing asset: ' + path)
@@ -26,12 +25,25 @@ def repl(m):
             sys.exit('no mime type for %s — add it to build-inline.py' % ext)
         blob = open(path, 'rb').read()
         seen[path] = ('data:%s;base64,%s' % (mime[ext], base64.b64encode(blob).decode()), len(blob))
-    return '%s="%s"' % (attr, seen[path][0])
+    return seen[path][0]
+
+def repl(m):
+    return '%s="%s"' % (m.group(1), inline(m.group(2)))
 
 html = re.sub(r'(src|poster)="(assets/[^"]+)"', repl, html)
 
+# @font-face src lives in CSS url(), not an attribute.
+def repl_url(m):
+    return 'url(%s)' % inline(m.group(1))
+html = re.sub(r'url\((assets/[^)"\']+)\)', repl_url, html)
+
+# A preload of a data: URI is pointless — the bytes are already in the file, so
+# the link would only duplicate them. Drop it from the standalone build.
+html = re.sub(r'\s*<link rel="preload"[^>]*href="assets/[^"]*"[^>]*>', '', html)
+
 # Nothing under assets/ may survive as a path, or the file is not standalone.
-left = sorted(set(re.findall(r'(?:src|href|poster)="(assets/[^"]+)"', html)))
+left = sorted(set(re.findall(r'(?:src|href|poster)="(assets/[^"]+)"', html)
+                  + re.findall(r'url\((assets/[^)"\']+)\)', html)))
 if left:
     sys.exit('still external, not self-contained: ' + ', '.join(left))
 

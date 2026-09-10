@@ -3,8 +3,8 @@
 Redesign of the homepage for [naturheilpraxis-dinger.de](https://naturheilpraxis-dinger.de/),
 a naturopathic practice (Heilpraktikerin) in Bad Schönborn, Baden-Württemberg.
 
-Single hand-written HTML file. **No framework, no build step, no dependencies**
-beyond one webfont — 31 KB of CSS, 3.3 KB of vanilla JS, 32 custom properties
+Single hand-written HTML file. **No framework, no build step, no external
+requests at all** — the webfont is self-hosted — 31 KB of CSS, 3.3 KB of vanilla JS, 32 custom properties
 carrying the entire design system.
 
 ## Run it
@@ -25,6 +25,7 @@ python3 -m http.server 4173
 | `build-inline.py` | generates `index.inlined.html` (every image as a data URI) |
 | `assets/` | original images pulled from the live site |
 | `assets/clean/` | repaired crops — baked-in pink frames and baked-in German text removed |
+| `assets/fonts/` | self-hosted Figtree (variable woff2, latin + latin-ext, roman + italic) and its OFL licence |
 | `index.v2-backup.html` | earlier warm/serif direction, kept for comparison |
 
 ## Design language
@@ -66,7 +67,5 @@ Two things will break if changed carelessly:
 - [ ] **A photo of Cornelia.** The single highest-value asset for a Heilpraktiker site
 - [ ] **Two prices** — `Betrag einsetzen` placeholders in the Kosten block
 - [ ] **Wire the contact form.** Front-end only; it shows the thank-you panel without sending
-- [ ] **Self-host Figtree.** The Google Fonts CDN request is a GDPR liability in Germany
-      (Munich regional court, 2022) — download the woff2 and serve it locally
 - [ ] Re-shoot or re-export photography at 2× displayed size (sources are 167–251px wide)
 - [ ] Opening hours, if she wants them public
