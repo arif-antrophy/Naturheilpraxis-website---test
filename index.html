@@ -523,11 +523,14 @@ a.fact:active{transform:scale(.985)}
    whole measure, and nothing enclosed. No panel, no radius, no shadow — the
    sequence is carried by the line and, more importantly, by the breaks in it.
 
-   Each step is a segment of that rail. A short accent tick marks where a
-   segment begins; the segment simply stops, and the gap that follows carries
-   the thing the lede promises and the old cards never showed — after each step
-   the visitor decides whether to go on. Two gaps, two decisions. The rail past
-   step three is left open on purpose: what follows is her pace, not a fourth box.
+   Each step is a segment of that rail, and the accent draws itself across one
+   segment at a time — 01, then 02, then 03 — so the line itself performs the
+   order the numerals only assert. All three retract together and it begins
+   again; the loop is the sequence, not decoration on top of it.
+
+   scaleX on a full-width bar, never width: width would relayout three times a
+   second. transform-origin is the left edge, so each segment draws forward
+   from where its step begins.
 
    The numerals stay (this really is an ordered, gated process) but stop being
    badges: set large at 300 — the same weight as the hero stats, the lightest
@@ -535,16 +538,12 @@ a.fact:active{transform:scale(.985)}
    inside a box.
    ========================================================================== */
 .flow{
-  --gate:clamp(76px,8.5vw,132px);
   list-style:none;margin:0;padding:0;
   display:grid;
-  grid-template-columns:1fr var(--gate) 1fr var(--gate) 1fr;
+  grid-template-columns:repeat(3,1fr);
+  column-gap:clamp(28px,4vw,64px);
   align-items:start;
 }
-/* Explicit placement: the gate columns are structural gutters, not items. */
-.flow__step:nth-child(1){grid-column:1}
-.flow__step:nth-child(2){grid-column:3}
-.flow__step:nth-child(3){grid-column:5}
 
 .flow__n{
   display:block;
@@ -559,10 +558,33 @@ a.fact:active{transform:scale(.985)}
   border-top:1px solid var(--hairline);
   padding-top:clamp(19px,2.1vw,27px);
 }
-/* Segment start: 2px of voltage where this step begins. */
+/* The drawing bar. Sits on top of the hairline rail and spans the whole
+   segment; scaleX carries it from 0 to full. One cycle covers all three in
+   turn, then all three retract together — hence three keyframe sets sharing
+   one 5.4s timeline rather than one keyframe set with staggered delays, which
+   would let step 01 reset while step 03 was still drawing. */
 .flow__body::before{
-  content:"";position:absolute;left:0;top:-1px;
-  width:clamp(30px,3.4vw,44px);height:2px;background:var(--accent);
+  content:"";position:absolute;left:0;right:0;top:-1px;
+  height:2px;background:var(--accent);
+  transform:scaleX(0);transform-origin:left center;
+  animation:railfill1 5.4s var(--ease-in-out) infinite;
+}
+.flow__step:nth-child(2) .flow__body::before{animation-name:railfill2}
+.flow__step:nth-child(3) .flow__body::before{animation-name:railfill3}
+@keyframes railfill1{
+  0%{transform:scaleX(0)}
+  22%,84%{transform:scaleX(1)}
+  100%{transform:scaleX(0)}
+}
+@keyframes railfill2{
+  0%,22%{transform:scaleX(0)}
+  44%,84%{transform:scaleX(1)}
+  100%{transform:scaleX(0)}
+}
+@keyframes railfill3{
+  0%,44%{transform:scaleX(0)}
+  66%,84%{transform:scaleX(1)}
+  100%{transform:scaleX(0)}
 }
 .flow__body h3{font-size:clamp(1.2rem,1.45vw,1.4rem)}
 .flow__meta{
@@ -572,47 +594,107 @@ a.fact:active{transform:scale(.985)}
 }
 .flow__body p{margin:13px 0 0;font-size:.95rem;line-height:1.55;color:var(--body)}
 
-/* The decision beat. Hangs in the gutter, level with the rail, dropping away
-   from it — the point where the line stops and the visitor chooses. */
-.flow__gate{
-  position:absolute;top:0;left:100%;width:var(--gate);
-  display:flex;flex-direction:column;align-items:center;gap:9px;
-  padding-inline:11px;text-align:center;
-  font-size:.75rem;font-weight:600;line-height:1.3;color:var(--muted);
-}
-.flow__gate::before{content:"";width:1px;height:clamp(20px,2.2vw,28px);background:var(--accent)}
-
 /* Under 900 the rail cannot hold three segments side by side, so each step
-   keeps its own rail and they stack; the gate drops out of the gutter and
-   becomes an inline beat between them, tick laid flat. */
+   keeps its own rail and they stack. The bars still draw 01 -> 02 -> 03, top
+   to bottom, which reads as the same sequence. */
 @media (max-width:900px){
   .flow{grid-template-columns:1fr;row-gap:clamp(32px,5vw,46px)}
-  .flow__step:nth-child(1),.flow__step:nth-child(2),.flow__step:nth-child(3){grid-column:1}
   .flow__n{font-size:clamp(2.1rem,7vw,2.9rem)}
   .flow__body p{max-width:62ch}
-  .flow__gate{
-    position:static;width:auto;
-    flex-direction:row;align-items:center;gap:13px;
-    padding-inline:0;text-align:left;
-    margin-top:clamp(20px,3.5vw,28px);
-  }
-  .flow__gate::before{width:clamp(26px,7vw,44px);height:1px}
 }
 
 /* ==========================================================================
-   ABOUT
+   ABOUT — a path, not a credentials table.
+
+   The old shape was a bio column beside a bordered eight-row table. It read as
+   a CV: every qualification the same weight, so none of them said anything,
+   and the one line that actually earns trust ("Beschwerden haben fast immer
+   eine Geschichte") was buried in a paragraph beside it.
+
+   So: a chronology. But only two of the eight credentials carry a year — 1999
+   and 2017. The rest are durations, teachers or statuses, and inventing dates
+   for a practitioner's professional history is not a design decision anyone
+   gets to make. So the spine carries what is actually documented, and the
+   undated training sits below it, plainly labelled as undated. The first era
+   is "davor" rather than a year for the same reason: her own text says the
+   care years came before the practice, not which year they began.
+
+   The year is the node and sits right-aligned hard against a hairline running
+   in the gutter, with a dot on the line itself so each era reads as a point in
+   time rather than a paragraph. The dot carries the distinction the spine
+   already makes: filled for the three documented points, hollow for "heute",
+   because today is not a fixed date. The spine stops before it — the past is a
+   line, today is open — so the line terminates in that open ring. The quote
+   lands there, boxless, as the arrival point rather than a pink card floating
+   beside the text.
+
+   No motion. The page's budget is already spent and nothing here is a state
+   change the visitor causes.
    ========================================================================== */
-.about{display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(30px,5vw,76px);align-items:start}
-.creds{margin:0;padding:0;list-style:none;background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-lg);overflow:hidden}
-.creds li{display:flex;gap:16px;justify-content:space-between;align-items:baseline;padding:15px 22px;font-size:.95rem;border-bottom:1px solid var(--hairline-soft)}
-.creds li:last-child{border-bottom:0}
-.creds b{font-weight:600}
-.creds span{color:var(--muted);font-size:.87rem;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
-.pullquote{
-  font-size:clamp(1.2rem,2vw,1.5rem);font-weight:400;font-style:italic;line-height:1.4;
-  color:var(--ink);margin:0;padding:24px 26px;background:var(--wash-2);border-radius:var(--r-lg);
+.bio{display:flex;flex-direction:column;align-items:flex-start;gap:20px;max-width:62ch}
+.bio p{max-width:60ch}
+.path__now{margin:11px 0 0;font-size:1rem;line-height:1.6;color:var(--body);max-width:46ch}
+
+.path{list-style:none;margin:0;padding:0;max-width:800px}
+.path__era{
+  display:grid;
+  grid-template-columns:clamp(84px,11vw,134px) 1fr;
+  align-items:start;
 }
-.pullquote cite{display:block;margin-top:13px;font-style:normal;font-size:.78rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+.path__when{
+  text-align:right;padding:clamp(2px,.3vw,5px) clamp(20px,2.6vw,34px) 0 0;
+  font-size:clamp(1.5rem,2.4vw,2.05rem);font-weight:300;line-height:1.05;
+  letter-spacing:-.03em;color:var(--accent);font-variant-numeric:tabular-nums;
+}
+/* The spine lives on the content side so the year hangs clear of it. */
+.path__what{
+  position:relative;
+  border-left:1px solid var(--hairline);
+  padding:0 0 clamp(46px,5.4vw,82px) clamp(24px,3vw,38px);
+}
+/* Today is not part of the documented line, so the line does not reach it.
+   Colour, not width — a 0 border would shift the content 1px left. */
+.path__what::before{
+  content:"";position:absolute;left:-5px;top:9px;
+  width:9px;height:9px;border-radius:50%;background:var(--accent);
+}
+.path__era--now > .path__what{border-left-color:transparent;padding-bottom:0}
+/* Today is open, so its node is too — a ring, filled with the section ground.
+   box-sizing is border-box, so 9px with a 2px border leaves a 5px hole. */
+.path__era--now > .path__what::before{background:var(--canvas);border:2px solid var(--accent)}
+.path__what h3{font-size:clamp(1.18rem,1.4vw,1.34rem)}
+.path__cred{margin:9px 0 0;font-size:.98rem;line-height:1.5;color:var(--ink);max-width:46ch}
+.path__cred i{font-style:normal;color:var(--body)}
+
+.pullquote{
+  margin:15px 0 0;padding:0;background:none;
+  font-size:clamp(1.15rem,1.9vw,1.45rem);font-weight:400;font-style:italic;
+  line-height:1.4;color:var(--ink);max-width:44ch;
+}
+/* Sentence case, not tracked caps — one fewer all-caps label on the page. */
+.pullquote cite{
+  display:block;margin-top:11px;font-style:normal;
+  font-size:.85rem;font-weight:600;color:var(--accent);
+}
+
+/* The undated coda — a footnote under both columns, not a third block of
+   content. It reads across the full measure in four narrow columns so no
+   single column becomes a wall, and the qualifier drops under its name so
+   each entry is two short lines instead of one long one. Tones stay at
+   --ink/--body: --muted is ~3.4:1 on white and fails AA at this size.
+   The label is load-bearing — it says why these are not on the spine. */
+.coda{
+  margin-top:clamp(46px,5.5vw,80px);padding-top:clamp(24px,2.8vw,34px);
+  border-top:1px solid var(--hairline-soft);
+}
+.coda__h{font-size:.86rem;font-weight:600;letter-spacing:0;color:var(--body)}
+.coda__list{
+  list-style:none;margin:20px 0 0;padding:0;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:18px clamp(22px,2.6vw,40px);
+}
+.coda__list li{font-size:.92rem;line-height:1.45;color:var(--ink)}
+.coda__list i{font-style:normal;display:block;margin-top:3px;font-size:.84rem;color:var(--body)}
+.coda__member{margin:clamp(26px,3vw,38px) 0 0;font-size:.88rem;line-height:1.55;color:var(--body);max-width:74ch}
 
 /* ==========================================================================
    METHODS
@@ -850,7 +932,9 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
   .burger{display:inline-flex}
   .bar__tel span{display:none}
   .bar__cta .btn{display:none}
-  .two,.about,.contact,.methods,.footcta{grid-template-columns:1fr}
+  .two,.contact,.methods,.footcta{grid-template-columns:1fr}
+  .path{margin-top:clamp(38px,4.5vw,60px)}
+  .coda__list{grid-template-columns:repeat(2,1fr)}
   .two--sticky > :first-child{position:static}
   .hero{min-height:0;padding-bottom:clamp(30px,5vw,48px)}
   .hero__veil{background:
@@ -876,6 +960,11 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
   .fact__ico{width:38px;height:38px}
   .fact__n{padding-top:20px}
   .statement{max-width:none}
+  .path__era{grid-template-columns:clamp(52px,15vw,78px) 1fr}
+  .path__when{font-size:clamp(1.05rem,4.6vw,1.4rem);padding-right:clamp(12px,3.4vw,18px)}
+  .path__what{padding-left:clamp(16px,4.6vw,24px)}
+  .path__what::before{width:7px;height:7px;left:-4px;top:8px}
+  .coda__list{grid-template-columns:1fr}
   .afterline{gap:20px}
   .mcta{display:flex}
   .hero__actions .btn{width:100%}
@@ -888,6 +977,8 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
   /* animation:none, not the .01ms clamp above: that clamps duration but not
      the per-word delay, which would leave the words popping in one by one. */
   .statement.is-armed .w{animation:none}
+  /* .01ms x infinite would strobe. Kill it and rest the bars drawn. */
+  .flow__body::before{animation:none;transform:scaleX(1)}
 }
 </style>
 
@@ -1157,7 +1248,6 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
             <h3>Vorgespräch</h3>
             <span class="flow__meta">30 Min · kostenfrei</span>
             <p>Sie schildern mir Ihr Anliegen, ich sage Ihnen offen, ob und mit welchen Methoden ich helfen kann. Am Telefon oder persönlich.</p>
-            <span class="flow__gate">Sie entscheiden</span>
           </div>
         </li>
         <li class="flow__step">
@@ -1166,7 +1256,6 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
             <h3>Erstanamnese</h3>
             <span class="flow__meta">ca. 1,5 Std</span>
             <p>Ausführliches Gespräch und Untersuchung, dazu je nach Bedarf Blut-, Speichel- oder Stuhlanalyse. Bringen Sie vorhandene Laborwerte gerne mit.</p>
-            <span class="flow__gate">Sie entscheiden</span>
           </div>
         </li>
         <li class="flow__step">
@@ -1183,8 +1272,8 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
 
   <!-- ABOUT -->
   <section class="section" id="praxis">
-    <div class="wrap about">
-      <div class="stack" style="gap:22px">
+    <div class="wrap two two--sticky">
+      <div class="bio">
         <span class="eyebrow">Über mich</span>
         <h2>Cornelia Dinger, Heilpraktikerin</h2>
         <p class="lede">
@@ -1193,26 +1282,62 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
           habe ich gelernt, was in keinem Laborwert steht: dass Beschwerden fast immer
           eine Geschichte haben.
         </p>
-        <p class="lede">
-          Heute verbinde ich beides — messbare Diagnostik und den Blick auf das, was
-          seelisch belastet. Mit Freude und Leidenschaft unterstütze ich Sie darin, Ihre
-          Selbstheilungskräfte zu aktivieren.
-        </p>
-        <blockquote class="pullquote">
-          Es kommt darauf an, den Körper durch die Seele und die Seele durch den Körper zu heilen.
-          <cite>Oscar Wilde</cite>
-        </blockquote>
       </div>
-      <ul class="creds">
-        <li><b>Heilpraktikerin</b><span>seit 2017</span></li>
-        <li><b>Psychologische Heilpraktikerin</b><span>seit 1999</span></li>
-        <li><b>Psychologische Lebensberatung, Regressions- &amp; Traumaarbeit</b><span>3 Jahre</span></li>
-        <li><b>Systemische Aufstellungsarbeit</b><span>Bertold Ulsamer</span></li>
-        <li><b>Klangschalentherapie</b><span>Frank Plate</span></li>
-        <li><b>Marte Meo Practitioner</b><span>zertifiziert</span></li>
-        <li><b>Examinierte Altenpflegerin, Psychiatrie &amp; ambulante Pflege</b><span>viele Jahre</span></li>
-        <li><b>Bund Deutscher Heilpraktiker · Kneipp-Verein · Laborgemeinschaft für ganzheitliche Medizin</b><span>Mitglied</span></li>
-      </ul>
+
+      <ol class="path" role="list">
+        <li class="path__era">
+          <span class="path__when">davor</span>
+          <div class="path__what">
+            <h3>Am Krankenbett</h3>
+            <p class="path__cred">Examinierte Altenpflegerin, Psychiatrie und ambulante Pflege <i>viele Jahre</i></p>
+          </div>
+        </li>
+        <li class="path__era">
+          <span class="path__when">1999</span>
+          <div class="path__what">
+            <h3>Die seelische Seite</h3>
+            <p class="path__cred">Psychologische Heilpraktikerin</p>
+          </div>
+        </li>
+        <li class="path__era">
+          <span class="path__when">2017</span>
+          <div class="path__what">
+            <h3>Die messbare Seite</h3>
+            <p class="path__cred">Heilpraktikerin</p>
+          </div>
+        </li>
+        <li class="path__era path__era--now">
+          <span class="path__when">heute</span>
+          <div class="path__what">
+            <h3>Beides zusammen</h3>
+            <p class="path__now">
+              Heute verbinde ich beides — messbare Diagnostik und den Blick auf das, was
+              seelisch belastet. Mit Freude und Leidenschaft unterstütze ich Sie darin,
+              Ihre Selbstheilungskräfte zu aktivieren.
+            </p>
+            <blockquote class="pullquote">
+              Es kommt darauf an, den Körper durch die Seele und die Seele durch den Körper zu heilen.
+              <cite>Oscar Wilde</cite>
+            </blockquote>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="wrap">
+      <div class="coda">
+        <h3 class="coda__h">Ausbildungen und Fortbildungen, ohne Jahresangabe</h3>
+        <ul class="coda__list">
+          <li>Psychologische Lebensberatung, Regressions- und Traumaarbeit <i>3 Jahre</i></li>
+          <li>Systemische Aufstellungsarbeit <i>bei Bertold Ulsamer</i></li>
+          <li>Klangschalentherapie <i>bei Frank Plate</i></li>
+          <li>Marte Meo Practitioner <i>zertifiziert</i></li>
+        </ul>
+        <p class="coda__member">
+          Mitglied im Bund Deutscher Heilpraktiker, im Kneipp-Verein und in der
+          Laborgemeinschaft für ganzheitliche Medizin.
+        </p>
+      </div>
     </div>
   </section>
 

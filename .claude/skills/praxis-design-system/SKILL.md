@@ -81,8 +81,12 @@ Follows Emil Kowalski's design-engineering rules. Non-negotiable:
    `animation:none` plus a visible resting transform rather than inheriting the
    `.01ms` clamp and vanishing.
 6. Scattered fade-and-slide-up on every section is the AI-generated default.
-   This page spends its motion budget on two orchestrated moments — the falling
-   droplet scroll cue and the scroll-driven voice wall. Keep it that way.
+   This page spends its motion budget on four orchestrated moments: the falling
+   droplet scroll cue, the scroll-driven voice wall, the statement typing itself
+   in word by word, and the Ablauf rail drawing 01 -> 02 -> 03 on a loop. That
+   is the ceiling — the budget is spent. Do not add a fifth without removing one.
+   The Ablauf loop is the only perpetual one; if motion ever needs trimming,
+   gate it to play once on scroll-in and it stops being perpetual.
 
 ## Two structural gotchas — these will silently break the page
 
@@ -120,8 +124,8 @@ secondary, `.82` card body, `.76` footer body, `.66` attribution. Reuse those
 values rather than inventing new ones. Buttons on dark invert to a white ground
 with `--accent` text.
 
-Note: the header comment in `index.html` still claims "no dark sections" — it
-predates the slider and footer. Fix that comment if you touch it.
+The header comment in `index.html` describes this correctly now; keep it in
+sync if the rhythm changes.
 
 ## Copy
 
@@ -131,9 +135,10 @@ methods and process, never promise outcomes. CTAs name what happens
 ("Kostenloses Vorgespräch"), not "Submit".
 
 `.eyebrow` is used 11 times as a pill with a `--bright` dot — that's the house
-label pattern. The four remaining `text-transform:uppercase` rules (scroll cue,
-pullquote cite, bigtel label, footer `h4`) are the only tracked-caps on the
-page; they're small structural labels, not headline decoration. Don't add more.
+label pattern. Three `text-transform:uppercase` rules remain (scroll cue,
+bigtel label, footer `h4`) and they are the only tracked-caps on the page;
+they're small structural labels, not headline decoration. Don't add more — the
+pullquote's `cite` was the fourth and is now sentence case.
 
 ## Quality floor
 
@@ -141,9 +146,11 @@ Already in place — keep it: `:focus-visible` with a 2.5px accent outline,
 `@media (hover:hover)` guards, reduced-motion block, three breakpoints
 (1140 / 900 / 740), `color-scheme:light` (light-only by design, no dark variant).
 
-**Known gap: there is no `<html lang="de">`.** The file opens straight at
-`<meta charset>`. Add it when you next touch the head — it affects screen-reader
-pronunciation and SEO.
+The head is now correct and should stay that way: `<!doctype html>` first (its
+absence had the page in quirks mode), then `<html lang="de">`, then
+`<meta charset="utf-8">` — the charset must stay above the documentation
+comment so it lands inside the first 1024 bytes, since the server sends no
+charset parameter of its own.
 
 CSS specificity: this file mixes type-ish selectors (`.section`) with
 element-ish ones (`.cta`). Section padding is the usual casualty. When adding a
