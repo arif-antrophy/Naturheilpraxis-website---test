@@ -804,21 +804,36 @@ a.fact:active{transform:scale(.985)}
 /* The undated coda — a footnote under both columns, not a third block of
    content. It reads across the full measure in four narrow columns so no
    single column becomes a wall, and the qualifier drops under its name so
-   each entry is two short lines instead of one long one. Tones stay at
-   --ink/--body: --muted is ~3.4:1 on white and fails AA at this size.
-   The label is load-bearing — it says why these are not on the spine. */
+   each entry is two short lines instead of one long one.
+
+   The rank is set by one rule: the four qualifications are body copy, and
+   everything around them is fine print. So the names sit at 1.05rem/--ink —
+   page body size, the largest thing in the block — while the label, the
+   qualifiers and the membership line all drop below .85rem at --body. The
+   label is deliberately the smallest thing here and is NOT typeset as a
+   heading: its job is to say why these carry no year, which is a caption's
+   job, not a title's. Small + 600 is the house label register (.eyebrow,
+   .pullquote cite), so it reads as a label at that size without tracked caps.
+   1.05rem also keeps the block under .path__what h3 (1.18-1.34rem/600)
+   directly above, so the coda stays subordinate to the timeline.
+
+   Tones stay at --ink/--body: --muted is ~3.4:1 on white and fails AA at
+   these sizes. The label is load-bearing — it says why these are not on
+   the spine. */
 .coda{
   margin-top:clamp(46px,5.5vw,80px);padding-top:clamp(24px,2.8vw,34px);
   border-top:1px solid var(--hairline-soft);
 }
-.coda__h{font-size:.86rem;font-weight:600;letter-spacing:0;color:var(--body)}
+.coda__h{font-size:.78rem;font-weight:600;line-height:1.4;letter-spacing:0;color:var(--body)}
 .coda__list{
-  list-style:none;margin:20px 0 0;padding:0;
-  display:grid;grid-template-columns:repeat(4,1fr);gap:18px clamp(22px,2.6vw,40px);
+  list-style:none;margin:clamp(20px,2.2vw,28px) 0 0;padding:0;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:24px clamp(22px,2.6vw,40px);
 }
-.coda__list li{font-size:.92rem;line-height:1.45;color:var(--ink)}
-.coda__list i{font-style:normal;display:block;margin-top:3px;font-size:.84rem;color:var(--body)}
-.coda__member{margin:clamp(26px,3vw,38px) 0 0;font-size:.88rem;line-height:1.55;color:var(--body);max-width:74ch}
+/* Negative tracking because the size rose — large-ish type here earns its
+   presence from size and tracking, never from weight. */
+.coda__list li{font-size:1.05rem;line-height:1.35;letter-spacing:-.012em;color:var(--ink);max-width:38ch}
+.coda__list i{font-style:normal;display:block;margin-top:5px;font-size:.85rem;line-height:1.4;letter-spacing:0;color:var(--body)}
+.coda__member{margin:clamp(30px,3.4vw,46px) 0 0;font-size:.8rem;line-height:1.6;color:var(--body);max-width:58ch}
 
 /* ==========================================================================
    METHODS
@@ -940,8 +955,10 @@ a.fact:active{transform:scale(.985)}
    the dominant --r-lg radius, --hairline borders, and the plum-tinted
    --shadow-card, never a grey one.
 
-   The free first step carries the section's single action, because it is the
-   way in and the CTA the whole page points at. */
+   Every card ends in the same action, because there is only one way in — the
+   contact form. The free first step keeps the filled --accent button and the
+   --bright border; the other three go ghost, so the row reads as one practice
+   with one route rather than four competing offers. */
 .fees{
   list-style:none;margin:clamp(30px,3.4vw,46px) 0 0;padding:0;
   display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,22px);
@@ -980,9 +997,29 @@ a.fact:active{transform:scale(.985)}
 }
 .incl li{display:flex;gap:9px;align-items:flex-start;font-size:.87rem;line-height:1.45;color:var(--body)}
 .incl .ico{width:15px;height:15px;flex:none;margin-top:3px;color:var(--accent)}
-/* Only the entry card has an action, so a fixed gap reads better than
-   margin-top:auto — there is no sibling button to line it up with. */
-.fees .btn{margin-top:clamp(16px,1.8vw,22px);width:100%;padding-top:14px;padding-bottom:14px}
+/* All four cards carry an action now, so the buttons line up on a shared
+   baseline (margin-top:auto) instead of a fixed gap — the cards stretch to
+   equal height and their lists differ in length, so a fixed gap would leave
+   the row of buttons ragged. The margin on .incl is the minimum breathing room
+   for the case where a card's content nearly fills its height.
+   nowrap is the guarantee behind the one-line labels: the button is width:100%,
+   so without it a long word pair would silently wrap inside the pill.
+   line-height matches .btn .ico's 18px so the entry card's button, which carries
+   an arrow, comes out exactly as tall as the three that do not — otherwise the
+   icon sets the line box and the row of four is 3px ragged along the top. */
+.fees .incl{margin-bottom:clamp(16px,1.8vw,22px)}
+.fees .btn{margin-top:auto;width:100%;padding-top:14px;padding-bottom:14px;white-space:nowrap;line-height:18px}
+/* The cards are --canvas themselves, so a ghost button on --hairline would read
+   as a nested card, not a button — it is the same border the card draws. --faint
+   is the next step up the same plum ladder and holds its edge on white while
+   staying clearly secondary to the filled entry-card CTA. */
+.fees .btn--ghost{border-color:var(--faint)}
+/* .btn--ghost:hover is declared far above at the same specificity, so this rule
+   would otherwise win on source order and kill the hover border. Restate it —
+   still behind the pointer guard, and still before .btn:active's press scale. */
+@media (hover:hover) and (pointer:fine){
+  .fees .btn--ghost:hover{border-color:var(--accent)}
+}
 .hint{
   margin:clamp(28px,3vw,40px) 0 0;padding-top:clamp(18px,2vw,24px);
   border-top:1px solid var(--hairline-soft);
@@ -1661,7 +1698,7 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
             <li><svg class="ico"><use href="#i-check"/></svg>Offene Einschätzung, ob und wie ich helfen kann</li>
             <li><svg class="ico"><use href="#i-check"/></svg>Telefonisch oder in der Praxis</li>
           </ul>
-          <a class="btn btn--primary btn--sm" href="#kontakt">Vorgespräch anfragen <svg class="ico"><use href="#i-arrow"/></svg></a>
+          <a class="btn btn--primary btn--sm" href="#kontakt">Jetzt anfragen <svg class="ico"><use href="#i-arrow"/></svg></a>
         </li>
         <li>
           <b>Erstanamnese &amp; Untersuchung</b>
@@ -1672,6 +1709,7 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
             <li><svg class="ico"><use href="#i-check"/></svg>Vorhandene Laborwerte beurteile ich mit</li>
             <li><svg class="ico"><use href="#i-check"/></svg>Therapie- und Kostenplan im Anschluss</li>
           </ul>
+          <a class="btn btn--ghost btn--sm" href="#kontakt">Termin anfragen</a>
         </li>
         <li>
           <b>Folgetermin</b>
@@ -1682,6 +1720,7 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
             <li><svg class="ico"><use href="#i-check"/></svg>Dauer richtet sich nach der Methode</li>
             <li><svg class="ico"><use href="#i-check"/></svg>Kein Abo, kein Paket</li>
           </ul>
+          <a class="btn btn--ghost btn--sm" href="#kontakt">Termin anfragen</a>
         </li>
         <li>
           <b>Laboranalysen</b>
@@ -1692,6 +1731,7 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
             <li><svg class="ico"><use href="#i-check"/></svg>42 bis 70 Blutwerte bei der Vitalanalyse</li>
             <li><svg class="ico"><use href="#i-check"/></svg>Die Rechnung kommt direkt vom Labor</li>
           </ul>
+          <a class="btn btn--ghost btn--sm" href="#kontakt">Termin anfragen</a>
         </li>
       </ul>
       <p class="hint">Abrechnung nach der Gebührenordnung für Heilpraktiker. Private Kassen und Zusatzversicherungen erstatten häufig; gesetzliche Kassen bezuschussen oft über Bonusprogramme.</p>
