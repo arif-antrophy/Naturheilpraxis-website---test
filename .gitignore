@@ -34,3 +34,7 @@ index.inlined.html
 .DS_Store
 Thumbs.db
 *.swp
+.vercel
+
+# Preview-only, must never reach the live site (see the file itself).
+robots.txt

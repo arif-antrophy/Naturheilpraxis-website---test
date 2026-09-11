@@ -1,0 +1,13 @@
+# Vercel uses this INSTEAD of .gitignore, which is the point: the hero footage,
+# its poster and voices-bg.jpg are gitignored (unlicensed iStock comps, public
+# repo) but the preview needs them to look like the real thing.
+.git
+.claude
+.DS_Store
+Thumbs.db
+*.swp
+build-inline.py
+index.inlined.html
+index.v2-backup.html
+README.md
+hero-homepage-background.jpg
