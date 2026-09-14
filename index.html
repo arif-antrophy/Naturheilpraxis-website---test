@@ -153,11 +153,10 @@ img{max-width:100%;display:block}
 .lede{font-size:clamp(1.08rem,1.6vw,1.3rem);font-weight:400;color:var(--body);max-width:56ch;line-height:1.55}
 
 .eyebrow{
-  display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
+  display:inline-flex;align-items:center;align-self:flex-start;
   font-size:.78rem;font-weight:600;letter-spacing:.04em;color:var(--accent);
   background:var(--accent-wash);border-radius:var(--r-pill);padding:7px 15px;
 }
-.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--bright);flex:none}
 .ico{width:1em;height:1em;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 
 .btn{
@@ -297,7 +296,6 @@ img{max-width:100%;display:block}
   color:#fff;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);
   border:1px solid rgba(255,255,255,.22);
 }
-.hero .eyebrow::before{background:var(--bright)}
 .hero__actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .hero .btn--primary{background:#fff;color:var(--accent);box-shadow:0 10px 26px -12px rgba(30,10,20,.55)}
 .hero .btn--primary:hover{background:var(--wash-2)}
@@ -508,7 +506,6 @@ a.fact:active{transform:scale(.985)}
 }
 .dark h2{color:#fff}
 .dark .eyebrow{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
-.dark .eyebrow::before{background:var(--bright)}
 .dark .lede{color:rgba(255,255,255,.76)}
 
 /* The mask lives on a NON-scrolling wrapper. On the scroller itself the
@@ -877,7 +874,6 @@ a.fact:active{transform:scale(.985)}
 }
 .vwall__l{color:#fff;align-self:center;max-width:560px}
 .vwall__l .eyebrow{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
-.vwall__l .eyebrow::before{background:var(--bright)}
 .vwall__l h2{
   color:#fff;margin:20px 0 18px;
   font-size:clamp(2.6rem,5vw,4.2rem);line-height:1.02;letter-spacing:-.036em;
@@ -1123,7 +1119,6 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
   padding-bottom:clamp(36px,4.4vw,54px);border-bottom:1px solid var(--hairline);
 }
 .footcta .eyebrow{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
-.footcta .eyebrow::before{background:var(--bright)}
 .footcta h2{color:#fff;margin:17px 0 14px}
 .footcta p{font-size:1rem;color:rgba(255,255,255,.72);max-width:42ch;line-height:1.6}
 .footcta__r{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
