@@ -1,0 +1,1350 @@
+/* ==========================================================================
+   Naturheilpraxis Cornelia Dinger — shared stylesheet.
+
+   This lives at the project root, NOT in assets/, on purpose: relative URLs in
+   a stylesheet resolve against the stylesheet's own location, so keeping it
+   here means the font paths below keep working untouched. (Do not write a
+   literal url followed by an assets path in prose here — build-inline.py reads
+   these as real references and will go looking for the file.)
+
+   It was inline in index.html until the site gained more than one page. Four
+   pages cannot each carry their own copy of the tokens — one change would mean
+   four edits and guaranteed drift.
+   ========================================================================== */
+/* ==========================================================================
+   FONT — Figtree, self-hosted, variable (300-900) so five used weights and one
+   italic come from two files instead of six. unicode-range keeps latin-ext off
+   the wire unless a character needs it; German umlauts and the typographic
+   quotes and dashes this page uses all sit inside the latin subset.
+   ========================================================================== */
+@font-face{
+  font-family:'Figtree';font-style:normal;font-weight:300 900;font-display:swap;
+  src:url(assets/fonts/figtree-latin.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:'Figtree';font-style:normal;font-weight:300 900;font-display:swap;
+  src:url(assets/fonts/figtree-latin-ext.woff2) format('woff2');
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face{
+  font-family:'Figtree';font-style:italic;font-weight:300 900;font-display:swap;
+  src:url(assets/fonts/figtree-italic-latin.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face{
+  font-family:'Figtree';font-style:italic;font-weight:300 900;font-display:swap;
+  src:url(assets/fonts/figtree-italic-latin-ext.woff2) format('woff2');
+  unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+
+/* ==========================================================================
+   TOKENS
+   Everything below is derived from one hue. --ink is a deep plum, never
+   near-black; every wash and hairline is that plum at low alpha, which is
+   what holds the page together as a single light system.
+   ========================================================================== */
+:root{
+  --canvas:#FFFFFF;
+  --wash-1:#FCF8FA;                      /* plum @ ~2% */
+  --wash-2:#F7EFF3;                      /* plum @ ~5% */
+  --wash-3:#F1E3EB;                      /* plum @ ~9% */
+  --hairline:rgba(58,31,48,.13);
+  --hairline-soft:rgba(58,31,48,.07);
+
+  --ink:#3A1F30;                          /* deep plum — the "navy" role */
+  --body:#6C5361;
+  --muted:#93808B;
+  --faint:#AE9CA6;
+
+  --accent:#A83168;                       /* primary voltage: CTAs, links */
+  --accent-hover:#8E2455;
+  --accent-wash:#FBEFF5;
+  --bright:#D97BA8;                       /* second accent, from the logo */
+  --on-accent:#FFFFFF;
+
+  --r-sm:12px; --r-md:16px; --r-lg:20px; --r-xl:26px; --r-pill:999px;
+
+  --shadow-card:0 1px 2px rgba(58,31,48,.03), 0 10px 30px -16px rgba(58,31,48,.13);
+  --shadow-panel:0 2px 6px rgba(58,31,48,.04), 0 24px 56px -28px rgba(58,31,48,.20);
+  --shadow-cta:0 8px 20px -10px rgba(168,49,104,.45);
+
+  --measure:1200px;
+  --gutter:clamp(20px,5vw,46px);
+  --sect:clamp(62px,7.5vw,112px);
+
+  --f:"Figtree","Helvetica Neue",Arial,sans-serif;
+
+  /* Built-in easings are too weak to read as intentional. */
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --ease-in-out:cubic-bezier(.77,0,.175,1);
+
+  color-scheme:light;
+  interpolate-size:allow-keywords;   /* lets the FAQ animate to height:auto */   /* light-only by design — no dark variant */
+}
+/* ==========================================================================
+   BASE — big sizes, light weights, generous leading
+   ========================================================================== */
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;background:var(--canvas);color:var(--ink);
+  font-family:var(--f);font-size:17px;font-weight:400;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+  /* clip, not hidden: hidden makes body a scroll container, which disables
+     position:sticky in its descendants. clip suppresses overflow without one. */
+  overflow-x:clip;
+}
+h1,h2,h3,h4{margin:0;text-wrap:balance;font-family:var(--f)}
+h1{font-size:clamp(2.55rem,5.6vw,4.25rem);font-weight:400;line-height:1.03;letter-spacing:-.032em}
+h2{font-size:clamp(1.85rem,3.5vw,2.7rem);font-weight:400;line-height:1.1;letter-spacing:-.026em}
+h3{font-size:1.3rem;font-weight:600;line-height:1.28;letter-spacing:-.014em}
+p{margin:0}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px}
+img{max-width:100%;display:block}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:3px;border-radius:6px}
+
+.wrap{max-width:var(--measure);margin-inline:auto;padding-inline:var(--gutter)}
+.section{padding-block:var(--sect)}
+.tint{background:var(--wash-1)}
+.tint-2{background:var(--wash-2)}
+.stack{display:flex;flex-direction:column}
+.lede{font-size:clamp(1.08rem,1.6vw,1.3rem);font-weight:400;color:var(--body);max-width:56ch;line-height:1.55}
+
+.eyebrow{
+  display:inline-flex;align-items:center;align-self:flex-start;
+  font-size:.78rem;font-weight:600;letter-spacing:.04em;color:var(--accent);
+  background:var(--accent-wash);border-radius:var(--r-pill);padding:7px 15px;
+}
+.ico{width:1em;height:1em;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-family:var(--f);font-size:1rem;font-weight:600;line-height:1;
+  padding:17px 28px;border-radius:var(--r-pill);border:1.5px solid transparent;
+  cursor:pointer;text-decoration:none;
+  transition:transform .16s var(--ease-out),background .16s var(--ease-out),
+             box-shadow .16s var(--ease-out),border-color .16s var(--ease-out);
+}
+.btn--primary{background:var(--accent);color:var(--on-accent);box-shadow:var(--shadow-cta)}
+.btn--ghost{background:var(--canvas);color:var(--ink);border-color:var(--hairline)}
+@media (hover:hover) and (pointer:fine){
+  .btn--primary:hover{background:var(--accent-hover);transform:translateY(-2px)}
+  .btn--ghost:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+}
+/* after the hover rules so a press always wins over a hover lift */
+.btn:active{transform:scale(.97)}
+.btn--sm{padding:12px 21px;font-size:.93rem}
+.btn .ico{width:18px;height:18px}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+.bar{
+  position:sticky;top:0;z-index:60;background:transparent;
+  border-bottom:1px solid transparent;
+  transition:background .3s var(--ease-out),border-color .3s var(--ease-out);
+}
+.bar.is-stuck{
+  background:color-mix(in srgb,var(--canvas) 88%,transparent);
+  backdrop-filter:saturate(160%) blur(16px);
+  border-bottom-color:var(--hairline-soft);
+}
+/* Over the hero photograph the header is transparent with white marks. */
+.bar:not(.is-stuck) .brand img{filter:brightness(0) invert(1)}
+.bar:not(.is-stuck) .nav a{color:rgba(255,255,255,.88)}
+.bar:not(.is-stuck) .nav a:hover{color:#fff;border-bottom-color:#fff}
+.bar:not(.is-stuck) .bar__tel,.bar:not(.is-stuck) .bar__tel .ico{color:#fff}
+.bar:not(.is-stuck) .btn--primary{background:#fff;color:var(--accent);box-shadow:none}
+.bar:not(.is-stuck) .btn--primary:hover{background:var(--wash-2)}
+.bar:not(.is-stuck) .burger{border-color:rgba(255,255,255,.45);color:#fff}
+.bar__in{display:flex;align-items:center;gap:clamp(14px,3vw,36px);height:84px}
+.brand{flex:none;display:block}
+.brand img{height:40px;width:auto}
+.nav{display:flex;gap:clamp(10px,1.7vw,28px);margin-left:auto}
+.nav a{
+  color:var(--body);text-decoration:none;font-size:.96rem;font-weight:500;white-space:nowrap;
+  padding:8px 0;border-bottom:2px solid transparent;transition:color .16s var(--ease-out),border-color .16s var(--ease-out);
+}
+.nav a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.bar__cta{display:flex;align-items:center;gap:12px;flex:none}
+.bar__tel{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:.95rem;color:var(--ink);text-decoration:none;white-space:nowrap}
+.bar__tel .ico{width:17px;height:17px;color:var(--accent)}
+.burger{display:none;background:none;border:1.5px solid var(--hairline);border-radius:var(--r-pill);padding:10px 16px;color:var(--ink);font:inherit;font-size:.9rem;font-weight:600;cursor:pointer;align-items:center}
+.sheet{display:none}
+.sheet[open]{display:block;position:fixed;inset:84px 0 0;z-index:55;background:var(--canvas);padding:22px var(--gutter) 40px;overflow-y:auto}
+.sheet a{display:block;padding:16px 0;border-bottom:1px solid var(--hairline-soft);color:var(--ink);text-decoration:none;font-size:1.2rem;font-weight:500}
+
+/* ==========================================================================
+   HERO — full-bleed photograph, plum gradient veil, booking card on the right
+   (Clireo's hero composition, remapped to the practice's own hue)
+   ========================================================================== */
+.hero{
+  position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;
+  min-height:100vh;
+  min-height:100svh;                   /* svh: no jump when mobile chrome hides */
+  margin-top:-84px;padding-top:84px;   /* sit underneath the transparent header */
+  padding-bottom:clamp(96px,11vh,132px);   /* room for the scroll cue */
+}
+.hero__bg{position:absolute;inset:0;z-index:-2}
+/* PLACEHOLDER FOOTAGE — a watermarked iStock comp, in for the client
+   presentation only. It is 768x432, so a full-bleed hero upscales it about 2x;
+   the veil above carries enough density to hide most of that, but a licensed
+   1920px file is a straight filename swap here. Excluded from git for the same
+   reason as the other iStock derivatives — see .gitignore.
+
+   muted + playsinline are what make autoplay permitted at all; the poster is
+   the video's own first frame, so there is no cross-fade between two different
+   images on first paint. Reduced motion is handled in JS, since CSS cannot
+   pause a video. */
+.hero__bg img,
+.hero__vid{width:100%;height:100%;object-fit:cover;object-position:56% 34%;display:block}
+.hero__veil{
+  position:absolute;inset:0;z-index:-1;
+  background:
+    linear-gradient(97deg,
+      rgba(44,18,32,.90)  0%,
+      rgba(74,25,52,.76) 22%,
+      rgba(123,34,85,.44) 42%,
+      rgba(140,44,96,.12) 60%,
+      rgba(140,44,96,0)   76%),
+    linear-gradient(to top, rgba(44,18,32,.38) 0%, rgba(44,18,32,0) 40%),
+    /* keeps the white nav legible where the header crosses the bright side */
+    linear-gradient(to bottom, rgba(44,18,32,.5) 0, rgba(44,18,32,.18) 90px, rgba(44,18,32,0) 150px);
+}
+.hero__in{position:relative;z-index:1;width:100%}
+.hero__copy{display:flex;flex-direction:column;gap:24px;align-items:flex-start;max-width:780px}
+.hero h1{color:#fff;font-size:clamp(2.9rem,6.5vw,5.4rem);font-weight:500;letter-spacing:-.038em;line-height:.98}
+
+/* One word carries an inked underline. Not a colour swap on the word itself —
+   recolouring a single word in a headline is the commonest tell of a generated
+   page — but a drawn stroke under it, bowed the way a hand bows a pen, in the
+   pink already inside the logo (--bright is the system's second accent, kept
+   for exactly this kind of small highlight).
+
+   preserveAspectRatio="none" lets the path stretch to whatever the word
+   measures. The stroke stays in user units so the dash maths and the path share
+   one coordinate space — see the note on the path rule below.
+
+   The resting value is drawn (dashoffset 0) and the animation fills backwards
+   into the hidden state — so if it never runs, the underline is simply there
+   rather than stranded invisible. */
+.mark{position:relative;display:inline-block}
+.mark__line{
+  position:absolute;left:-.5%;bottom:-.2em;
+  width:101%;height:.2em;overflow:visible;pointer-events:none;
+}
+.mark__line path{
+  fill:none;stroke:var(--bright);stroke-linecap:round;
+  /* User units, not px, and no vector-effect: non-scaling-stroke measures the
+     dash pattern in SCREEN pixels, so a 100-unit dasharray became 100px against
+     a ~292px stroke and drew it as two dashes with a gap. In user units the
+     path is ~97 long, so 100 is one continuous dash. Thickness then scales with
+     the SVG box (.2em tall), which tracks the headline for free: ~6px at
+     desktop, ~3px at mobile. */
+  stroke-width:4.2;
+  stroke-dasharray:100;stroke-dashoffset:0;
+  /* --ease-in-out, not --ease-out: a strong ease-out puts 96% of the draw in
+     the first half, which reads as a snap rather than a stroke. This is
+     movement across the screen, so it wants the symmetric curve. */
+  animation:markdraw .8s var(--ease-in-out) .5s backwards;
+}
+@keyframes markdraw{from{stroke-dashoffset:100}}
+.hero .lede{color:rgba(255,255,255,.9);max-width:34ch;font-size:clamp(1rem,1.45vw,1.125rem)}
+.hero .eyebrow{
+  color:#fff;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.22);
+}
+.hero__actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.hero .btn--primary{background:#fff;color:var(--accent);box-shadow:0 10px 26px -12px rgba(30,10,20,.55)}
+.hero .btn--primary:hover{background:var(--wash-2)}
+.hero .btn--ghost{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);color:#fff;backdrop-filter:blur(6px)}
+.hero .btn--ghost:hover{background:#fff;color:var(--accent);border-color:#fff}
+
+/* the one hard number, bottom-left, the way Clireo anchors its 4.8 rating */
+.hero__stat{display:flex;align-items:center;gap:16px;margin-top:6px}
+.hero__stat-n{font-size:clamp(2.6rem,4.4vw,3.6rem);font-weight:300;color:#fff;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums}
+.hero__stat-t{font-size:.92rem;color:rgba(255,255,255,.84);line-height:1.4;max-width:22ch;border-left:1px solid rgba(255,255,255,.3);padding-left:16px}
+
+/* Scroll cue: a droplet falling down a hairline — the logo mark is a water
+   drop, so the motion belongs to this practice rather than being a generic
+   bouncing chevron. It is a real link to the next section, not decoration. */
+.scrollcue{
+  position:absolute;left:50%;bottom:clamp(26px,3.6vh,44px);transform:translateX(-50%);
+  z-index:2;display:flex;flex-direction:column;align-items:center;gap:11px;
+  text-decoration:none;color:#fff;
+  transition:opacity .45s var(--ease-out),transform .45s var(--ease-out);
+}
+.scrollcue__label{
+  font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.78);transition:color .2s var(--ease-out);
+}
+.scrollcue:hover .scrollcue__label{color:#fff}
+.scrollcue__track{
+  position:relative;width:1px;height:46px;
+  background:linear-gradient(to bottom,rgba(255,255,255,.42),rgba(255,255,255,0));
+}
+.scrollcue__drop{
+  position:absolute;left:50%;top:0;width:15px;height:15px;margin-left:-7.5px;
+  color:#fff;fill:currentColor;stroke:none;
+  animation:dropfall 2.1s cubic-bezier(.55,.05,.55,.95) infinite;
+  filter:drop-shadow(0 1px 3px rgba(44,18,32,.5));
+}
+@keyframes dropfall{
+   0%{transform:translateY(-4px) scale(.82);opacity:0}
+  16%{transform:translateY(2px)  scale(1);   opacity:1}
+  72%{opacity:1}
+ 100%{transform:translateY(34px) scale(.72); opacity:0}
+}
+.scrollcue.is-gone{opacity:0;transform:translateX(-50%) translateY(14px);pointer-events:none}
+
+.pills{display:flex;flex-wrap:wrap;gap:9px}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;font-size:.85rem;font-weight:500;color:var(--body);
+  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-pill);padding:8px 15px;
+}
+.pill .ico{width:15px;height:15px;color:var(--accent)}
+.hero .pill{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.24);color:#fff;backdrop-filter:blur(6px)}
+.hero .pill .ico{color:#fff}
+
+.appt__foot{font-size:.79rem;color:var(--faint);margin-top:13px;text-align:center}
+
+/* ==========================================================================
+   FORMS
+   ========================================================================== */
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.field label{font-size:.85rem;font-weight:600;color:var(--ink)}
+.field input,.field select,.field textarea{
+  font:inherit;font-size:.97rem;color:var(--ink);background:var(--wash-1);
+  border:1.5px solid var(--hairline);border-radius:var(--r-sm);padding:14px 15px;width:100%;
+  transition:border-color .16s var(--ease-out),background .16s var(--ease-out),box-shadow .16s var(--ease-out);
+}
+.field textarea{min-height:104px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--accent);background:var(--canvas);outline:none;
+  box-shadow:0 0 0 3px var(--accent-wash);
+}
+.field input::placeholder,.field textarea::placeholder{color:var(--faint)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.check{display:flex;gap:11px;align-items:flex-start;font-size:.85rem;color:var(--body);line-height:1.5;margin:6px 0 18px}
+.check input{margin:2px 0 0;accent-color:var(--accent);width:18px;height:18px;flex:none}
+.sent{display:none;flex-direction:column;gap:11px;padding:8px 0;text-align:center;align-items:center}
+.sent .ico{width:38px;height:38px;color:var(--accent);background:var(--accent-wash);border-radius:50%;padding:9px;box-sizing:content-box}
+.is-sent .fbody{display:none}
+.is-sent .sent{display:flex}
+
+/* ==========================================================================
+   STATEMENT — centred eyebrow, one large claim, one primary CTA, then fact cards
+   ========================================================================== */
+.center{display:flex;flex-direction:column;align-items:center;text-align:center}
+.eyebrow--c{align-self:center}
+.statement{
+  font-size:clamp(1.7rem,3.5vw,2.95rem);font-weight:400;line-height:1.16;letter-spacing:-.03em;
+  color:var(--ink);max-width:20em;margin-top:22px;
+}
+.statement em{font-style:normal;color:var(--accent)}
+
+/* The statement types itself in, word by word, the first time it is scrolled
+   to. Words are inline-block because a transform needs a block box; the spaces
+   between them stay real text nodes, so wrapping and screen-reader reading are
+   unchanged. The hidden state lives ONLY in the animation's backwards fill —
+   never in a separate opacity:0 — so if the animation is cancelled for any
+   reason the words are visible rather than stranded. Armed paused, then run,
+   so the cascade cannot be caught half-finished on the way in. */
+.statement .w{display:inline-block}
+.statement.is-armed .w{
+  animation:wordin .42s var(--ease-out) both;
+  animation-play-state:paused;
+}
+.statement.is-armed.is-typing .w{animation-play-state:running}
+@keyframes wordin{
+  from{opacity:0;transform:translateY(.32em)}
+  to{opacity:1;transform:none}
+}
+.afterline{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(18px,3vw,44px);margin-top:34px}
+
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2vw,26px);margin-top:clamp(40px,5vw,68px);width:100%}
+.fact{
+  position:relative;overflow:hidden;text-align:left;   /* the wrap is centred; cards are not */
+  background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-xl);
+  padding:clamp(28px,3vw,38px);display:flex;flex-direction:column;min-height:308px;
+  text-decoration:none;color:var(--ink);
+  transition:transform .22s var(--ease-out),box-shadow .22s var(--ease-out),border-color .22s var(--ease-out);
+}
+/* a faint bloom in the top corner so a large white card is not a flat slab */
+.fact::after{
+  content:"";position:absolute;top:-42%;right:-26%;width:74%;aspect-ratio:1;pointer-events:none;
+  background:radial-gradient(circle,var(--wash-3) 0%,rgba(241,227,235,0) 68%);
+}
+.fact > *{position:relative;z-index:1}
+@media (hover:hover) and (pointer:fine){
+  .fact:hover{transform:translateY(-4px);box-shadow:var(--shadow-panel);border-color:var(--bright)}
+}
+a.fact:active{transform:scale(.985)}
+.fact__ico{width:46px;height:46px;color:var(--bright);stroke-width:1.4;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.fact__n{
+  margin-top:auto;padding-top:26px;
+  font-size:clamp(2rem,3vw,2.7rem);font-weight:400;letter-spacing:-.036em;line-height:1.04;
+  font-variant-numeric:tabular-nums;
+}
+.fact__l{font-weight:600;font-size:1.06rem;margin-top:12px;letter-spacing:-.008em}
+.fact__d{font-size:.93rem;color:var(--muted);margin-top:9px;line-height:1.55;max-width:30ch}
+
+/* The free consultation is the offer, so this one card carries the accent
+   and is the only clickable card in the row. */
+.fact--offer{background:var(--accent-wash);border-color:rgba(168,49,104,.2)}
+.fact--offer::after{background:radial-gradient(circle,rgba(217,123,168,.22) 0%,rgba(217,123,168,0) 68%)}
+.fact--offer .fact__ico,.fact--offer .fact__n{color:var(--accent)}
+.fact--offer .fact__d{color:var(--body)}
+.fact--offer:hover{border-color:var(--accent)}
+.fact__go{margin-top:16px;font-size:.92rem;font-weight:700;color:var(--accent);display:inline-flex;align-items:center;gap:8px}
+.fact__go .ico{width:15px;height:15px;transition:transform .2s var(--ease-out)}
+.fact--offer:hover .fact__go .ico{transform:translateX(4px)}
+
+/* ==========================================================================
+   SYMPTOM LIST
+   ========================================================================== */
+.two{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,80px);align-items:start}
+/* A recognition list, not a feature list: the visitor reads down it to find
+   herself — "Ein Punkt genügt". So no cards and no check icons. A ✓ says
+   "included" or "done", which is the wrong thing to say about someone's
+   migraines; it is correct on the Diagnostik lists further down, and that is
+   the difference. Each entry names the complaint, then says what we actually
+   look at — process, not promised outcomes. Bracketed by a hairline top and
+   bottom so it reads as one list, divided by softer ones between entries.
+
+   The left column is sticky: the claim and the list she is checking herself
+   against belong on screen together. top:96px is the same clearance the
+   in-page anchor links already scroll to, so a stuck column and a jumped-to
+   heading sit at the same height under the header. Sticky needs an ancestor
+   that is not a scroll container — body is overflow-x:clip for exactly this
+   reason; hidden there would silently kill it. */
+.two--sticky{
+  --split:.85fr 1.15fr;
+  --split-gap:clamp(30px,7vw,120px);
+  grid-template-columns:var(--split);gap:var(--split-gap);
+}
+/* Symptoms only: the claim needs room to set in two or three lines instead of
+   four, so this pair runs 65/35. The About timeline keeps the default — its
+   year column alone is 134px and would be starved at 35%. A narrower gap here
+   too, or the 35% column pays for the whitespace twice. */
+.two--wideleft{--split:65fr 35fr;--split-gap:clamp(28px,4.6vw,72px)}
+/* About: an even split. The timeline carries a year gutter plus prose — the
+   quote and the "heute" paragraph both live in it — so it needs as much of the
+   row as the bio. The year gutter still runs narrower than the default: those
+   pixels are worth more to the paragraph at the terminus than to the numeral. */
+.two--even{--split:1fr 1fr;--split-gap:clamp(26px,3.4vw,56px)}
+.two--even .path__era{grid-template-columns:clamp(72px,7.6vw,104px) 1fr}
+.two--even .path__when{font-size:clamp(1.4rem,1.9vw,1.78rem);padding-right:clamp(16px,1.8vw,24px)}
+.two--sticky > :first-child{position:sticky;top:96px}
+/* No room to stick: stacked layout, or a viewport shorter than the column. */
+@media (max-height:640px){.two--sticky > :first-child{position:static}}
+
+.symptoms{margin:0;padding:0;list-style:none;border-block:1px solid var(--hairline)}
+.symptoms li{
+  padding:clamp(24px,2.6vw,34px) 0;
+  border-bottom:1px solid var(--hairline-soft);
+}
+.symptoms li:last-child{border-bottom:0}
+.symptoms h3{
+  font-size:clamp(1.18rem,1.45vw,1.38rem);font-weight:600;
+  letter-spacing:-.018em;line-height:1.25;color:var(--accent);
+}
+.symptoms p{margin-top:9px;font-size:.95rem;line-height:1.55;color:var(--body);max-width:52ch}
+.after{margin-top:clamp(6px,1vw,14px);display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+.after p{color:var(--body);max-width:34ch}
+
+/* ==========================================================================
+   SERVICES — the one dark band on the page: image-filled cards in a
+   scroll-snap slider, the way Clireo presents its treatments
+   ========================================================================== */
+.dark{
+  --hairline:rgba(255,255,255,.16);
+  background:linear-gradient(158deg,#3C1C2E 0%,#55223E 52%,#38192B 100%);
+  color:#fff;
+}
+.dark h2{color:#fff}
+.dark .eyebrow{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
+.dark .lede{color:rgba(255,255,255,.76)}
+
+/* The mask lives on a NON-scrolling wrapper. On the scroller itself the
+   browser has to recomposite the mask every frame, which is what makes a
+   masked slider stutter; here it is painted once and the cards move under it. */
+.sliderwrap{
+  --sidepad:max(var(--gutter),calc(50vw - var(--measure)/2 + var(--gutter)));
+  --fade:min(clamp(24px,6vw,116px),var(--sidepad));
+  margin-inline:calc(50% - 50vw);   /* break out of the centred measure */
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade),#000 calc(100% - var(--fade)),transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade),#000 calc(100% - var(--fade)),transparent 100%);
+}
+.slider{
+  display:flex;gap:clamp(14px,1.7vw,22px);overflow-x:auto;
+  scroll-snap-type:x proximity;
+  scrollbar-width:none;-ms-overflow-style:none;
+  padding:0 var(--sidepad) 4px;
+  scroll-padding-inline:var(--sidepad);
+  overscroll-behavior-x:contain;
+}
+.slider::-webkit-scrollbar{display:none}
+.scard{
+  position:relative;flex:0 0 clamp(252px,30%,344px);scroll-snap-align:start;
+  aspect-ratio:5/6;border-radius:var(--r-xl);overflow:hidden;isolation:isolate;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:clamp(20px,2vw,26px);text-decoration:none;color:#fff;
+  background:#2B1421;
+  transition:transform .2s var(--ease-out);
+}
+.scard img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;
+  transition:transform .32s var(--ease-out);
+}
+.scard::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(to top,
+    rgba(30,11,20,.94) 0%, rgba(30,11,20,.72) 34%,
+    rgba(38,15,26,.28) 64%, rgba(38,15,26,.06) 100%);
+}
+@media (hover:hover) and (pointer:fine){
+  .scard:hover img{transform:scale(1.06)}
+}
+.scard:active{transform:scale(.985)}
+.scard__ico{
+  width:44px;height:44px;border-radius:13px;margin-bottom:auto;flex:none;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.22);
+  backdrop-filter:blur(6px);display:grid;place-items:center;
+}
+.scard__ico .ico{width:21px;height:21px;color:#fff}
+.scard h3{font-size:1.32rem;font-weight:600;letter-spacing:-.016em;margin-top:20px}
+.scard p{font-size:.92rem;line-height:1.5;color:rgba(255,255,255,.82);margin-top:8px}
+.scard__go{
+  margin-top:14px;font-size:.87rem;font-weight:700;display:inline-flex;align-items:center;gap:7px;
+  color:#fff;opacity:.85;
+}
+.scard__go .ico{width:15px;height:15px;transition:transform .2s var(--ease-out)}
+.scard:hover .scard__go .ico{transform:translateX(4px)}
+
+/* Heading row: title left, arrows hard right. The arrows must align to the
+   centred --measure, so they live in the .wrap ABOVE the slider — .sliderwrap
+   is full-bleed and would drag them out to the viewport edge. flex-end bottom-
+   aligns the circles with the last heading line rather than floating them. */
+.shead{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:clamp(20px,4vw,48px);margin-bottom:clamp(30px,3.6vw,44px);
+}
+.shead__t{flex:1 1 auto;min-width:0;gap:16px}
+.sarrows{display:flex;gap:12px;flex:none}
+.sarrow{
+  width:46px;height:46px;border-radius:50%;border:1px solid rgba(255,255,255,.28);
+  background:rgba(255,255,255,.1);color:#fff;cursor:pointer;display:grid;place-items:center;
+  transition:background .18s var(--ease-out),opacity .18s var(--ease-out),transform .16s var(--ease-out);
+}
+@media (hover:hover) and (pointer:fine){
+  .sarrow:hover:not(:disabled){background:#fff;color:var(--accent);transform:translateY(-2px)}
+}
+.sarrow:active:not(:disabled){transform:scale(.92)}
+.sarrow:disabled{opacity:.3;cursor:default}
+.sarrow .ico{width:19px;height:19px}
+.sarrow--prev .ico{transform:rotate(180deg)}
+
+.sfoot{
+  display:flex;flex-wrap:wrap;align-items:center;gap:18px clamp(20px,4vw,48px);
+  margin-top:clamp(30px,3.6vw,46px);padding-top:clamp(22px,2.6vw,30px);
+  border-top:1px solid rgba(255,255,255,.16);
+}
+.sfoot p{font-size:1rem;color:rgba(255,255,255,.76);max-width:34ch}
+.sfoot a{
+  margin-left:auto;display:inline-flex;align-items:center;gap:11px;
+  color:#fff;text-decoration:none;font-size:1.02rem;font-weight:600;
+}
+.sfoot a .sq{
+  width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.22);display:grid;place-items:center;
+  transition:background .18s var(--ease-out),color .18s var(--ease-out);
+}
+.sfoot a:hover .sq{background:#fff;color:var(--accent)}
+.sfoot a:active .sq{transform:scale(.92)}
+.sfoot a .sq .ico{width:17px;height:17px}
+
+/* ==========================================================================
+   ABLAUF — a segmented rail, not three cards.
+
+   The section sits directly under the dark slider's hard full-bleed edge, so
+   it answers that edge with its opposite: one fine horizontal line across the
+   whole measure, and nothing enclosed. No panel, no radius, no shadow — the
+   sequence is carried by the line and, more importantly, by the breaks in it.
+
+   Each step is a segment of that rail, and the accent draws itself across one
+   segment at a time — 01, then 02, then 03 — so the line itself performs the
+   order the numerals only assert. All three retract together and it begins
+   again; the loop is the sequence, not decoration on top of it.
+
+   scaleX on a full-width bar, never width: width would relayout three times a
+   second. transform-origin is the left edge, so each segment draws forward
+   from where its step begins.
+
+   The numerals stay (this really is an ordered, gated process) but stop being
+   badges: set large at 300 — the same weight as the hero stats, the lightest
+   on the page — they become the structure above the line instead of chrome
+   inside a box.
+   ========================================================================== */
+.flow{
+  list-style:none;margin:0;padding:0;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  column-gap:clamp(28px,4vw,64px);
+  align-items:start;
+}
+
+.flow__n{
+  display:block;
+  font-size:clamp(2.5rem,4.8vw,3.9rem);font-weight:300;line-height:1;
+  letter-spacing:-.04em;font-variant-numeric:tabular-nums;
+  color:var(--muted);
+  margin-bottom:clamp(15px,1.7vw,22px);
+}
+/* The rail lives on the body, so the numeral sits above the line. */
+.flow__body{
+  position:relative;
+  border-top:1px solid var(--hairline);
+  padding-top:clamp(19px,2.1vw,27px);
+}
+/* The drawing bar. Sits on top of the hairline rail and spans the whole
+   segment; scaleX carries it from 0 to full. One cycle covers all three in
+   turn, then all three retract together — hence three keyframe sets sharing
+   one 5.4s timeline rather than one keyframe set with staggered delays, which
+   would let step 01 reset while step 03 was still drawing. */
+.flow__body::before{
+  content:"";position:absolute;left:0;right:0;top:-1px;
+  height:2px;background:var(--accent);
+  transform:scaleX(0);transform-origin:left center;
+  animation:railfill1 5.4s var(--ease-in-out) infinite;
+}
+.flow__step:nth-child(2) .flow__body::before{animation-name:railfill2}
+.flow__step:nth-child(3) .flow__body::before{animation-name:railfill3}
+@keyframes railfill1{
+  0%{transform:scaleX(0)}
+  22%,84%{transform:scaleX(1)}
+  100%{transform:scaleX(0)}
+}
+@keyframes railfill2{
+  0%,22%{transform:scaleX(0)}
+  44%,84%{transform:scaleX(1)}
+  100%{transform:scaleX(0)}
+}
+@keyframes railfill3{
+  0%,44%{transform:scaleX(0)}
+  66%,84%{transform:scaleX(1)}
+  100%{transform:scaleX(0)}
+}
+.flow__body h3{font-size:clamp(1.2rem,1.45vw,1.4rem)}
+.flow__meta{
+  display:block;margin-top:7px;
+  font-size:.82rem;font-weight:600;color:var(--accent);
+  font-variant-numeric:tabular-nums;
+}
+.flow__body p{margin:13px 0 0;font-size:.95rem;line-height:1.55;color:var(--body)}
+
+/* Under 900 the rail cannot hold three segments side by side, so each step
+   keeps its own rail and they stack. The bars still draw 01 -> 02 -> 03, top
+   to bottom, which reads as the same sequence. */
+@media (max-width:900px){
+  .flow{grid-template-columns:1fr;row-gap:clamp(32px,5vw,46px)}
+  .flow__n{font-size:clamp(2.1rem,7vw,2.9rem)}
+  .flow__body p{max-width:62ch}
+}
+
+/* ==========================================================================
+   ABOUT — a path, not a credentials table.
+
+   The old shape was a bio column beside a bordered eight-row table. It read as
+   a CV: every qualification the same weight, so none of them said anything,
+   and the one line that actually earns trust ("Beschwerden haben fast immer
+   eine Geschichte") was buried in a paragraph beside it.
+
+   So: a chronology. But only two of the eight credentials carry a year — 1999
+   and 2017. The rest are durations, teachers or statuses, and inventing dates
+   for a practitioner's professional history is not a design decision anyone
+   gets to make. So the spine carries what is actually documented, and the
+   undated training sits below it, plainly labelled as undated. The first era
+   is "davor" rather than a year for the same reason: her own text says the
+   care years came before the practice, not which year they began.
+
+   The year is the node and sits right-aligned hard against a hairline running
+   in the gutter, with a dot on the line itself so each era reads as a point in
+   time rather than a paragraph. The dot carries the distinction the spine
+   already makes: filled for the three documented points, hollow for "heute",
+   because today is not a fixed date. The spine stops before it — the past is a
+   line, today is open — so the line terminates in that open ring. The quote
+   lands there, boxless, as the arrival point rather than a pink card floating
+   beside the text.
+
+   No motion. The page's budget is already spent and nothing here is a state
+   change the visitor causes.
+   ========================================================================== */
+.bio{display:flex;flex-direction:column;align-items:flex-start;gap:20px;max-width:62ch}
+.bio p{max-width:60ch}
+.path__now{margin:11px 0 0;font-size:1rem;line-height:1.6;color:var(--body);max-width:46ch}
+
+.path{
+  list-style:none;margin:0;padding:0;max-width:800px;
+  /* one place to size the node; the spine's start and end follow it */
+  --dot:9px;--dot-top:9px;
+}
+.path__era{
+  display:grid;
+  grid-template-columns:clamp(84px,11vw,134px) 1fr;
+  align-items:start;
+}
+.path__when{
+  text-align:right;padding:clamp(2px,.3vw,5px) clamp(20px,2.6vw,34px) 0 0;
+  font-size:clamp(1.5rem,2.4vw,2.05rem);font-weight:300;line-height:1.05;
+  letter-spacing:-.03em;color:var(--accent);font-variant-numeric:tabular-nums;
+}
+/* The spine lives on the content side so the year hangs clear of it. It is an
+   element rather than a border-left, because a border runs the full height of
+   the column: it started above the first node and stopped short of the last.
+   As a positioned line it can begin at the first node's centre and end at the
+   last node's centre, which is also what makes it drawable on scroll. */
+.path__what{
+  position:relative;
+  padding:0 0 clamp(46px,5.4vw,82px) clamp(24px,3vw,38px);
+}
+.path__what::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:1px;
+  background:var(--hairline);
+}
+/* Begins at the first node, not above it. */
+.path__era:first-child > .path__what::after{top:calc(var(--dot-top) + var(--dot)/2)}
+/* And ends at the last: a stub down to the ring, nothing past it. */
+.path__era--now > .path__what{padding-bottom:0}
+.path__era--now > .path__what::after{bottom:auto;height:calc(var(--dot-top) + var(--dot)/2)}
+/* The node, centred on the spine's own 1px. */
+.path__what::before{
+  content:"";position:absolute;top:var(--dot-top);
+  left:calc(.5px - var(--dot)/2);
+  width:var(--dot);height:var(--dot);border-radius:50%;background:var(--accent);
+}
+/* Today is open, so its node is too — a ring, filled with the section ground.
+   box-sizing is border-box, so 9px with a 2px border leaves a 5px hole. */
+.path__era--now > .path__what::before{background:var(--canvas);border:2px solid var(--accent)}
+.path__what h3{font-size:clamp(1.18rem,1.4vw,1.34rem)}
+
+/* Draws itself as it is scrolled to. Armed by JS only, so without the script
+   the timeline is simply there, fully drawn. Transitions rather than keyframes:
+   a fast scroll can trip several eras at once and a transition retargets from
+   wherever it is instead of restarting. Never scale(0) on the node — it grows
+   from .5 and fades, so it is never something appearing out of nothing. */
+.path--armed .path__what::after{transform:scaleY(0);transform-origin:top center}
+.path--armed .path__what::before{opacity:0;transform:scale(.5)}
+.path--armed .is-in > .path__what::after{
+  transform:scaleY(1);transition:transform .45s var(--ease-out) .12s;
+}
+.path--armed .is-in > .path__what::before{
+  opacity:1;transform:scale(1);
+  transition:opacity .2s var(--ease-out),transform .2s var(--ease-out);
+}
+.path__cred{margin:9px 0 0;font-size:.98rem;line-height:1.5;color:var(--ink);max-width:46ch}
+.path__cred i{font-style:normal;color:var(--body)}
+
+.pullquote{
+  margin:15px 0 0;padding:0;background:none;
+  font-size:clamp(1.15rem,1.9vw,1.45rem);font-weight:400;font-style:italic;
+  line-height:1.4;color:var(--ink);max-width:44ch;
+}
+/* Sentence case, not tracked caps — one fewer all-caps label on the page. */
+.pullquote cite{
+  display:block;margin-top:11px;font-style:normal;
+  font-size:.85rem;font-weight:600;color:var(--accent);
+}
+
+/* The undated coda — a footnote under both columns, not a third block of
+   content. It reads across the full measure in four narrow columns so no
+   single column becomes a wall, and the qualifier drops under its name so
+   each entry is two short lines instead of one long one.
+
+   The rank is set by one rule: the four qualifications are body copy, and
+   everything around them is fine print. So the names sit at 1.05rem/--ink —
+   page body size, the largest thing in the block — while the label, the
+   qualifiers and the membership line all drop below .85rem at --body. The
+   label is deliberately the smallest thing here and is NOT typeset as a
+   heading: its job is to say why these carry no year, which is a caption's
+   job, not a title's. Small + 600 is the house label register (.eyebrow,
+   .pullquote cite), so it reads as a label at that size without tracked caps.
+   1.05rem also keeps the block under .path__what h3 (1.18-1.34rem/600)
+   directly above, so the coda stays subordinate to the timeline.
+
+   Tones stay at --ink/--body: --muted is ~3.4:1 on white and fails AA at
+   these sizes. The label is load-bearing — it says why these are not on
+   the spine. */
+.coda{
+  margin-top:clamp(46px,5.5vw,80px);padding-top:clamp(24px,2.8vw,34px);
+  border-top:1px solid var(--hairline-soft);
+}
+.coda__h{font-size:.78rem;font-weight:600;line-height:1.4;letter-spacing:0;color:var(--body)}
+.coda__list{
+  list-style:none;margin:clamp(20px,2.2vw,28px) 0 0;padding:0;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:24px clamp(22px,2.6vw,40px);
+}
+/* Negative tracking because the size rose — large-ish type here earns its
+   presence from size and tracking, never from weight. */
+.coda__list li{font-size:1.05rem;line-height:1.35;letter-spacing:-.012em;color:var(--ink);max-width:38ch}
+.coda__list i{font-style:normal;display:block;margin-top:5px;font-size:.85rem;line-height:1.4;letter-spacing:0;color:var(--body)}
+.coda__member{margin:clamp(30px,3.4vw,46px) 0 0;font-size:.8rem;line-height:1.6;color:var(--body);max-width:58ch}
+
+/* ==========================================================================
+   METHODS
+   ========================================================================== */
+.methods{display:grid;grid-template-columns:1fr 1fr;gap:clamp(18px,2.4vw,28px)}
+.mpanel{background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-lg);padding:28px 26px}
+.mpanel h3{margin-bottom:14px}
+.mpanel ul{margin:0;padding:0;list-style:none}
+.mpanel li{padding:13px 0;border-bottom:1px solid var(--hairline-soft);font-size:.96rem;display:flex;gap:12px;align-items:flex-start}
+.mpanel li:last-child{border-bottom:0}
+.mpanel li .ico{width:17px;height:17px;color:var(--bright);margin-top:4px}
+.mpanel li b{font-weight:600;display:block}
+.mpanel li i{font-style:normal;color:var(--muted);font-size:.88rem}
+
+/* ==========================================================================
+   VOICE WALL — the 90svh sticky stage IS the clipping box: the cards live
+   inside it, so overflow:hidden on the stage genuinely hides them. They are
+   moved by scroll position rather than by document flow, which is what lets
+   the box stay 90svh while the cards travel through it.
+
+   .vwall is only a scroll runway. It must not get overflow:clip/hidden —
+   that would disable the sticky stage inside it.
+   ========================================================================== */
+.vwall{position:relative;height:200svh}
+.vwall__stage{
+  position:sticky;top:0;height:90svh;overflow:hidden;isolation:isolate;
+}
+.vwall__bg{position:absolute;inset:0;z-index:-2}
+.vwall__bg img{width:100%;height:100%;object-fit:cover;object-position:58% 42%}
+.vwall__veil{
+  position:absolute;inset:0;z-index:-1;
+  background:
+    linear-gradient(98deg,rgba(38,15,28,.95) 0%,rgba(56,22,41,.88) 33%,
+                          rgba(85,34,62,.66) 62%,rgba(85,34,62,.44) 100%),
+    linear-gradient(to bottom,rgba(38,15,28,.45) 0%,rgba(38,15,28,0) 24%);
+}
+.vwall__in{
+  position:relative;height:100%;display:grid;
+  grid-template-columns:min(50%,560px) 1fr;gap:clamp(28px,4vw,72px);
+  align-items:stretch;
+}
+.vwall__l{color:#fff;align-self:center;max-width:560px}
+.vwall__l .eyebrow{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
+.vwall__l h2{
+  color:#fff;margin:20px 0 18px;
+  font-size:clamp(2.6rem,5vw,4.2rem);line-height:1.02;letter-spacing:-.036em;
+}
+.vwall__l p{color:rgba(255,255,255,.76);font-size:1.02rem;line-height:1.6}
+
+.vwall__col{position:relative;height:100%}
+.vwall__cards{
+  position:absolute;top:0;right:0;width:min(100%,470px);
+  display:flex;flex-direction:column;gap:clamp(18px,3svh,42px);
+  will-change:transform;
+}
+.vcard{
+  width:100%;color:#fff;
+  /* No backdrop-filter: the background is already blurred in the file, so a
+     flat translucent fill reads the same and costs nothing to scroll. */
+  background:rgba(44,18,33,.62);
+  border:1px solid rgba(255,255,255,.17);
+  border-radius:var(--r-xl);
+  padding:clamp(24px,2.4vw,32px);
+}
+.vcard blockquote{margin:0;font-size:clamp(1.02rem,1.5vw,1.18rem);line-height:1.5}
+.vcard__more{
+  margin-top:18px;display:inline-flex;align-items:center;gap:10px;
+  color:#fff;text-decoration:none;font-size:.88rem;font-weight:600;
+  transition:color .18s var(--ease-out);
+}
+.vcard__more .sq{
+  width:27px;height:27px;border-radius:8px;background:var(--bright);color:#2A1018;
+  display:grid;place-items:center;font-size:1rem;font-weight:700;line-height:1;
+  transition:transform .16s var(--ease-out),background .18s var(--ease-out);
+}
+@media (hover:hover) and (pointer:fine){
+  .vcard__more:hover .sq{background:#fff;transform:scale(1.08)}
+}
+.vcard__more:active .sq{transform:scale(.9)}
+.vcard__who{
+  margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.16);
+  display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;
+}
+.vcard__who b{font-size:.98rem;font-weight:600}
+.vcard__who span{font-size:.86rem;color:rgba(255,255,255,.66)}
+
+
+/* Under 900px: no pin, no transform — the section becomes a normal block and
+   the cards simply stack. The script detects this and stops driving them. */
+@media (max-width:900px){
+  .vwall{height:auto;background:linear-gradient(180deg,#3C1C2E 0%,#2A1220 100%)}
+  .vwall__stage{position:static;height:auto;overflow:visible;padding-block:clamp(46px,9svh,76px)}
+  .vwall__in{grid-template-columns:1fr;height:auto;gap:clamp(26px,4vw,40px)}
+  .vwall__l{max-width:none}
+  .vwall__col{height:auto}
+  .vwall__cards{position:static;width:100%;gap:14px}
+  .vcard{width:100%}
+}
+
+/* ==========================================================================
+   FEES + FAQ
+   ========================================================================== */
+/* Only the contact form uses this now, and it is the primary object in its
+   section, so it carries the deeper shadow. */
+.panel{
+  background:var(--canvas);border:1px solid var(--hairline);
+  border-radius:var(--r-xl);padding:clamp(24px,3vw,34px);
+  box-shadow:var(--shadow-panel);
+}
+/* KOSTEN — pricing cards. Costs and questions used to share one grid, each
+   with its own eyebrow and headline; they are two sections now, costs first,
+   so the FAQ's opening question about insurance follows from the prices.
+
+   Cards are right here specifically, where they are wrong elsewhere on this
+   page: each one binds a price to what that appointment actually includes, and
+   the four are peers meant to be read against each other. That is the card
+   doing structural work rather than decorating. They stay inside the system —
+   the dominant --r-lg radius, --hairline borders, and the plum-tinted
+   --shadow-card, never a grey one.
+
+   Every card ends in the same action, because there is only one way in — the
+   contact form. The free first step keeps the filled --accent button and the
+   --bright border; the other three go ghost, so the row reads as one practice
+   with one route rather than four competing offers. */
+.fees{
+  list-style:none;margin:clamp(30px,3.4vw,46px) 0 0;padding:0;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,1.6vw,22px);
+  align-items:stretch;
+}
+.fees > li{
+  display:flex;flex-direction:column;align-items:flex-start;
+  background:var(--canvas);border:1px solid var(--hairline);
+  border-radius:var(--r-lg);box-shadow:var(--shadow-card);
+  padding:clamp(20px,2vw,26px);
+}
+.fees > li.is-entry{border-color:var(--bright);box-shadow:var(--shadow-panel)}
+.fees b{font-weight:600;font-size:1.02rem;letter-spacing:-.01em;color:var(--ink)}
+.fees i{font-style:normal;margin-top:5px;font-size:.86rem;line-height:1.45;color:var(--body)}
+.price{
+  margin-top:clamp(13px,1.5vw,18px);
+  font-size:clamp(1.3rem,1.7vw,1.6rem);font-weight:400;letter-spacing:-.024em;
+  white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--ink);
+}
+.price--free{color:var(--accent);font-weight:500}
+/* Still a placeholder, and it should keep looking like one until a real number
+   replaces it — see the launch list in README.md. */
+.price--slot{
+  margin-top:clamp(13px,1.5vw,18px);font-size:.8rem;font-weight:600;color:var(--body);
+  border:1px dashed var(--hairline);border-radius:var(--r-pill);
+  padding:6px 13px;white-space:nowrap;
+}
+/* What the appointment includes. The tick is correct here — these really are
+   included items, the same sense it carries on the Diagnostik lists — unlike
+   on the symptom list, where it described complaints and was wrong. */
+.incl{
+  list-style:none;width:100%;
+  margin:clamp(15px,1.7vw,20px) 0 0;padding:clamp(14px,1.6vw,18px) 0 0;
+  border-top:1px solid var(--hairline-soft);
+  display:flex;flex-direction:column;gap:9px;
+}
+.incl li{display:flex;gap:9px;align-items:flex-start;font-size:.87rem;line-height:1.45;color:var(--body)}
+.incl .ico{width:15px;height:15px;flex:none;margin-top:3px;color:var(--accent)}
+/* All four cards carry an action now, so the buttons line up on a shared
+   baseline (margin-top:auto) instead of a fixed gap — the cards stretch to
+   equal height and their lists differ in length, so a fixed gap would leave
+   the row of buttons ragged. The margin on .incl is the minimum breathing room
+   for the case where a card's content nearly fills its height.
+   nowrap is the guarantee behind the one-line labels: the button is width:100%,
+   so without it a long word pair would silently wrap inside the pill.
+   line-height matches .btn .ico's 18px so the entry card's button, which carries
+   an arrow, comes out exactly as tall as the three that do not — otherwise the
+   icon sets the line box and the row of four is 3px ragged along the top. */
+.fees .incl{margin-bottom:clamp(16px,1.8vw,22px)}
+.fees .btn{margin-top:auto;width:100%;padding-top:14px;padding-bottom:14px;white-space:nowrap;line-height:18px}
+/* The cards are --canvas themselves, so a ghost button on --hairline would read
+   as a nested card, not a button — it is the same border the card draws. --faint
+   is the next step up the same plum ladder and holds its edge on white while
+   staying clearly secondary to the filled entry-card CTA. */
+.fees .btn--ghost{border-color:var(--faint)}
+/* .btn--ghost:hover is declared far above at the same specificity, so this rule
+   would otherwise win on source order and kill the hover border. Restate it —
+   still behind the pointer guard, and still before .btn:active's press scale. */
+@media (hover:hover) and (pointer:fine){
+  .fees .btn--ghost:hover{border-color:var(--accent)}
+}
+.hint{
+  margin:clamp(28px,3vw,40px) 0 0;padding-top:clamp(18px,2vw,24px);
+  border-top:1px solid var(--hairline-soft);
+  font-size:.9rem;line-height:1.6;color:var(--body);max-width:74ch;
+}
+
+/* The accordions are unchanged. They just get their own section, and a reading
+   measure now that nothing sits beside them. */
+.faq{display:flex;flex-direction:column;gap:10px;max-width:880px;margin-top:clamp(26px,3vw,38px)}
+details.q{background:var(--canvas);border:1px solid var(--hairline);border-radius:var(--r-md);overflow:hidden}
+details.q[open]{border-color:var(--bright)}
+details.q summary{
+  cursor:pointer;list-style:none;padding:18px 52px 18px 22px;position:relative;
+  font-size:1rem;font-weight:600;color:var(--ink);
+}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary::after{
+  content:"";position:absolute;right:22px;top:24px;width:10px;height:10px;
+  border-right:2px solid var(--accent);border-bottom:2px solid var(--accent);
+  transform:rotate(45deg);transition:transform .24s var(--ease-out);
+}
+details.q[open] summary::after{transform:rotate(-135deg);top:26px}
+details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64ch}
+
+/* ==========================================================================
+   CONTACT
+   ========================================================================== */
+/* CONTACT — the form is the action; everything else is reference.
+
+   The section used to present four objects at one weight: the form as a card,
+   and then three more cards beside it (details, map, legal note), so nothing
+   read as primary. Now only the form is a card. Three things carry the
+   hierarchy instead of one:
+
+   1. the grid leans to the form — 1.3fr against .7fr, not an even split;
+   2. the form gets a shadow, because a white card on a white section has
+      nothing but a 1px border to stand on;
+   3. the details, the map and the legal note lose their frames entirely.
+
+   The legal note also leaves the column: a § 3 HWG disclaimer belongs as a
+   footnote under the whole section, not stacked as a third card in a corner. */
+.contact{display:grid;grid-template-columns:1.3fr .7fr;gap:clamp(28px,4.4vw,68px);align-items:start}
+
+/* Reference, not an object: no ground, no frame, no padding — just the icon
+   column and generous row spacing. */
+.info{display:flex;flex-direction:column;gap:clamp(26px,3vw,36px)}
+.info dl{
+  margin:0;display:grid;grid-template-columns:auto 1fr;
+  gap:clamp(15px,1.7vw,19px) 14px;font-size:.95rem;align-items:start;
+}
+.info dt{color:var(--accent)}
+.info dt .ico{width:18px;height:18px;display:block;margin-top:2px}
+.info dd{margin:0;font-weight:500;line-height:1.5;color:var(--ink)}
+.info dd a{font-weight:600}
+.info__sub{display:block;font-weight:400;color:var(--body)}
+
+/* The map's own ground separates it; it does not need a frame as well. */
+.mapcard{border-radius:var(--r-lg);overflow:hidden}
+.mapcard svg{display:block;width:100%;height:auto}
+.mapcard__foot{
+  display:flex;flex-wrap:wrap;gap:7px 14px;justify-content:space-between;align-items:baseline;
+  padding:12px 2px 0;font-size:.87rem;color:var(--body);
+}
+
+/* A disclaimer has to stay readable — --muted is ~3.4:1 on white and fails AA
+   at this size, so this sits at --body. */
+.legal{
+  margin:clamp(34px,4vw,54px) 0 0;padding-top:clamp(18px,2vw,24px);
+  border-top:1px solid var(--hairline-soft);
+  font-size:.85rem;line-height:1.6;color:var(--body);max-width:92ch;
+}
+.legal strong{color:var(--ink);font-weight:600}
+
+/* ==========================================================================
+   FOOTER — dark close to the page, with the phone number as the final CTA.
+   The contact form sits directly above, so another "book now" button here
+   would only repeat it; a large tappable number is the useful last ask.
+   ========================================================================== */
+.foot{
+  --hairline:rgba(255,255,255,.16);          /* locally inverted for this band */
+  position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#33172A 0%,#24101D 100%);
+  color:#fff;padding-block:clamp(46px,5.5vw,72px) 26px;
+}
+.foot::before{                                /* same bloom motif as the fact cards */
+  content:"";position:absolute;top:-32%;right:-8%;width:46%;aspect-ratio:1;pointer-events:none;
+  background:radial-gradient(circle,rgba(217,123,168,.17) 0%,rgba(217,123,168,0) 68%);
+}
+/* The logo droplet as a watermark, cropped by the footer's own overflow.
+   The file is a flat black silhouette with the logo's alpha, so one invert()
+   turns it white — the two brand tones would both flatten anyway. */
+.foot__mark{
+  position:absolute;z-index:0;pointer-events:none;
+  left:-6%;bottom:-26%;width:min(46%,520px);
+  opacity:.03;filter:invert(1);
+}
+.foot > *:not(.foot__mark){position:relative}
+
+.footcta{
+  display:grid;grid-template-columns:1.06fr .94fr;gap:clamp(26px,4vw,64px);align-items:center;
+  padding-bottom:clamp(36px,4.4vw,54px);border-bottom:1px solid var(--hairline);
+}
+.footcta .eyebrow{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
+.footcta h2{color:#fff;margin:17px 0 14px}
+.footcta p{font-size:1rem;color:rgba(255,255,255,.72);max-width:42ch;line-height:1.6}
+.footcta__r{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+
+.bigtel{
+  display:inline-flex;align-items:center;gap:clamp(14px,1.5vw,20px);
+  text-decoration:none;color:#fff;
+  transition:transform .16s var(--ease-out);
+}
+.bigtel__ring{
+  width:clamp(48px,4.4vw,60px);aspect-ratio:1;border-radius:50%;flex:none;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);
+  display:grid;place-items:center;
+  transition:background .2s var(--ease-out),color .2s var(--ease-out),border-color .2s var(--ease-out);
+}
+.bigtel__ring .ico{width:44%;height:44%;color:#fff;transition:color .2s var(--ease-out)}
+.bigtel__t{display:flex;flex-direction:column;line-height:1.15}
+.bigtel__t small{
+  font-size:.74rem;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--bright);margin-bottom:7px;
+}
+.bigtel__t b{
+  font-size:clamp(1.55rem,2.9vw,2.3rem);font-weight:400;letter-spacing:-.032em;
+  font-variant-numeric:tabular-nums;
+}
+@media (hover:hover) and (pointer:fine){
+  .bigtel:hover .bigtel__ring{background:var(--bright);border-color:var(--bright)}
+  .bigtel:hover .bigtel__ring .ico{color:#2A1018}
+}
+.bigtel:active{transform:scale(.985)}
+
+.footmail{
+  display:inline-flex;align-items:center;gap:10px;font-size:.97rem;font-weight:500;
+  color:rgba(255,255,255,.78);text-decoration:none;
+  transition:color .18s var(--ease-out);
+}
+.footmail .ico{width:17px;height:17px;color:var(--bright)}
+.footmail:hover{color:#fff}
+
+.foot__grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:clamp(22px,3vw,44px);margin-top:clamp(34px,4vw,52px)}
+.foot h4{font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--bright);margin-bottom:15px}
+.foot a{color:rgba(255,255,255,.78);text-decoration:none;transition:color .16s var(--ease-out)}
+.foot a:hover{color:#fff}
+.foot ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;font-size:.94rem;color:rgba(255,255,255,.78)}
+.foot__logo{height:38px;width:auto;margin-bottom:14px;filter:brightness(0) invert(1)}
+.foot__note{font-size:.88rem;color:rgba(255,255,255,.62);line-height:1.62;max-width:42ch}
+.foot__bar{margin-top:38px;padding-top:22px;border-top:1px solid var(--hairline);display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;font-size:.85rem;color:rgba(255,255,255,.55)}
+
+.mcta{
+  display:none;position:fixed;left:0;right:0;bottom:0;z-index:70;
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom));gap:10px;
+  background:color-mix(in srgb,var(--canvas) 94%,transparent);
+  backdrop-filter:blur(14px);border-top:1px solid var(--hairline);
+}
+.mcta .btn{flex:1;padding:15px 12px}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width:1140px){
+  .nav{display:none}
+  .burger{display:inline-flex}
+  .bar__tel span{display:none}
+  .bar__cta .btn{display:none}
+  .two,.contact,.methods,.footcta{grid-template-columns:1fr}
+  .path{margin-top:clamp(38px,4.5vw,60px)}
+  .coda__list{grid-template-columns:repeat(2,1fr)}
+  .fees{grid-template-columns:repeat(2,1fr)}
+  .two--sticky > :first-child{position:static}
+  .hero{min-height:0;padding-bottom:clamp(30px,5vw,48px)}
+  .hero__veil{background:
+    linear-gradient(180deg, rgba(44,18,32,.90) 0%, rgba(74,25,52,.86) 42%, rgba(123,34,85,.72) 100%),
+    linear-gradient(97deg, rgba(44,18,32,.5) 0%, rgba(140,44,96,0) 70%)}
+  .hero__bg img,.hero__vid{object-position:62% 30%}
+  .hero .lede{max-width:46ch}
+  .voices{grid-template-columns:1fr 1fr}
+  .facts{grid-template-columns:1fr}
+  .fact{min-height:0}
+}
+@media (max-width:740px){
+  body{font-size:16px;padding-bottom:82px}
+  .voices,.row2,.foot__grid,.footcta{grid-template-columns:1fr}
+  .foot__mark{width:min(64%,320px);left:-12%;bottom:-10%}
+  .scard{flex-basis:82%}
+  /* The heading can no longer give up 104px and still set two comfortable
+     lines, so the arrows drop under it — still above the cards, left-aligned
+     with the heading rather than orphaned against the right edge. */
+  .shead{flex-direction:column;align-items:flex-start;gap:24px}
+  .sfoot a{margin-left:0}
+  .fact{padding:26px 22px}
+  .fact__ico{width:38px;height:38px}
+  .fact__n{padding-top:20px}
+  .statement{max-width:none}
+  .path__era{grid-template-columns:clamp(52px,15vw,78px) 1fr}
+  .path__when{font-size:clamp(1.05rem,4.6vw,1.4rem);padding-right:clamp(12px,3.4vw,18px)}
+  .path__what{padding-left:clamp(16px,4.6vw,24px)}
+  .path{--dot:7px;--dot-top:8px}
+  .coda__list{grid-template-columns:1fr}
+  .fees{grid-template-columns:1fr;gap:clamp(20px,5vw,28px)}
+  .afterline{gap:20px}
+  .mcta{display:flex}
+  .hero__actions .btn{width:100%}
+  .foot{padding-bottom:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+  /* animation-name:none, so the droplet rests visibly instead of ending hidden */
+  .scrollcue__drop{animation:none;transform:translateY(12px);opacity:.95}
+  /* animation:none, not the .01ms clamp above: that clamps duration but not
+     the per-word delay, which would leave the words popping in one by one. */
+  .statement.is-armed .w{animation:none}
+  /* .01ms x infinite would strobe. Kill it and rest the bars drawn. */
+  .flow__body::before{animation:none;transform:scaleX(1)}
+  .mark__line path{animation:none;stroke-dashoffset:0}
+  /* the timeline must never be left half-drawn */
+  .path--armed .path__what::after{transform:scaleY(1)}
+  .path--armed .path__what::before{opacity:1;transform:scale(1)}
+}
+
+/* ==========================================================================
+   SEMINARE — the landing-page block.
+
+   The device here is the portrait: no other section on this page carries a
+   picture of a person, so it does the differentiating and nothing else has to.
+   Everything beside it is plain type plus one "next date" strip, because the
+   page's other patterns are already spoken for — cards belong to Kosten, the
+   hairline list to Beschwerden, the year spine to Über mich, the slider to
+   Schwerpunkte. A sixth variant would be the failure mode.
+
+   The portrait is a reserved slot until the real photograph exists. It is
+   deliberately drawn as an empty frame in the dashed register the price chips
+   already use, so it reads as "not filled in yet" rather than as a design. */
+.sem{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(28px,4.4vw,72px);align-items:center}
+
+.sem__portrait{
+  margin:0;position:relative;border-radius:var(--r-xl);overflow:hidden;
+  aspect-ratio:4/5;background:var(--wash-2);
+  max-width:392px;   /* the photograph's native width — never scale it up */
+}
+.sem__portrait img{width:100%;height:100%;object-fit:cover;display:block}
+/* The empty state. Swap in an <img> and this never renders. */
+.sem__slot{
+  position:absolute;inset:clamp(10px,1.2vw,16px);
+  border:1.5px dashed var(--hairline);border-radius:var(--r-lg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;text-align:center;padding:20px;
+  font-size:.85rem;font-weight:600;line-height:1.45;color:var(--body);
+}
+.sem__slot .ico{width:26px;height:26px;color:var(--faint)}
+.sem__slot span{font-weight:400;color:var(--body);max-width:24ch}
+.sem__cap{
+  margin:12px 0 0;font-size:.86rem;line-height:1.5;color:var(--body);
+}
+
+.sem__body{display:flex;flex-direction:column;align-items:flex-start;gap:18px}
+.sem__body .lede{margin:0}
+
+/* The next date. One strip, not a card — it is a pointer to the seminar page,
+   not a thing to read in full here. */
+.sem__next{
+  width:100%;margin-top:clamp(4px,1vw,10px);
+  padding-top:clamp(20px,2.2vw,28px);border-top:1px solid var(--hairline);
+}
+.sem__when{
+  display:block;font-size:.82rem;font-weight:600;letter-spacing:.02em;
+  color:var(--accent);font-variant-numeric:tabular-nums;
+}
+.sem__next h3{margin:8px 0 0;font-size:clamp(1.2rem,1.5vw,1.42rem);letter-spacing:-.016em}
+.sem__next p{margin:9px 0 0;font-size:.96rem;line-height:1.55;color:var(--body);max-width:52ch}
+.sem__acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(18px,2vw,24px)}
+
+@media (max-width:900px){
+  .sem{grid-template-columns:1fr;gap:clamp(24px,5vw,36px)}
+  .sem__portrait{max-width:340px;aspect-ratio:1/1}
+}
+
+/* ==========================================================================
+   SEMINAR PAGES — seminare.htm and one page per seminar.
+
+   The listing is a chronological index, so it gets what a chronological index
+   wants: a date column on the left and the seminar beside it, hairline-ruled.
+   That echoes Über mich's year spine deliberately — both are "things in time" —
+   but it lives on its own page, so the two are never seen together.
+
+   The detail page repeats the Kontakt hierarchy rather than inventing a third:
+   the booking form is the action and keeps the panel and its shadow, the
+   reading matter beside it is unboxed. Someone who has already booked a
+   Vorgespräch meets the same shape twice, which is the point.
+   ========================================================================== */
+
+/* Placeholder banner. Dashed, like the price chips, because it says the same
+   thing: this is not filled in yet. */
+.semnote{
+  margin:clamp(26px,3vw,38px) 0 0;padding:14px 18px;
+  border:1.5px dashed var(--hairline);border-radius:var(--r-md);
+  font-size:.88rem;line-height:1.55;color:var(--body);max-width:78ch;
+}
+.semnote strong{color:var(--ink);font-weight:600}
+
+.semlist{
+  list-style:none;margin:clamp(30px,3.6vw,48px) 0 0;padding:0;
+  border-top:1px solid var(--hairline);
+}
+.semrow{
+  display:grid;grid-template-columns:clamp(190px,20vw,260px) 1fr;
+  gap:clamp(18px,2.6vw,40px);
+  padding:clamp(26px,3vw,40px) 0;
+  border-bottom:1px solid var(--hairline-soft);
+}
+.semrow:last-child{border-bottom:0}
+.semrow__when{display:flex;flex-direction:column;gap:5px;padding-top:3px}
+.semrow__date{font-size:1rem;font-weight:600;color:var(--accent);font-variant-numeric:tabular-nums}
+.semrow__time{font-size:.88rem;color:var(--body);font-variant-numeric:tabular-nums}
+.semrow__what h2{font-size:clamp(1.24rem,1.7vw,1.5rem);letter-spacing:-.018em;line-height:1.25}
+.semrow__what h2 a{color:var(--ink);text-decoration:none}
+.semrow__what p{margin:10px 0 0;font-size:.98rem;line-height:1.55;color:var(--body);max-width:62ch}
+.semrow__go{
+  display:inline-flex;align-items:center;gap:8px;margin-top:14px;
+  font-size:.92rem;font-weight:600;color:var(--accent);
+}
+.semrow__go .ico{width:15px;height:15px;transition:transform .2s var(--ease-out)}
+@media (hover:hover) and (pointer:fine){
+  .semrow__what h2 a:hover{color:var(--accent)}
+  .semrow:hover .semrow__go .ico{transform:translateX(3px)}
+}
+
+/* Detail page header. h1 comes down from the homepage scale — this is a
+   seminar title, not the site's opening statement. */
+.semhead h1{font-size:clamp(1.9rem,3.6vw,2.85rem);letter-spacing:-.028em;line-height:1.06}
+.semback{
+  display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
+  font-size:.9rem;font-weight:600;color:var(--accent);text-decoration:none;
+}
+.semback .ico{width:15px;height:15px;transform:rotate(180deg)}
+
+.semfacts{
+  margin:clamp(18px,2.2vw,28px) 0 0;padding:clamp(20px,2.4vw,28px) 0 0;
+  border-top:1px solid var(--hairline);
+  display:grid;grid-template-columns:repeat(4,1fr);gap:20px clamp(20px,2.4vw,36px);
+}
+.semfacts dt{font-size:.8rem;font-weight:600;color:var(--body)}
+.semfacts dd{margin:6px 0 0;font-size:.98rem;line-height:1.45;color:var(--ink)}
+
+.semdetail{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(28px,4.4vw,68px);align-items:start}
+.semdetail__text p{font-size:1.02rem;line-height:1.65;color:var(--body);max-width:62ch}
+.semdetail__text p + p{margin-top:16px}
+.semdetail__text h3{margin:clamp(30px,3.4vw,44px) 0 0;font-size:clamp(1.15rem,1.4vw,1.32rem)}
+.semincl{margin-top:16px}
+.semincl li{font-size:.98rem}
+
+/* The practice photographs are 133–251px native. Shown at size, not stretched
+   across a page they were never big enough for. */
+.semshot{margin:clamp(26px,3vw,38px) 0 0;max-width:260px}
+/* width:auto, not 100%: these sources are 133-251px wide and filling the figure
+   would upscale them. They render at native size and the figure just caps how
+   large they are ever allowed to get. */
+.semshot img{width:auto;height:auto;max-width:100%;border-radius:var(--r-lg);display:block}
+
+.semportrait--inline{margin-top:clamp(30px,3.4vw,44px);max-width:280px;aspect-ratio:4/5}
+
+.sembook__lead{margin:10px 0 4px;font-size:.93rem;line-height:1.55;color:var(--body)}
+.sembook h3{font-size:1.24rem;letter-spacing:-.014em}
+
+@media (max-width:1140px){
+  .semdetail{grid-template-columns:1fr}
+  .semfacts{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:740px){
+  .semrow{grid-template-columns:1fr;gap:10px}
+  .semfacts{grid-template-columns:1fr}
+}

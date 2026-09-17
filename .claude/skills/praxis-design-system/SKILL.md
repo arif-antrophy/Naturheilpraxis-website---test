@@ -5,8 +5,25 @@ description: The design system and structural contract for the Naturheilpraxis C
 
 # Naturheilpraxis Dinger — design system
 
-One hand-written file, no framework, no build step: `index.html` is the source.
-`README.md` documents *what the site is*; this skill is *what you may not break*.
+Hand-written HTML, no framework. `README.md` documents *what the site is*; this
+skill is *what you may not break*.
+
+**The CSS is shared.** It lives in `site.css` at the project root — not in
+`assets/`, because relative font paths inside a stylesheet resolve against the
+stylesheet, and keeping it at the root means they resolve unchanged. Every page
+links it. It was inline in `index.html` until the site gained seminar pages;
+four pages cannot each carry their own tokens.
+
+**The seminar pages are generated.** `seminare.htm` and every `seminar-*.htm`
+come from `build-seminars.py`, which lifts the head, sprite, header, footer and
+script out of `index.html` so five pages cannot drift apart. Edit the `SEMINARS`
+list and re-run; never hand-edit the generated files.
+
+**Two traps in `build-inline.py`**, both of which have bitten already: it matches
+`src="assets/..."` and `url(assets/...)` *inside comments*, so never write a
+literal asset path as prose in an HTML or CSS comment — describe it instead. And
+`index.html` has a second `<title>` inside its documentation comment, so
+anything rewriting the title must strip that comment first.
 
 ## The core rule
 
@@ -159,7 +176,8 @@ by or cancelling `.section`.
 
 ## Build and verify loop
 
-1. Edit **`index.html`**. Never edit `index.inlined.html` — it is generated.
+1. Edit **`index.html`** and **`site.css`**. Never edit `index.inlined.html`,
+   `seminare.htm` or `seminar-*.htm` — all four are generated.
 2. Preview: `.claude/launch.json` defines `praxis-dinger` on port 4173. Use the
    Browser pane's `preview_start`, not a shell server.
 3. Verify at all three breakpoints (`resize_window`), and check `:focus-visible`

@@ -3,8 +3,8 @@
 Redesign of the homepage for [naturheilpraxis-dinger.de](https://naturheilpraxis-dinger.de/),
 a naturopathic practice (Heilpraktikerin) in Bad Schönborn, Baden-Württemberg.
 
-Single hand-written HTML file. **No framework, no build step, no external
-requests at all** — the webfont is self-hosted — 31 KB of CSS, 3.3 KB of vanilla JS, 32 custom properties
+Hand-written HTML. **No framework, no external requests at all** — the webfont
+is self-hosted — 31 KB of CSS, 3.3 KB of vanilla JS, 32 custom properties
 carrying the entire design system.
 
 ## Run it
@@ -20,11 +20,15 @@ python3 -m http.server 4173
 
 | file | what it is |
 | --- | --- |
-| `index.html` | **the source.** Edit this one. References `assets/clean/*` by path |
+| `index.html` | **the homepage source.** Edit this one |
+| `site.css` | shared stylesheet for every page. At the root, not in `assets/`, so relative font paths inside it resolve unchanged |
+| `seminare.htm` | seminar index — **generated**, do not hand-edit |
+| `seminar-*.htm` | one page per seminar — **generated**, do not hand-edit |
+| `build-seminars.py` | generates the five seminar pages. Edit `SEMINARS` at the top and re-run |
 | `index.inlined.html` | *(not in repo)* generated self-contained build — run `build-inline.py` |
 | `build-inline.py` | generates `index.inlined.html` (every image as a data URI) |
 | `assets/` | original images pulled from the live site |
-| `assets/clean/` | repaired crops — baked-in pink frames and baked-in German text removed |
+| `assets/clean/` | repaired crops — baked-in pink frames and baked-in German text removed, including `cornelia.jpg` (8px plum frame cropped off the original) |
 | `assets/fonts/` | self-hosted Figtree (variable woff2, latin + latin-ext, roman + italic) and its OFL licence |
 | `index.v2-backup.html` | earlier warm/serif direction, kept for comparison |
 
@@ -64,8 +68,10 @@ Two things will break if changed carelessly:
 ## Outstanding before launch
 
 - [ ] **Licence or replace the hero image.** Excluded from this repo — see `.gitignore`
-- [ ] **A photo of Cornelia.** The single highest-value asset for a Heilpraktiker site
+- [ ] **Real seminar dates, titles and fees.** Everything in `build-seminars.py`
+      is a placeholder; the seminar index carries a visible notice saying so.
+      Edit `SEMINARS` there and re-run, then delete the `.semnote` block
 - [ ] **Two prices** — `Betrag einsetzen` placeholders in the Kosten block
-- [ ] **Wire the contact form.** Front-end only; it shows the thank-you panel without sending
+- [ ] **Wire the contact form and the seminar booking form.** Both are front-end only; they show a confirmation panel without sending
 - [ ] Re-shoot or re-export photography at 2× displayed size (sources are 167–251px wide)
 - [ ] Opening hours, if she wants them public

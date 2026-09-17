@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+
+<title>Kinder stärken | Naturheilpraxis Cornelia Dinger</title>
+
+<!-- Figtree is self-hosted. The Google Fonts CDN transmits the visitor's IP to
+     Google on every page view, which LG München I (3 O 17493/20, 20 Jan 2022)
+     held to be a GDPR violation without consent — not a risk worth carrying on
+     a German practice site. Files are the same variable woff2 Google serves,
+     under the SIL Open Font License; see assets/fonts/OFL.txt.
+     crossorigin is required on a font preload even same-origin, because fonts
+     are always fetched in CORS mode. -->
+<link rel="preload" href="assets/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+<link rel="stylesheet" href="site.css">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.6 4.2 4.2L19 6.6"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.2 3.5h3l1.5 3.8-2 1.4a11.3 11.3 0 0 0 5.6 5.6l1.4-2 3.8 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.2 5.7a2 2 0 0 1 2-2.2Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m4 7.5 8 5.5 8-5.5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3.2 2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z"/><circle cx="12" cy="10.3" r="2.6"/></symbol>
+  <symbol id="i-portrait" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><circle cx="12" cy="10" r="2.9"/><path d="M6.6 19.2a5.6 5.6 0 0 1 10.8 0"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4.5 12h15"/><path d="m13.5 6 6 6-6 6"/></symbol>
+  <symbol id="i-lab" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.4L5.7 17a2.3 2.3 0 0 0 2 3.4h8.6a2.3 2.3 0 0 0 2-3.4L14 9.4V3"/><path d="M7.6 14.4h8.8"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.4S3.8 15.4 3.8 9.9A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8.2 2.9c0 5.5-8.2 10.5-8.2 10.5Z"/></symbol>
+  <symbol id="i-arrow-ne" viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M8.5 7H17v8.5"/></symbol>
+  <symbol id="i-child" viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.2"/><path d="M6.6 20.6c0-3.6 2.4-6.3 5.4-6.3s5.4 2.7 5.4 6.3"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 4c0 8.4-4.6 13.1-11 13.1-1.6 0-3-.3-4.2-.9C4.8 9.8 9.6 4.6 20 4Z"/><path d="M5 20c1.6-4.4 4.4-7.6 8.6-9.7"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 12 8.6 8.2"/><path d="M12 3.4v1.6M20.6 12H19M12 20.6V19M3.4 12H5"/></symbol>
+  <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 2.6s6.6 7 6.6 11.6a6.6 6.6 0 0 1-13.2 0C5.4 9.6 12 2.6 12 2.6Z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.6c0 4.4-2.9 8-7 9.8-4.1-1.8-7-5.4-7-9.8V5.6L12 3Z"/></symbol>
+  <symbol id="i-badge" viewBox="0 0 24 24"><circle cx="12" cy="9.5" r="5.8"/><path d="M8.4 14.3 7 21l5-2.4L17 21l-1.4-6.7"/></symbol>
+</svg>
+
+<header class="bar" id="bar">
+  <div class="wrap bar__in">
+    <a class="brand" href="#top" aria-label="Naturheilpraxis Cornelia Dinger — Startseite">
+      <img src="assets/clean/logo.png" alt="Naturheilpraxis Cornelia Dinger" width="404" height="85">
+    </a>
+    <nav class="nav" aria-label="Hauptnavigation">
+      <a href="#schwerpunkte">Schwerpunkte</a>
+      <a href="#ablauf">Ablauf</a>
+      <a href="#praxis">Über mich</a>
+      <a href="#stimmen">Erfahrungen</a>
+      <a href="seminare.htm">Seminare</a>
+      <a href="#kosten">Kosten</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <div class="bar__cta">
+      <a class="bar__tel" href="tel:+491711242717"><svg class="ico"><use href="#i-phone"/></svg><span>0171 124 27 17</span></a>
+      <a class="btn btn--primary btn--sm" href="#kontakt">Vorgespräch anfragen</a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="sheet">Menü</button>
+    </div>
+  </div>
+</header>
+
+<div class="sheet" id="sheet">
+  <a href="#schwerpunkte">Schwerpunkte</a>
+  <a href="#ablauf">Ablauf</a>
+  <a href="#praxis">Über mich</a>
+  <a href="#stimmen">Erfahrungen</a><a href="seminare.htm">Seminare</a>
+  <a href="#kosten">Kosten &amp; Kasse</a>
+  <a href="#kontakt">Kontakt &amp; Anfahrt</a>
+</div>
+
+<main>
+  <section class="section tint-2 semhead">
+    <div class="wrap stack" style="gap:14px">
+      <a class="semback" href="seminare.htm"><svg class="ico"><use href="#i-arrow"/></svg>Alle Seminare</a>
+      <span class="eyebrow">Seminar</span>
+      <h1>Kinder stärken — ein Abend für Eltern</h1>
+      <p class="lede">Unruhe, Konzentration, Rückzug: was Kinder brauchen, wie PSE bei ihnen wirkt und was Sie zu Hause tun können.</p>
+      <dl class="semfacts">
+        <div><dt>Termin</dt><dd>Mittwoch, 4. Februar 2027</dd></div>
+        <div><dt>Uhrzeit</dt><dd>19–21 Uhr, 2 Stunden</dd></div>
+        <div><dt>Ort</dt><dd>Praxis, Schubertstraße 7, Bad Schönborn</dd></div>
+        <div><dt>Gebühr</dt><dd><span class="price--slot">Betrag einsetzen</span></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap semdetail">
+      <div class="semdetail__text">
+          <p>Kinder reagieren auf Psychosomatische Energetik oft besonders schnell, weil bei ihnen noch wenig überlagert ist. Dieser Abend richtet sich an Eltern, nicht an die Kinder selbst.</p>
+          <p>Es geht um Beobachten statt Bewerten — und darum, wann eine ärztliche Abklärung der richtige erste Schritt ist.</p>
+        <figure class="semshot">
+          <img src="assets/clean/kinder.jpg" alt="Kinderhände und Erwachsenenhände halten gemeinsam ein Herz" width="133" height="202" loading="lazy" decoding="async">
+        </figure>
+        <h3>Worum es geht</h3>
+        <ul class="incl semincl">
+            <li><svg class="ico"><use href="#i-check"/></svg>Unruhe, Schlaf und Konzentration einordnen</li>
+            <li><svg class="ico"><use href="#i-check"/></svg>Wie die Testung bei Kindern abläuft</li>
+            <li><svg class="ico"><use href="#i-check"/></svg>Was Sie zu Hause unterstützen können</li>
+            <li><svg class="ico"><use href="#i-check"/></svg>Wann zuerst ärztlich abgeklärt wird</li>
+        </ul>
+
+        <figure class="sem__portrait semportrait--inline">
+          <img src="assets/clean/cornelia.jpg" alt="Cornelia Dinger, Heilpraktikerin" width="392" height="482" loading="lazy" decoding="async">
+        </figure>
+        <p class="sem__cap">Cornelia Dinger, Heilpraktikerin. Sie hält das Seminar selbst.</p>
+      </div>
+
+      <form class="panel sembook" id="booking">
+        <div class="fbody">
+          <h3>Platz buchen</h3>
+          <p class="sembook__lead">Vier Angaben genügen. Sie erhalten eine Bestätigung,
+            bevor etwas verbindlich wird.</p>
+          <div class="row2">
+            <div class="field"><label for="b-first">Vorname</label><input id="b-first" name="firstname" type="text" autocomplete="given-name" required></div>
+            <div class="field"><label for="b-last">Nachname</label><input id="b-last" name="lastname" type="text" autocomplete="family-name" required></div>
+          </div>
+          <div class="field"><label for="b-mail">E-Mail</label><input id="b-mail" name="email" type="email" autocomplete="email" required></div>
+          <div class="field"><label for="b-tel">Telefon</label><input id="b-tel" name="tel" type="tel" autocomplete="tel" required></div>
+          <label class="check">
+            <input type="checkbox" name="consent" required>
+            <span>Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung meiner Anmeldung gespeichert werden. <a href="datenschutz.htm">Datenschutzerklärung</a></span>
+          </label>
+          <button class="btn btn--primary" type="submit" style="width:100%">Platz buchen <svg class="ico"><use href="#i-arrow"/></svg></button>
+          <p class="appt__foot">Ihre Anmeldung ist noch keine Zusage — ich bestätige Ihren Platz persönlich.</p>
+        </div>
+        <div class="sent" role="status">
+          <svg class="ico"><use href="#i-check"/></svg>
+          <h3 style="font-size:1.3rem">Vielen Dank für Ihre Anmeldung.</h3>
+          <p style="color:var(--body)">Ich melde mich persönlich bei Ihnen und bestätige Ihren Platz. Wenn es dringend ist, erreichen Sie mich unter <a href="tel:+491711242717">0171 124 27 17</a>.</p>
+          <p class="appt__foot">Entwurf: im Livebetrieb an das Praxis-Postfach angebunden.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <img class="foot__mark" src="assets/clean/mark.png" alt="" aria-hidden="true" width="560" height="580" loading="lazy" decoding="async">
+  <div class="wrap">
+    <div class="footcta">
+      <div>
+        <span class="eyebrow">Lieber direkt sprechen?</span>
+        <h2>Sie müssen nicht alles<br>allein herausfinden.</h2>
+        <p>Ein Satz am Telefon reicht mir, um Ihnen zu sagen, ob ich der richtige Weg für Sie bin. Das Vorgespräch kostet nichts.</p>
+      </div>
+      <div class="footcta__r">
+        <a class="bigtel" href="tel:+491711242717">
+          <span class="bigtel__ring"><svg class="ico"><use href="#i-phone"/></svg></span>
+          <span class="bigtel__t">
+            <small>30 Minuten · kostenfrei</small>
+            <b>0171 124 27 17</b>
+          </span>
+        </a>
+        <a class="footmail" href="mailto:info@naturheilpraxis-dinger.de">
+          <svg class="ico"><use href="#i-mail"/></svg> info@naturheilpraxis-dinger.de
+        </a>
+      </div>
+    </div>
+
+    <div class="foot__grid">
+      <div>
+        <img class="foot__logo" src="assets/clean/logo.png" alt="Naturheilpraxis Cornelia Dinger" width="404" height="85">
+        <p class="foot__note">Praxis für ganzheitliche Gesundheit und Ursachenbehandlung in Bad Schönborn — für Patientinnen und Patienten aus Bad Schönborn, Kronau, Ubstadt-Weiher, Bruchsal, Waghäusel und dem Kraichgau.</p>
+      </div>
+      <div>
+        <h4>Praxis</h4>
+        <ul>
+          <li><a href="praxis.htm">Über mich</a></li>
+          <li><a href="#schwerpunkte">Schwerpunkte</a></li>
+          <li><a href="#methoden">Diagnostik &amp; Therapien</a></li>
+          <li><a href="patientenstimmen.htm">Erfahrungsberichte</a></li>
+          <li><a href="gebuehren.htm">Gebühren</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Kontakt</h4>
+        <ul>
+          <li>Schubertstraße 7<br>76669 Bad Schönborn</li>
+          <li><a href="tel:+491711242717">0171 124 27 17</a></li>
+          <li><a href="mailto:info@naturheilpraxis-dinger.de">info@naturheilpraxis-dinger.de</a></li>
+          <li><a href="https://de-de.facebook.com/pg/NaturheilpraxisDinger" target="_blank" rel="noopener">Facebook</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Rechtliches</h4>
+        <ul>
+          <li><a href="impressum.htm">Impressum</a></li>
+          <li><a href="datenschutz.htm">Datenschutz</a></li>
+          <li><a href="#kosten">Kosten &amp; Kasse</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__bar">
+      <span>© 2026 Naturheilpraxis Cornelia Dinger</span>
+      <span>Mitglied im Bund Deutscher Heilpraktiker</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var bar = document.getElementById('bar');
+  var cue = document.getElementById('scrollcue');
+  var onScroll = function(){
+    bar.classList.toggle('is-stuck', window.scrollY > 8);
+    if (cue) cue.classList.toggle('is-gone', window.scrollY > 90);
+  };
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+  var burger = document.getElementById('burger'), sheet = document.getElementById('sheet');
+  burger.addEventListener('click', function(){
+    var open = sheet.hasAttribute('open');
+    if (open) sheet.removeAttribute('open'); else sheet.setAttribute('open','');
+    burger.setAttribute('aria-expanded', String(!open));
+    burger.textContent = open ? 'Menü' : 'Schließen';
+    document.body.style.overflow = open ? '' : 'hidden';
+  });
+  sheet.addEventListener('click', function(e){
+    if (e.target.tagName === 'A') {
+      sheet.removeAttribute('open');
+      burger.setAttribute('aria-expanded','false');
+      burger.textContent = 'Menü';
+      document.body.style.overflow = '';
+    }
+  });
+
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    var id = a.getAttribute('href');
+    if (id === '#' || id.length < 2) return;
+    var t = document.querySelector(id);
+    if (!t) return;
+    e.preventDefault();
+    window.scrollTo({top: t.getBoundingClientRect().top + window.scrollY - 96, behavior:'smooth'});
+  });
+
+  // Services slider: arrows page by one card. Native smooth scrolling runs on
+  // the compositor and cooperates with scroll-snap; driving scrollLeft frame by
+  // frame instead makes the snap engine re-snap mid-animation, which stutters.
+  var sl = document.getElementById('slider');
+  if (sl) {
+    var prev = document.getElementById('sprev'), next = document.getElementById('snext');
+    var step = function(){
+      var card = sl.querySelector('.scard');
+      var gap = parseFloat(getComputedStyle(sl).columnGap) || 0;
+      return card ? card.getBoundingClientRect().width + gap : sl.clientWidth * 0.8;
+    };
+    var ease = function(){
+      return matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    };
+    var sync = function(){
+      prev.disabled = sl.scrollLeft <= 2;
+      next.disabled = sl.scrollLeft >= sl.scrollWidth - sl.clientWidth - 2;
+    };
+    prev.addEventListener('click', function(){ sl.scrollBy({left:-step(), behavior:ease()}); });
+    next.addEventListener('click', function(){ sl.scrollBy({left: step(), behavior:ease()}); });
+    sl.addEventListener('scroll', sync, {passive:true});
+    addEventListener('resize', sync);
+    sync();
+  }
+
+  // Voice wall: the cards sit inside the 90svh sticky stage (so overflow:hidden
+  // on it really clips them) and are moved by scroll position instead of flow.
+  // The runway height is set from the measured travel, so it scrolls ~1:1.
+  var vw = document.getElementById('vwall');
+  var vwCards = document.getElementById('vwcards');
+  if (vw && vwCards) {
+    var vwStage = vw.querySelector('.vwall__stage');
+    var vwLeft  = vw.querySelector('.vwall__l');
+    var stageH = 0, travel = 0, ticking = false;
+
+    var pinned = function(){ return getComputedStyle(vwStage).position === 'sticky'; };
+
+    var measure = function(){
+      if (!pinned()) {                       // mobile: hand it back to the browser
+        vw.style.height = '';
+        vwCards.style.transform = '';
+        stageH = travel = 0;
+        return;
+      }
+      vwCards.style.transform = '';          // measure at rest
+      stageH = vwStage.offsetHeight;
+
+      // Stop when the last card's bottom is level with the bottom of the
+      // headline block, not when the column has cleared the window. The
+      // headline is vertically centred, so this is measured, not assumed.
+      var endOffset = vwLeft.getBoundingClientRect().bottom - vwStage.getBoundingClientRect().top;
+      travel = vwCards.offsetHeight + stageH - endOffset;
+      if (travel < 1) travel = vwCards.offsetHeight;   // guard: very short column
+
+      vw.style.height = (stageH + travel) + 'px';
+      draw();
+    };
+
+    var draw = function(){
+      ticking = false;
+      if (!travel) return;
+      var p = -vw.getBoundingClientRect().top / travel;
+      p = p < 0 ? 0 : p > 1 ? 1 : p;
+      vwCards.style.transform = 'translate3d(0,' + (stageH - p * travel) + 'px,0)';
+    };
+
+    var onScroll = function(){ if (!ticking) { ticking = true; requestAnimationFrame(draw); } };
+    addEventListener('scroll', onScroll, {passive:true});
+    addEventListener('resize', measure);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+    measure();
+  }
+
+  // Contact form: validate required fields, then swap to the thank-you panel.
+  // Same handler serves the seminar booking form on the seminar pages.
+  [['form',['f-name','f-mail']],['booking',['b-first','b-last','b-mail','b-tel']]].forEach(function(pair){
+    var el = document.getElementById(pair[0]);
+    if (!el) return;
+    el.addEventListener('submit', function(e){
+      e.preventDefault();
+      var missing = false;
+      pair[1].forEach(function(id){
+        var f = document.getElementById(id);
+        if (f && !f.value.trim()) { f.style.borderColor = 'var(--accent)'; missing = true; }
+      });
+      var c = el.querySelector('input[name="consent"]');
+      if (c && !c.checked) { missing = true; c.focus(); }
+      if (missing) return;
+      el.classList.add('is-sent');
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+    });
+  });
+
+  // Statement: types itself in word by word the first time it is scrolled to.
+  // The split happens here rather than in the markup so the sentence stays
+  // plain text — if this never runs, it is simply there, unanimated. Recursing
+  // into elements keeps <em>woher</em> and its accent colour intact.
+  var st = document.querySelector('.statement');
+  if (st && 'IntersectionObserver' in window &&
+      !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var n = 0;
+    var split = function(node){
+      [].slice.call(node.childNodes).forEach(function(kid){
+        if (kid.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          kid.nodeValue.split(/(\s+)/).forEach(function(part){
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+            var w = document.createElement('span');
+            w.className = 'w';
+            w.textContent = part;
+            w.style.animationDelay = (n++ * 45) + 'ms';
+            frag.appendChild(w);
+          });
+          node.replaceChild(frag, kid);
+        } else if (kid.nodeType === 1) {
+          split(kid);
+        }
+      });
+    };
+    split(st);
+    st.classList.add('is-armed');
+    // Fires ~180px before the statement reaches the viewport, so the armed
+    // (hidden) state is never on screen and the cascade reads from its start.
+    var stIO = new IntersectionObserver(function(es){
+      if (!es[0].isIntersecting) return;
+      st.classList.add('is-typing');
+      stIO.disconnect();
+    }, {rootMargin: '0px 0px 180px 0px'});
+    stIO.observe(st);
+  }
+
+
+  // The timeline draws itself as it is scrolled to: each era's node appears and
+  // its segment of the spine draws down toward the next. Arming happens here
+  // rather than in the markup so that without this script — or under reduced
+  // motion — the timeline is simply present and fully drawn.
+  var pathEl = document.querySelector('.path');
+  if (pathEl && 'IntersectionObserver' in window &&
+      !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    pathEl.classList.add('path--armed');
+    var pathIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        en.target.classList.add('is-in');
+        pathIO.unobserve(en.target);          // one-shot per era
+      });
+    }, {rootMargin: '0px 0px -15% 0px'});
+    [].slice.call(pathEl.querySelectorAll('.path__era')).forEach(function(era){
+      pathIO.observe(era);
+    });
+  }
+
+
+  // A 15s looping background is exactly what prefers-reduced-motion is for, and
+  // CSS cannot pause a video — so it is paused here and left showing a still
+  // frame instead.
+  var heroVid = document.querySelector('.hero__vid');
+  if (heroVid && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    heroVid.autoplay = false;
+    heroVid.removeAttribute('autoplay');
+    heroVid.pause();
+    try { heroVid.currentTime = 0; } catch (e) {}
+  }
+
+})();
+</script>

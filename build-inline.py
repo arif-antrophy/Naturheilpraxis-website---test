@@ -32,6 +32,16 @@ def repl(m):
 
 html = re.sub(r'(src|poster)="(assets/[^"]+)"', repl, html)
 
+# The stylesheet moved out of index.html when the site gained more pages, so the
+# standalone build has to pull it back in — and it must happen BEFORE the url()
+# pass below, or the @font-face paths inside it are never seen.
+def repl_css(m):
+    path = m.group(1)
+    if not os.path.exists(path):
+        sys.exit('missing stylesheet: ' + path)
+    return '<style>\n' + open(path, encoding='utf-8').read() + '\n</style>'
+html = re.sub(r'<link rel="stylesheet" href="([^"]+\.css)">', repl_css, html)
+
 # @font-face src lives in CSS url(), not an attribute.
 def repl_url(m):
     return 'url(%s)' % inline(m.group(1))
@@ -43,7 +53,8 @@ html = re.sub(r'\s*<link rel="preload"[^>]*href="assets/[^"]*"[^>]*>', '', html)
 
 # Nothing under assets/ may survive as a path, or the file is not standalone.
 left = sorted(set(re.findall(r'(?:src|href|poster)="(assets/[^"]+)"', html)
-                  + re.findall(r'url\((assets/[^)"\']+)\)', html)))
+                  + re.findall(r'url\((assets/[^)"\']+)\)', html)
+                  + re.findall(r'<link rel="stylesheet" href="([^"]+)">', html)))
 if left:
     sys.exit('still external, not self-contained: ' + ', '.join(left))
 
