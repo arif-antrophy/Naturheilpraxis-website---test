@@ -86,6 +86,11 @@
    BASE — big sizes, light weights, generous leading
    ========================================================================== */
 *,*::before,*::after{box-sizing:border-box}
+/* The slider breaks out full-bleed with 50vw, and vw counts a classic
+   scrollbar while % does not, so the root could be panned sideways by the
+   scrollbar's width. clip, never hidden: hidden makes the root a scroll
+   container and kills position:sticky everywhere. */
+html{overflow-x:clip}
 body{
   margin:0;background:var(--canvas);color:var(--ink);
   font-family:var(--f);font-size:17px;font-weight:400;line-height:1.62;
@@ -1159,6 +1164,10 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
   .fees{grid-template-columns:repeat(2,1fr)}
   .two--sticky > :first-child{position:static}
   .hero{min-height:0;padding-bottom:clamp(30px,5vw,48px)}
+  /* The hero stops being a full viewport here, so "scroll down" has nothing
+     left to say — and the cue, absolutely positioned at the hero's bottom
+     centre, was landing on top of the 25+ stat block. */
+  .scrollcue{display:none}
   .hero__veil{background:
     linear-gradient(180deg, rgba(44,18,32,.90) 0%, rgba(74,25,52,.86) 42%, rgba(123,34,85,.72) 100%),
     linear-gradient(97deg, rgba(44,18,32,.5) 0%, rgba(140,44,96,0) 70%)}
@@ -1170,6 +1179,29 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
 }
 @media (max-width:740px){
   body{font-size:16px;padding-bottom:82px}
+
+  /* Touch targets. WCAG 2.5.8 asks for 24x24 as a minimum and the platform
+     guidelines for 44x44; these were the elements that missed it. The header
+     phone link was the worst of them — 17x17, with the number hidden at this
+     width, on a local practice's site where calling is the main action. */
+  .bar__tel{min-width:46px;min-height:46px;justify-content:center;margin-right:-10px}
+  .btn--sm{min-height:46px}
+  .semback{padding:9px 0;min-height:44px;align-items:center}
+  .vcard__more{padding:9px 0;min-height:44px}
+  .mapcard__foot a,.info dd a{display:inline-block;padding:6px 0;min-height:32px}
+  .foot ul a,.foot__bar a{display:inline-block;padding:7px 0;min-height:32px}
+  .foot ul{gap:4px}                     /* the padding above now carries the rhythm */
+  .footmail{padding:6px 0;min-height:32px}
+
+  /* iOS Safari zooms the whole page when a focused input is under 16px, so
+     every form field on the site would jump on tap. .97rem lands at 15.52px
+     once the body drops to 16 — a third of a pixel short of the threshold. */
+  .field input,.field select,.field textarea{font-size:16px}
+
+  /* Body drops to 16px here, which shrank every rem-based label with it — the
+     footer headings and meta landed under 12px. Nudged back over. */
+  .foot h4{font-size:.8rem}
+  .foot small,.appt__foot,.scrollcue__label{font-size:.78rem}
   .voices,.row2,.foot__grid,.footcta{grid-template-columns:1fr}
   .foot__mark{width:min(64%,320px);left:-12%;bottom:-10%}
   .scard{flex-basis:82%}

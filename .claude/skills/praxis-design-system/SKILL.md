@@ -157,6 +157,28 @@ bigtel label, footer `h4`) and they are the only tracked-caps on the page;
 they're small structural labels, not headline decoration. Don't add more — the
 pullquote's `cite` was the fourth and is now sentence case.
 
+## Mobile floor
+
+Audited across six pages at 320 / 375 / 390 / 430. Keep these true:
+
+- **Every tap target clears 24px** (WCAG 2.5.8), and the important ones clear
+  44px. The header phone link was the worst offender at 17x17 — its label is
+  hidden at this width, so only the icon remained, on a site whose main action
+  is calling. It now reserves 46x46.
+- **Form fields are 16px at mobile, not `.97rem`.** iOS Safari zooms the whole
+  page when a focused input is under 16px, and `.97rem` lands at 15.52px once
+  the body drops to 16 — a third of a pixel short.
+- **`html` carries `overflow-x:clip`, not just `body`.** The slider breaks out
+  with `50vw`, which counts a classic scrollbar where `%` does not, so the root
+  could be panned sideways. `clip`, never `hidden` — see the gotchas above.
+- **Nothing renders under 12px.** Body drops to 16px here, which shrinks every
+  rem-based label with it; the footer headings and meta had fallen below.
+- **The scroll cue is hidden below 1140.** The hero stops being a full viewport
+  there, so it has nothing left to say, and it was landing on the stat block.
+- The burger's white treatment is scoped to `html:has(.hero,.semhero)`. Pages
+  without a dark hero get `--ink` marks; without that scoping their nav is
+  white on white until the first scroll.
+
 ## Quality floor
 
 Already in place — keep it: `:focus-visible` with a 2.5px accent outline,
