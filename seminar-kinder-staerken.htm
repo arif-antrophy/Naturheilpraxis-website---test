@@ -20,6 +20,8 @@
   <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m4 7.5 8 5.5 8-5.5"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3.2 2"/></symbol>
   <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z"/><circle cx="12" cy="10.3" r="2.6"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3.2v3.4M16 3.2v3.4"/></symbol>
+  <symbol id="i-euro" viewBox="0 0 24 24"><path d="M16.8 7.3a6 6 0 1 0 0 9.4"/><path d="M4.8 10.6h8M4.8 13.8h8"/></symbol>
   <symbol id="i-portrait" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><circle cx="12" cy="10" r="2.9"/><path d="M6.6 19.2a5.6 5.6 0 0 1 10.8 0"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4.5 12h15"/><path d="m13.5 6 6 6-6 6"/></symbol>
   <symbol id="i-lab" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.4L5.7 17a2.3 2.3 0 0 0 2 3.4h8.6a2.3 2.3 0 0 0 2-3.4L14 9.4V3"/><path d="M7.6 14.4h8.8"/></symbol>
@@ -72,10 +74,14 @@
       <h1>Kinder stärken — ein Abend für Eltern</h1>
       <p class="lede">Unruhe, Konzentration, Rückzug: was Kinder brauchen, wie PSE bei ihnen wirkt und was Sie zu Hause tun können.</p>
       <dl class="semfacts">
-        <div><dt>Termin</dt><dd>Mittwoch, 4. Februar 2027</dd></div>
-        <div><dt>Uhrzeit</dt><dd>19–21 Uhr, 2 Stunden</dd></div>
-        <div><dt>Ort</dt><dd>Praxis, Schubertstraße 7, Bad Schönborn</dd></div>
-        <div><dt>Gebühr</dt><dd><span class="price--slot">Betrag einsetzen</span></dd></div>
+        <div><span class="semfact__ico"><svg class="ico"><use href="#i-calendar"/></svg></span>
+          <span class="semfact__t"><dt>Termin</dt><dd>Mittwoch, 4. Februar 2027</dd></span></div>
+        <div><span class="semfact__ico"><svg class="ico"><use href="#i-clock"/></svg></span>
+          <span class="semfact__t"><dt>Uhrzeit</dt><dd>19–21 Uhr, 2 Stunden</dd></span></div>
+        <div><span class="semfact__ico"><svg class="ico"><use href="#i-pin"/></svg></span>
+          <span class="semfact__t"><dt>Ort</dt><dd>Praxis, Schubertstraße 7, Bad Schönborn</dd></span></div>
+        <div><span class="semfact__ico"><svg class="ico"><use href="#i-euro"/></svg></span>
+          <span class="semfact__t"><dt>Gebühr</dt><dd><span class="price--slot">Betrag einsetzen</span></dd></span></div>
       </dl>
     </div>
   </section>
@@ -85,7 +91,7 @@
       <div class="semdetail__text">
           <p>Kinder reagieren auf Psychosomatische Energetik oft besonders schnell, weil bei ihnen noch wenig überlagert ist. Dieser Abend richtet sich an Eltern, nicht an die Kinder selbst.</p>
           <p>Es geht um Beobachten statt Bewerten — und darum, wann eine ärztliche Abklärung der richtige erste Schritt ist.</p>
-        <figure class="semshot">
+        <figure class="semshot" style="--shot:266px">
           <img src="assets/clean/kinder.jpg" alt="Kinderhände und Erwachsenenhände halten gemeinsam ein Herz" width="133" height="202" loading="lazy" decoding="async">
         </figure>
         <h3>Worum es geht</h3>
@@ -96,10 +102,12 @@
             <li><svg class="ico"><use href="#i-check"/></svg>Wann zuerst ärztlich abgeklärt wird</li>
         </ul>
 
-        <figure class="sem__portrait semportrait--inline">
-          <img src="assets/clean/cornelia.jpg" alt="Cornelia Dinger, Heilpraktikerin" width="392" height="482" loading="lazy" decoding="async">
-        </figure>
-        <p class="sem__cap">Cornelia Dinger, Heilpraktikerin. Sie hält das Seminar selbst.</p>
+        <div class="semteacher">
+          <figure class="sem__portrait semportrait--inline">
+            <img src="assets/clean/cornelia.jpg" alt="Cornelia Dinger, Heilpraktikerin" width="392" height="482" loading="lazy" decoding="async">
+          </figure>
+          <p class="semteacher__t"><b>Cornelia Dinger</b>Heilpraktikerin. Sie hält das Seminar selbst.</p>
+        </div>
       </div>
 
       <form class="panel sembook" id="booking">

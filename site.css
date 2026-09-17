@@ -1136,6 +1136,16 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
 /* ==========================================================================
    RESPONSIVE
    ========================================================================== */
+/* The header collapses earlier than the rest of the layout. Adding Seminare
+   made the nav seven items, and seven plus the phone number plus the CTA stop
+   fitting at about 1280 — measured overflow was 80px at 1141px, which sits
+   above the 1140 breakpoint where the burger would otherwise take over. */
+@media (max-width:1280px){
+  .nav{display:none}
+  .burger{display:inline-flex}
+  .bar__tel span{display:none}
+  .bar__cta .btn{display:none}
+}
 @media (max-width:1140px){
   .nav{display:none}
   .burger{display:inline-flex}
@@ -1313,12 +1323,22 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
 .semback .ico{width:15px;height:15px;transform:rotate(180deg)}
 
 .semfacts{
-  margin:clamp(18px,2.2vw,28px) 0 0;padding:clamp(20px,2.4vw,28px) 0 0;
+  margin:clamp(18px,2.2vw,28px) 0 0;padding:clamp(22px,2.6vw,32px) 0 0;
   border-top:1px solid var(--hairline);
-  display:grid;grid-template-columns:repeat(4,1fr);gap:20px clamp(20px,2.4vw,36px);
+  display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(22px,2.4vw,32px);
 }
-.semfacts dt{font-size:.8rem;font-weight:600;color:var(--body)}
-.semfacts dd{margin:6px 0 0;font-size:.98rem;line-height:1.45;color:var(--ink)}
+.semfacts > div{display:flex;gap:13px;align-items:flex-start}
+/* The icon chip is the page's one bit of ornament, and it earns it: four facts
+   in a row read as a block of text without something to separate them. Same
+   rounded-square language as .scard__ico on the homepage slider. */
+.semfact__ico{
+  width:38px;height:38px;flex:none;border-radius:var(--r-sm);
+  background:var(--accent-wash);display:grid;place-items:center;
+}
+.semfact__ico .ico{width:19px;height:19px;color:var(--accent)}
+.semfact__t{display:block;min-width:0}
+.semfacts dt{font-size:.78rem;font-weight:600;letter-spacing:.02em;color:var(--body)}
+.semfacts dd{margin:4px 0 0;font-size:.98rem;line-height:1.4;color:var(--ink)}
 
 .semdetail{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(28px,4.4vw,68px);align-items:start}
 .semdetail__text p{font-size:1.02rem;line-height:1.65;color:var(--body);max-width:62ch}
@@ -1329,13 +1349,24 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
 
 /* The practice photographs are 133–251px native. Shown at size, not stretched
    across a page they were never big enough for. */
-.semshot{margin:clamp(26px,3vw,38px) 0 0;max-width:260px}
-/* width:auto, not 100%: these sources are 133-251px wide and filling the figure
-   would upscale them. They render at native size and the figure just caps how
-   large they are ever allowed to get. */
-.semshot img{width:auto;height:auto;max-width:100%;border-radius:var(--r-lg);display:block}
+/* --shot is set per page to twice the photograph's own native width. These
+   sources are only 133-251px wide, so filling a 650px column would be a 3-5x
+   upscale and look it; 2x is the retina tolerance and the most these files can
+   carry. Re-exported photography is on the launch list — when it lands, raise
+   or drop the cap. */
+.semshot{margin:clamp(28px,3.2vw,42px) 0 0;max-width:min(var(--shot,260px),100%)}
+.semshot img{width:100%;height:auto;border-radius:var(--r-lg);display:block}
 
-.semportrait--inline{margin-top:clamp(30px,3.4vw,44px);max-width:280px;aspect-ratio:4/5}
+/* She becomes a byline, not a second portrait block: small picture, name, one
+   line of role. The seminar is the subject of this page; she is the credit. */
+.semteacher{
+  display:flex;align-items:center;gap:clamp(14px,1.6vw,20px);
+  margin-top:clamp(32px,3.6vw,46px);padding-top:clamp(22px,2.4vw,30px);
+  border-top:1px solid var(--hairline-soft);
+}
+.semportrait--inline{margin:0;width:clamp(76px,8vw,104px);flex:none;aspect-ratio:4/5;border-radius:var(--r-md)}
+.semteacher__t{margin:0;font-size:.94rem;line-height:1.5;color:var(--body);max-width:40ch}
+.semteacher__t b{display:block;font-weight:600;font-size:1.02rem;color:var(--ink);margin-bottom:3px}
 
 .sembook__lead{margin:10px 0 4px;font-size:.93rem;line-height:1.55;color:var(--body)}
 .sembook h3{font-size:1.24rem;letter-spacing:-.014em}
@@ -1346,5 +1377,5 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
 }
 @media (max-width:740px){
   .semrow{grid-template-columns:1fr;gap:10px}
-  .semfacts{grid-template-columns:1fr}
+  .semfacts{grid-template-columns:1fr;gap:18px}
 }

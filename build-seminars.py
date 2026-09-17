@@ -153,10 +153,14 @@ for s in SEMINARS:
       <h1>%(title)s</h1>
       <p class="lede">%(teaser)s</p>
       <dl class="semfacts">
-        <div><dt>Termin</dt><dd>%(when)s</dd></div>
-        <div><dt>Uhrzeit</dt><dd>%(time)s, %(dur)s</dd></div>
-        <div><dt>Ort</dt><dd>Praxis, Schubertstraße 7, Bad Schönborn</dd></div>
-        <div><dt>Gebühr</dt><dd><span class="price--slot">Betrag einsetzen</span></dd></div>
+        <div><span class="semfact__ico"><svg class="ico"><use href="#i-calendar"/></svg></span>
+          <span class="semfact__t"><dt>Termin</dt><dd>%(when)s</dd></span></div>
+        <div><span class="semfact__ico"><svg class="ico"><use href="#i-clock"/></svg></span>
+          <span class="semfact__t"><dt>Uhrzeit</dt><dd>%(time)s, %(dur)s</dd></span></div>
+        <div><span class="semfact__ico"><svg class="ico"><use href="#i-pin"/></svg></span>
+          <span class="semfact__t"><dt>Ort</dt><dd>Praxis, Schubertstraße 7, Bad Schönborn</dd></span></div>
+        <div><span class="semfact__ico"><svg class="ico"><use href="#i-euro"/></svg></span>
+          <span class="semfact__t"><dt>Gebühr</dt><dd><span class="price--slot">Betrag einsetzen</span></dd></span></div>
       </dl>
     </div>
   </section>
@@ -165,7 +169,7 @@ for s in SEMINARS:
     <div class="wrap semdetail">
       <div class="semdetail__text">
 %(paras)s
-        <figure class="semshot">
+        <figure class="semshot" style="--shot:%(shot)dpx">
           <img src="%(img)s" alt="%(alt)s" width="%(imgw)d" height="%(imgh)d" loading="lazy" decoding="async">
         </figure>
         <h3>Worum es geht</h3>
@@ -173,10 +177,12 @@ for s in SEMINARS:
 %(points)s
         </ul>
 
-        <figure class="sem__portrait semportrait--inline">
-          <img src="assets/clean/cornelia.jpg" alt="Cornelia Dinger, Heilpraktikerin" width="392" height="482" loading="lazy" decoding="async">
-        </figure>
-        <p class="sem__cap">Cornelia Dinger, Heilpraktikerin. Sie hält das Seminar selbst.</p>
+        <div class="semteacher">
+          <figure class="sem__portrait semportrait--inline">
+            <img src="assets/clean/cornelia.jpg" alt="Cornelia Dinger, Heilpraktikerin" width="392" height="482" loading="lazy" decoding="async">
+          </figure>
+          <p class="semteacher__t"><b>Cornelia Dinger</b>Heilpraktikerin. Sie hält das Seminar selbst.</p>
+        </div>
       </div>
 
       <form class="panel sembook" id="booking">
@@ -206,7 +212,7 @@ for s in SEMINARS:
       </form>
     </div>
   </section>
-''' % dict(s, paras=paras, points=points)
+''' % dict(s, paras=paras, points=points, shot=s['imgw']*2)
     io.open(s['slug'] + '.htm', 'w', encoding='utf-8').write(
         page('%s | Naturheilpraxis Cornelia Dinger' % s['short'], body))
 

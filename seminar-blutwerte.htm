@@ -20,6 +20,8 @@
   <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="m4 7.5 8 5.5 8-5.5"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3.2 2"/></symbol>
   <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.5s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z"/><circle cx="12" cy="10.3" r="2.6"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3.2v3.4M16 3.2v3.4"/></symbol>
+  <symbol id="i-euro" viewBox="0 0 24 24"><path d="M16.8 7.3a6 6 0 1 0 0 9.4"/><path d="M4.8 10.6h8M4.8 13.8h8"/></symbol>
   <symbol id="i-portrait" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><circle cx="12" cy="10" r="2.9"/><path d="M6.6 19.2a5.6 5.6 0 0 1 10.8 0"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4.5 12h15"/><path d="m13.5 6 6 6-6 6"/></symbol>
   <symbol id="i-lab" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.4L5.7 17a2.3 2.3 0 0 0 2 3.4h8.6a2.3 2.3 0 0 0 2-3.4L14 9.4V3"/><path d="M7.6 14.4h8.8"/></symbol>
@@ -72,10 +74,14 @@
       <h1>Ihre Blutwerte lesen lernen</h1>
       <p class="lede">42 bis 70 Werte ergeben ein Bild. An diesem Vormittag lernen Sie, worauf ich schaue und was die Zahlen über Ihren Stoffwechsel sagen.</p>
       <dl class="semfacts">
-        <div><dt>Termin</dt><dd>Samstag, 28. November 2026</dd></div>
-        <div><dt>Uhrzeit</dt><dd>10–14 Uhr, 4 Stunden</dd></div>
-        <div><dt>Ort</dt><dd>Praxis, Schubertstraße 7, Bad Schönborn</dd></div>
-        <div><dt>Gebühr</dt><dd><span class="price--slot">Betrag einsetzen</span></dd></div>
+        <div><span class="semfact__ico"><svg class="ico"><use href="#i-calendar"/></svg></span>
+          <span class="semfact__t"><dt>Termin</dt><dd>Samstag, 28. November 2026</dd></span></div>
+        <div><span class="semfact__ico"><svg class="ico"><use href="#i-clock"/></svg></span>
+          <span class="semfact__t"><dt>Uhrzeit</dt><dd>10–14 Uhr, 4 Stunden</dd></span></div>
+        <div><span class="semfact__ico"><svg class="ico"><use href="#i-pin"/></svg></span>
+          <span class="semfact__t"><dt>Ort</dt><dd>Praxis, Schubertstraße 7, Bad Schönborn</dd></span></div>
+        <div><span class="semfact__ico"><svg class="ico"><use href="#i-euro"/></svg></span>
+          <span class="semfact__t"><dt>Gebühr</dt><dd><span class="price--slot">Betrag einsetzen</span></dd></span></div>
       </dl>
     </div>
   </section>
@@ -85,7 +91,7 @@
       <div class="semdetail__text">
           <p>Ein Laborbefund ist kein Urteil, sondern ein Zwischenstand. Wir gehen gemeinsam durch die Werte, die in einer ganzheitlichen Analyse zusammengehören, und ich zeige, welche Zusammenhänge mir auffallen.</p>
           <p>Bringen Sie vorhandene eigene Befunde gerne mit — wir schauen anonym und nur, soweit Sie das möchten.</p>
-        <figure class="semshot">
+        <figure class="semshot" style="--shot:334px">
           <img src="assets/clean/1019.jpg" alt="Blutröhrchen für die ganzheitliche Laboranalyse" width="167" height="206" loading="lazy" decoding="async">
         </figure>
         <h3>Worum es geht</h3>
@@ -96,10 +102,12 @@
             <li><svg class="ico"><use href="#i-check"/></svg>Eigene Befunde können mitgebracht werden</li>
         </ul>
 
-        <figure class="sem__portrait semportrait--inline">
-          <img src="assets/clean/cornelia.jpg" alt="Cornelia Dinger, Heilpraktikerin" width="392" height="482" loading="lazy" decoding="async">
-        </figure>
-        <p class="sem__cap">Cornelia Dinger, Heilpraktikerin. Sie hält das Seminar selbst.</p>
+        <div class="semteacher">
+          <figure class="sem__portrait semportrait--inline">
+            <img src="assets/clean/cornelia.jpg" alt="Cornelia Dinger, Heilpraktikerin" width="392" height="482" loading="lazy" decoding="async">
+          </figure>
+          <p class="semteacher__t"><b>Cornelia Dinger</b>Heilpraktikerin. Sie hält das Seminar selbst.</p>
+        </div>
       </div>
 
       <form class="panel sembook" id="booking">
