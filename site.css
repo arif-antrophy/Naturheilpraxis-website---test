@@ -1460,3 +1460,55 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
 .semhero h1{color:#fff;font-size:clamp(2.2rem,4.6vw,3.6rem);letter-spacing:-.032em;line-height:1.02}
 .semhero .lede{color:rgba(255,255,255,.90);max-width:46ch}
 .semhero .eyebrow{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}
+
+/* ==========================================================================
+   NEWSLETTER — a row in the footer, between the phone CTA and the link grid.
+
+   On the dark ground the field follows the same translucent-white treatment
+   the dark bands already use for the eyebrow and the hero's ghost button, and
+   the submit inverts to a white ground with accent text, exactly as .btn--primary
+   does over the hero. Nothing new is invented for it.
+   ========================================================================== */
+/* The label is there for screen readers; a placeholder is not a label. */
+.vh{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip-path:inset(50%);white-space:nowrap;border:0;
+}
+.news{
+  margin-top:clamp(34px,4vw,52px);padding-top:clamp(26px,3vw,38px);
+  border-top:1px solid rgba(255,255,255,.16);
+}
+.news__t h4{
+  font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--bright);margin-bottom:10px;
+}
+.news__t p{font-size:.96rem;line-height:1.6;color:rgba(255,255,255,.76);max-width:46ch}
+.news__f{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(16px,1.8vw,22px);max-width:520px}
+.news__f input{
+  flex:1 1 220px;min-width:0;font:inherit;font-size:.97rem;
+  color:#fff;background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.26);border-radius:var(--r-pill);
+  padding:13px 20px;
+  transition:border-color .16s var(--ease-out),background .16s var(--ease-out);
+}
+.news__f input::placeholder{color:rgba(255,255,255,.55)}
+.news__f input:focus{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.55);outline:none}
+.news__f input:focus-visible{outline:2.5px solid var(--bright);outline-offset:3px}
+.news .btn--primary{background:#fff;color:var(--accent);box-shadow:none;flex:none}
+@media (hover:hover) and (pointer:fine){
+  .news .btn--primary:hover{background:var(--wash-2)}
+}
+.news__note{
+  margin-top:14px;font-size:.84rem;line-height:1.55;
+  color:rgba(255,255,255,.62);max-width:56ch;
+}
+.news__note a{color:rgba(255,255,255,.82);text-decoration:underline;text-underline-offset:3px}
+.news .sent{align-items:flex-start;text-align:left;padding:0}
+.news .sent .ico{color:var(--accent);background:#fff}
+.news .sent p{color:rgba(255,255,255,.86);font-size:.98rem;line-height:1.6;max-width:52ch}
+
+@media (max-width:740px){
+  .news__f{max-width:none}
+  .news__f input,.news .btn--primary{flex:1 1 100%;width:100%}
+  .news__f input{font-size:16px}          /* iOS zooms a focused field under 16px */
+}

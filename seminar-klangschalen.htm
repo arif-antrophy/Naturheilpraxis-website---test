@@ -13,7 +13,7 @@
      are always fetched in CORS mode. -->
 <link rel="preload" href="assets/fonts/figtree-latin.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="site.css?v=9f34bb33">
+<link rel="stylesheet" href="site.css?v=fa2f5abf">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.6 4.2 4.2L19 6.6"/></symbol>
   <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.2 3.5h3l1.5 3.8-2 1.4a11.3 11.3 0 0 0 5.6 5.6l1.4-2 3.8 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.2 5.7a2 2 0 0 1 2-2.2Z"/></symbol>
@@ -159,6 +159,29 @@
         </a>
       </div>
     </div>
+
+    <form class="news" id="news">
+      <div class="fbody">
+        <div class="news__t">
+          <h4>Newsletter</h4>
+          <p>Neue Seminartermine und ab und zu ein Impuls aus der Praxis. Etwa vier Mails im Jahr.</p>
+        </div>
+        <div class="news__f">
+          <label class="vh" for="n-mail">E-Mail-Adresse</label>
+          <input id="n-mail" name="email" type="email" autocomplete="email" placeholder="Ihre E-Mail-Adresse" required>
+          <button class="btn btn--primary btn--sm" type="submit">Anmelden</button>
+        </div>
+        <p class="news__note">
+          Anmeldung mit Bestätigungsmail, Abmeldung jederzeit über den Link in jeder Mail.
+          <a href="datenschutz.htm">Datenschutzerklärung</a>
+        </p>
+      </div>
+      <div class="sent" role="status">
+        <svg class="ico"><use href="#i-check"/></svg>
+        <p>Fast geschafft — bitte bestätigen Sie die Anmeldung über den Link in der Mail.</p>
+        <p class="news__note">Entwurf: im Livebetrieb an den Verteiler angebunden.</p>
+      </div>
+    </form>
 
     <div class="foot__grid">
       <div>
@@ -313,7 +336,7 @@
 
   // Contact form: validate required fields, then swap to the thank-you panel.
   // Same handler serves the seminar booking form on the seminar pages.
-  [['form',['f-name','f-mail']],['booking',['b-first','b-last','b-mail','b-tel']]].forEach(function(pair){
+  [['form',['f-name','f-mail']],['booking',['b-first','b-last','b-mail','b-tel']],['news',['n-mail']]].forEach(function(pair){
     var el = document.getElementById(pair[0]);
     if (!el) return;
     el.addEventListener('submit', function(e){
