@@ -113,10 +113,6 @@ def head(title):
         sys.exit('expected exactly one <title> after stripping the comment, found %d' % n)
     return h
 
-NOTE = ('<p class="semnote">Die hier gezeigten Termine sind <strong>Beispiele für die '
-        'Gestaltung</strong>. Echte Seminartermine und Preise trägt die Praxis vor dem '
-        'Livegang ein.</p>')
-
 def page(title, body):
     return '%s\n%s\n\n%s<main>\n%s</main>\n\n%s\n\n%s\n' % (
         head(title), SPRITE, CHROME, body, FOOTER, SCRIPT)
@@ -132,7 +128,7 @@ for s in SEMINARS:
           <div class="semrow__what">
             <h2><a href="%(slug)s.htm">%(title)s</a></h2>
             <p>%(teaser)s</p>
-            <span class="semrow__go">Details und Platz buchen <svg class="ico"><use href="#i-arrow"/></svg></span>
+            <a class="btn btn--ghost btn--sm semrow__btn" href="%(slug)s.htm">Details und Platz buchen <svg class="ico"><use href="#i-arrow"/></svg></a>
           </div>
         </li>''' % s)
 
@@ -153,13 +149,12 @@ index_body = '''  <section class="semhero">
 
   <section class="section" id="seminare">
     <div class="wrap">
-      %s
       <ul class="semlist">
 %s
       </ul>
     </div>
   </section>
-''' % (NOTE, '\n'.join(rows))
+''' % ('\n'.join(rows))
 
 io.open('seminare.htm', 'w', encoding='utf-8').write(page('Seminare | Naturheilpraxis Cornelia Dinger', index_body))
 
