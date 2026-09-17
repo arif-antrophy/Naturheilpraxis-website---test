@@ -1090,11 +1090,13 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
    spacing it carried as a standalone row. The phone and mail moved down to
    that row instead. */
 .footcta .news{margin-top:0;padding-top:0;border-top:0}
+/* No rule and no margin of its own: .footcta already draws the divider above
+   it, and carrying a second one left two hairlines with an empty band between
+   them. This row just sits under that single line. */
 .footreach{
   display:flex;flex-wrap:wrap;align-items:center;
   gap:clamp(18px,3vw,54px);
-  margin-top:clamp(30px,3.6vw,46px);padding-top:clamp(26px,3vw,38px);
-  border-top:1px solid rgba(255,255,255,.16);
+  margin-top:0;padding-top:clamp(26px,3vw,38px);
 }
 
 .bigtel{
