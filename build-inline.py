@@ -36,11 +36,11 @@ html = re.sub(r'(src|poster)="(assets/[^"]+)"', repl, html)
 # standalone build has to pull it back in — and it must happen BEFORE the url()
 # pass below, or the @font-face paths inside it are never seen.
 def repl_css(m):
-    path = m.group(1)
+    path = m.group(1).split('?')[0]          # drop the ?v= cache-busting stamp
     if not os.path.exists(path):
         sys.exit('missing stylesheet: ' + path)
     return '<style>\n' + open(path, encoding='utf-8').read() + '\n</style>'
-html = re.sub(r'<link rel="stylesheet" href="([^"]+\.css)">', repl_css, html)
+html = re.sub(r'<link rel="stylesheet" href="([^"]+\.css(?:\?[^"]*)?)">', repl_css, html)
 
 # @font-face src lives in CSS url(), not an attribute.
 def repl_url(m):

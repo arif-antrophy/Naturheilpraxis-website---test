@@ -7,7 +7,7 @@ apart. Edit SEMINARS below and re-run when the real dates arrive:
 
     python3 build-seminars.py
 """
-import io, re, sys
+import io, re, sys, hashlib
 
 SEMINARS = [
     dict(slug='seminar-pse-einfuehrung',
@@ -76,14 +76,27 @@ SEMINARS = [
                  'Wann zuerst ärztlich abgeklärt wird']),
 ]
 
+# The dev server (python -m http.server) sends no Cache-Control and no ETag,
+# only Last-Modified, so browsers fall back to heuristic caching and will happily
+# serve a stale stylesheet across reloads — which has already cost real debugging
+# time. Stamping the file's own content hash onto the URL makes that impossible:
+# change the CSS, the URL changes, the cache misses.
+CSS = 'site.css'
+ver = hashlib.sha1(io.open(CSS, 'rb').read()).hexdigest()[:8]
+_idx = io.open('index.html', encoding='utf-8').read()
+_new = re.sub(r'href="site\.css(?:\?v=[0-9a-f]+)?"', 'href="site.css?v=%s"' % ver, _idx, count=1)
+if _new != _idx:
+    io.open('index.html', 'w', encoding='utf-8').write(_new)
+print('stylesheet version: %s' % ver)
+
 src = io.open('index.html', encoding='utf-8').read()
 
 def between(a, b, inclusive_b=True):
     i = src.index(a); j = src.index(b, i)
     return src[i:j + (len(b) if inclusive_b else 0)]
 
-STYLE_LINK = '<link rel="stylesheet" href="site.css">'
-HEAD_TOP = src[:src.index(STYLE_LINK) + len(STYLE_LINK)]
+_m = re.search(r'<link rel="stylesheet" href="site\.css[^"]*">', src)
+HEAD_TOP = src[:_m.end()]
 SPRITE   = between('<svg width="0"', '</svg>')
 CHROME   = src[src.index('<header class="bar"'):src.index('<main')]      # header + mobile sheet
 FOOTER   = between('<footer class="foot"', '</footer>')
