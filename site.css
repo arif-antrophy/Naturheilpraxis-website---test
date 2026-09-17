@@ -149,14 +149,16 @@ img{max-width:100%;display:block}
   backdrop-filter:saturate(160%) blur(16px);
   border-bottom-color:var(--hairline-soft);
 }
-/* Over the hero photograph the header is transparent with white marks. */
-.bar:not(.is-stuck) .brand img{filter:brightness(0) invert(1)}
-.bar:not(.is-stuck) .nav a{color:rgba(255,255,255,.88)}
-.bar:not(.is-stuck) .nav a:hover{color:#fff;border-bottom-color:#fff}
-.bar:not(.is-stuck) .bar__tel,.bar:not(.is-stuck) .bar__tel .ico{color:#fff}
-.bar:not(.is-stuck) .btn--primary{background:#fff;color:var(--accent);box-shadow:none}
-.bar:not(.is-stuck) .btn--primary:hover{background:var(--wash-2)}
-.bar:not(.is-stuck) .burger{border-color:rgba(255,255,255,.45);color:#fff}
+/* Over a dark hero the header is transparent with white marks — but only
+   where such a hero exists. The seminar detail pages open on a light band, and
+   these rules left their nav white on white until the first scroll. */
+html:has(.hero,.semhero) .bar:not(.is-stuck) .brand img{filter:brightness(0) invert(1)}
+html:has(.hero,.semhero) .bar:not(.is-stuck) .nav a{color:rgba(255,255,255,.88)}
+html:has(.hero,.semhero) .bar:not(.is-stuck) .nav a:hover{color:#fff;border-bottom-color:#fff}
+html:has(.hero,.semhero) .bar:not(.is-stuck) .bar__tel,html:has(.hero,.semhero) .bar:not(.is-stuck) .bar__tel .ico{color:#fff}
+html:has(.hero,.semhero) .bar:not(.is-stuck) .btn--primary{background:#fff;color:var(--accent);box-shadow:none}
+html:has(.hero,.semhero) .bar:not(.is-stuck) .btn--primary:hover{background:var(--wash-2)}
+html:has(.hero,.semhero) .bar:not(.is-stuck) .burger{border-color:rgba(255,255,255,.45);color:#fff}
 .bar__in{display:flex;align-items:center;gap:clamp(14px,3vw,36px);height:84px}
 .brand{flex:none;display:block}
 .brand img{height:40px;width:auto}
@@ -1341,6 +1343,14 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
 .semfacts dd{margin:4px 0 0;font-size:.98rem;line-height:1.4;color:var(--ink)}
 
 .semdetail{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(28px,4.4vw,68px);align-items:start}
+/* The booking form is the action on a seminar page, so it stays put while the
+   description scrolls past it — the same device Beschwerden and Über mich use,
+   applied to the second column instead of the first. This must sit ABOVE the
+   breakpoints below: they override it at equal specificity, so source order is
+   what decides. */
+.semdetail > form{position:sticky;top:96px}
+/* No room to pin on a short viewport. */
+@media (max-height:760px){.semdetail > form{position:static}}
 .semdetail__text p{font-size:1.02rem;line-height:1.65;color:var(--body);max-width:62ch}
 .semdetail__text p + p{margin-top:16px}
 .semdetail__text h3{margin:clamp(30px,3.4vw,44px) 0 0;font-size:clamp(1.15rem,1.4vw,1.32rem)}
@@ -1373,9 +1383,50 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
 
 @media (max-width:1140px){
   .semdetail{grid-template-columns:1fr}
+  /* Stacked, the form is simply the last thing on the page — nothing left to
+     scroll past it, so pinning it would only get in the way. */
+  .semdetail > form{position:static}
   .semfacts{grid-template-columns:repeat(2,1fr)}
 }
 @media (max-width:740px){
   .semrow{grid-template-columns:1fr;gap:10px}
   .semfacts{grid-template-columns:1fr;gap:18px}
 }
+
+/* ==========================================================================
+   SEMINARE HERO — the index page opens like the homepage does.
+
+   Same construction as .hero: photograph, a plum veil angled so the left side
+   carries enough density for white type, and the header sitting on top of it
+   rather than above it. The difference is height — 60svh, not a full viewport,
+   because this page's job is the list underneath, not the picture.
+
+   The photograph is the same unlicensed iStock comp as the voice wall, which
+   is why it is gitignored; a licensed file is a filename swap here.
+   ========================================================================== */
+.semhero{
+  position:relative;isolation:isolate;overflow:hidden;
+  display:flex;align-items:flex-end;
+  height:60svh;min-height:340px;
+  margin-top:-84px;padding-top:84px;         /* sit underneath the transparent header */
+  padding-bottom:clamp(30px,4.5vh,58px);
+}
+.semhero__bg{position:absolute;inset:0;z-index:-2}
+.semhero__bg img{width:100%;height:100%;object-fit:cover;object-position:60% 42%;display:block}
+.semhero__veil{
+  position:absolute;inset:0;z-index:-1;
+  background:
+    linear-gradient(97deg,
+      rgba(44,18,32,.92)  0%,
+      rgba(74,25,52,.80) 24%,
+      rgba(123,34,85,.48) 46%,
+      rgba(140,44,96,.16) 64%,
+      rgba(140,44,96,0)   80%),
+    linear-gradient(to top, rgba(44,18,32,.42) 0%, rgba(44,18,32,0) 46%),
+    /* keeps the white nav legible where the header crosses the bright side */
+    linear-gradient(to bottom, rgba(44,18,32,.5) 0, rgba(44,18,32,.18) 90px, rgba(44,18,32,0) 150px);
+}
+.semhero__in{position:relative;z-index:1;width:100%}
+.semhero h1{color:#fff;font-size:clamp(2.2rem,4.6vw,3.6rem);letter-spacing:-.032em;line-height:1.02}
+.semhero .lede{color:rgba(255,255,255,.90);max-width:46ch}
+.semhero .eyebrow{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2)}

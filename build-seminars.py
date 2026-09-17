@@ -123,13 +123,22 @@ for s in SEMINARS:
           </div>
         </li>''' % s)
 
-index_body = '''  <section class="section" id="seminare">
-    <div class="wrap stack" style="gap:16px">
-      <span class="eyebrow">Seminare</span>
-      <h1>Kommende Termine</h1>
-      <p class="lede">In kleinen Gruppen erkläre ich die Methoden, mit denen ich arbeite —
-        verständlich, ohne Vorkenntnisse und mit genug Zeit für Ihre Fragen.</p>
+index_body = '''  <section class="semhero">
+    <div class="semhero__bg" aria-hidden="true">
+      <img src="assets/clean/voices-bg.jpg" alt="" width="1800" height="1198">
     </div>
+    <div class="semhero__veil" aria-hidden="true"></div>
+    <div class="semhero__in">
+      <div class="wrap stack" style="gap:16px">
+        <span class="eyebrow">Seminare</span>
+        <h1>Kommende Termine</h1>
+        <p class="lede">In kleinen Gruppen erkläre ich die Methoden, mit denen ich arbeite —
+          verständlich, ohne Vorkenntnisse und mit genug Zeit für Ihre Fragen.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="seminare">
     <div class="wrap">
       %s
       <ul class="semlist">
@@ -190,10 +199,8 @@ for s in SEMINARS:
           <h3>Platz buchen</h3>
           <p class="sembook__lead">Vier Angaben genügen. Sie erhalten eine Bestätigung,
             bevor etwas verbindlich wird.</p>
-          <div class="row2">
-            <div class="field"><label for="b-first">Vorname</label><input id="b-first" name="firstname" type="text" autocomplete="given-name" required></div>
-            <div class="field"><label for="b-last">Nachname</label><input id="b-last" name="lastname" type="text" autocomplete="family-name" required></div>
-          </div>
+          <div class="field"><label for="b-first">Vorname</label><input id="b-first" name="firstname" type="text" autocomplete="given-name" required></div>
+          <div class="field"><label for="b-last">Nachname</label><input id="b-last" name="lastname" type="text" autocomplete="family-name" required></div>
           <div class="field"><label for="b-mail">E-Mail</label><input id="b-mail" name="email" type="email" autocomplete="email" required></div>
           <div class="field"><label for="b-tel">Telefon</label><input id="b-tel" name="tel" type="tel" autocomplete="tel" required></div>
           <label class="check">
