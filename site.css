@@ -1401,8 +1401,11 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
    rather than above it. The difference is height — 60svh, not a full viewport,
    because this page's job is the list underneath, not the picture.
 
-   The photograph is the same unlicensed iStock comp as the voice wall, which
-   is why it is gitignored; a licensed file is a filename swap here.
+   The photograph is hero.jpg — sharp, and free since the homepage moved to the
+   video. NOT voices-bg.jpg: that file is deliberately blurred (gblur sigma 26)
+   because it was built to sit behind the voice wall's cards, and as a hero it
+   just looks out of focus. Still an unlicensed iStock comp, hence gitignored;
+   a licensed file is a filename swap.
    ========================================================================== */
 .semhero{
   position:relative;isolation:isolate;overflow:hidden;
@@ -1412,7 +1415,7 @@ details.q p{padding:0 22px 20px;color:var(--body);font-size:.96rem;max-width:64c
   padding-bottom:clamp(30px,4.5vh,58px);
 }
 .semhero__bg{position:absolute;inset:0;z-index:-2}
-.semhero__bg img{width:100%;height:100%;object-fit:cover;object-position:60% 42%;display:block}
+.semhero__bg img{width:100%;height:100%;object-fit:cover;object-position:66% 38%;display:block}
 .semhero__veil{
   position:absolute;inset:0;z-index:-1;
   background:

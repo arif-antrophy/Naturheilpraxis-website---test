@@ -125,7 +125,7 @@ for s in SEMINARS:
 
 index_body = '''  <section class="semhero">
     <div class="semhero__bg" aria-hidden="true">
-      <img src="assets/clean/voices-bg.jpg" alt="" width="1800" height="1198">
+      <img src="assets/clean/hero.jpg" alt="" width="1024" height="410">
     </div>
     <div class="semhero__veil" aria-hidden="true"></div>
     <div class="semhero__in">
